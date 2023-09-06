@@ -11,10 +11,10 @@
 
     display: flex;
     background-color: white;
-    width: 50%;
+    width: 100%;
     flex-direction:row-reverse ;
     border-radius: 30px;
-    min-height: 600px;
+    min-height: 100%;
     overflow: hidden;
 }
 .left{
