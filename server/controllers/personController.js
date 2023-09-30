@@ -12,7 +12,7 @@ function executeQuery(db, query, params) {
 exports.getPerson = async(req, res, next) => {
     const personId = req.params.personId;
 
-    const basicInfoQuery = `SELECT P.first_name, P.last_name,
+    const basicInfoQuery = `SELECTgi P.first_name, P.last_name,
                                 L.city, L.state, L.country
                                 FROM person P
                                 JOIN location L
