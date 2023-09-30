@@ -11,7 +11,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 1400px; /* Adjust as needed to center vertically within the viewport */
+    width: 100%; /* Adjust as needed to center vertically within the viewport */
 }
 .left{
    display: flex;
@@ -26,12 +26,12 @@
 .search {
     display: flex;
     align-items: center;
-    
+
     gap: 10px;
     border: 1px solid lightgray;
     border-radius: 10px;
     padding: 5px;
-    width: 100%;
+    width: 45rem;
     max-width: 900px; /* Limit the width to 500px */
 }
 
@@ -48,7 +48,7 @@
     outline: none; /* Remove the input outline */
     padding: 5px;
     
-    width: 500px;
+    width: 100%;
 }
 
 /* Hover effect for the search bar */

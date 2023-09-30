@@ -15,7 +15,7 @@ const Navbar = ()=>
         <div className={classes.navbar}>
           <div className={classes.left}>
            <Link to ='/' style={{textDecoration:"none"}}>
-            <span>Thrive</span>
+            <span style={{fontSize:"30px"}}>Thrive</span>
            </Link>
            <HomeRoundedIcon/>
            <DarkModeIcon/>
