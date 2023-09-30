@@ -1,10 +1,11 @@
 import React from "react";
+import "./Rightbar"
 const Rightbar = ()=>
 {
     return(
-        <>
-        Right bar
-        </>
+        <div className="rightbar">
+            Right bar
+        </div>
     )
 }
 export default Rightbar;
