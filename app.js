@@ -4,7 +4,7 @@ const xss = require('xss-clean');
 const attachDb = require('./server/utils/dbMiddleware');
 
 //Rquired Routes
-const profileRouter = require('./server/routes/profileRoutes')
+const personRouter = require('./server/routes/personRoutes')
 
 //Starting app
 const app = express();
@@ -18,7 +18,7 @@ app.use(xss());
 app.use('/api/v1', attachDb);
 
 //Routing Middlewares
-app.use('/api/v1/profiles', profileRouter);
+app.use('/api/v1/persons', personRouter);
 
 //404
 app.all('*', (req, res, next) => {
