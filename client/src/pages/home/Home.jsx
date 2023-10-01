@@ -1,42 +1,12 @@
 import "./home.scss"
+import Posts from "../../components/Posts/Posts";
 import React from 'react';
 const home= ()=>
 {
    return(
-    <div className="home">
-        Home
-        <div className="home">
-        Home
-    
-    </div><div className="home">
-        Home
-    
-    </div><div className="home">
-        Home
-    
-    </div><div className="home">
-        Home
-    
-    </div><div className="home">
-        Home
-    
-    </div><div className="home">
-        Home
-    
-    </div><div className="home">
-        Home
-    
-    </div><div className="home">
-        Home
-    
-    </div><div className="home">
-        Home
-    
-    </div><div className="home">
-        Home
-    
-    </div>
-    </div>
+   <div className="home">
+    <Posts/>
+   </div>
      
    )
 }

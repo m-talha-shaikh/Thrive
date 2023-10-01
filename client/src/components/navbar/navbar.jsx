@@ -20,7 +20,7 @@ const Navbar = ()=>
         <div className='navbar'>
           <div className='left'>
            <Link to ='/' style={{textDecoration:"none"}}>
-            <span style={{fontSize:"30px"}}>Thrive</span>
+            <span style={{fontSize:"30px",fontFamily:"cursive"}}>Thrive</span>
            </Link>
            <HomeRoundedIcon/>
            {darkMode?<LightModeIcon onClick={toggel}/>:<DarkModeIcon onClick={toggel}/>}

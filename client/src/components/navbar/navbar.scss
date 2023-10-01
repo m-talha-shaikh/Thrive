@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-    height: 50px;
+    height: 40px;
     border-bottom: 1px solid themed("border");
     position: sticky;
     top: 0;
@@ -32,9 +32,10 @@
         border: 1px solid themed("border");
         border-radius: 5px;
         padding: 5px;
-
+        margin-left: 6rem;
         input {
            border: none;
+
           width: 500px;
           background-color: transparent;
           color: themed("textColor");
