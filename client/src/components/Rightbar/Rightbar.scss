@@ -1,4 +1,7 @@
+@import '../../style.scss';
 .rightbar{
+    @include themify($themes)
+    {
     flex: 2.5;
 
     position: sticky;
@@ -6,6 +9,7 @@
     height: calc(100vh - 70px);
     overflow: scroll;
     scrollbar-width: none; /* Hide scrollbar for Firefox */
+    background-color: themed("bgSoft");
     -ms-overflow-style: none;
     &::-webkit-scrollbar{
         display: none;
@@ -19,6 +23,7 @@
             box-shadow: 9px -2px 22px -4px rgba(173,173,173,0.75);
 -webkit-box-shadow: 9px -2px 22px -4px rgba(173,173,173,0.75);
 -moz-box-shadow: 9px -2px 22px -4px rgba(173,173,173,0.75);
+background-color: themed("bg");
             span{
                 color: gray;
             }
@@ -48,10 +53,11 @@
                     left: 30px;
                  }
                  p{
-                    color: gray;
+                    color:themed("textColorSoft");
                  }
                  span{
                     font-weight: 500;
+                    color: themed("textColor");
                  }
                 }
                 .buttons{
@@ -76,4 +82,5 @@
             }
         }
     }
+}
 }
