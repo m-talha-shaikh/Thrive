@@ -5,6 +5,7 @@ import Navbar from './components/navbar/navbar';
 import Leftbar from './components/Leftbar/Leftbar';
 import Profile from './pages/profile/Profile';
 import Home from './pages/home/Home'
+import "./style.scss"
 import Rightbar from './components/Rightbar/Rightbar';
 import {createBrowserRouter,RouterProvider, Outlet, Navigate} from 'react-router-dom'; 
 function App() {
@@ -12,7 +13,7 @@ function App() {
   const Layout =()=>
   {
     return(
-      <>
+      <div className='theme-dark'>
       <Navbar/>
       <div style={{display:'flex'}}>
         <Leftbar/>
@@ -22,7 +23,7 @@ function App() {
         </div>
         <Rightbar/>
       </div>
-      </>
+      </div>
     )
   }
   const ProtectedRoute= ({children})=>
