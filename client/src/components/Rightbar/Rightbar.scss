@@ -1,0 +1,79 @@
+.rightbar{
+    flex: 2.5;
+
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 70px);
+    overflow: scroll;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+    .container{
+        padding: 20px 10px 10px 10px;
+
+        .item{
+            padding: 5px;
+            margin-top: 20px;
+            box-shadow: 9px -2px 22px -4px rgba(173,173,173,0.75);
+-webkit-box-shadow: 9px -2px 22px -4px rgba(173,173,173,0.75);
+-moz-box-shadow: 9px -2px 22px -4px rgba(173,173,173,0.75);
+            span{
+                color: gray;
+            }
+            .user{
+                display: flex;
+                align-items: center;
+                justify-content: space-between ;
+                margin: 10px 0px;
+                .userInfo{
+                 display: flex;
+                 align-items: center;
+                 gap: 20px;
+                 position: relative;
+                 img{
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                 }
+                 .online{
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    background-color: green;
+                    position: absolute;
+                    top:0 ;
+                    left: 30px;
+                 }
+                 p{
+                    color: gray;
+                 }
+                 span{
+                    font-weight: 500;
+                 }
+                }
+                .buttons{
+                   display: flex;
+                   align-items: center;
+                   gap: 10px;
+                }
+                button{
+                    border: none;
+                    
+                        padding: 5px;
+                        color: white;
+                        cursor: pointer;
+                    
+                   background: #3896ff;
+                    
+                        &:last-child {
+                            background-color: red;
+                        }
+                }
+                
+            }
+        }
+    }
+}
