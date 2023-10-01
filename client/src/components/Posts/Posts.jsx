@@ -6,21 +6,21 @@ const Posts = ()=>
   const posts = [
     {
       id: 123,
-      name: "Talha Shekh",
+      name: "Arham Ahmed",
       userId: 90,
       profilePic:
-        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
+        "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1696183974/arham_c4mnx8.jpg",
       desc: "check out this",
-      img: "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      img: "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1696183974/arham_c4mnx8.jpg",
     },
     {
       id: 34,
       name: "Yousuf Ahmed",
       userId: 23,
       profilePic:
-        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
+        "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1696183974/arham_c4mnx8.jpg",
       desc: "This is me",
-      img: "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
+      img: "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1696183975/yousuf_mosgs4.jpg"
     },
   ];
   return(
