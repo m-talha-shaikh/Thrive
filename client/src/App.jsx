@@ -9,8 +9,9 @@ import "./style.scss"
 import Rightbar from './components/Rightbar/Rightbar';
 import {createBrowserRouter,RouterProvider, Outlet, Navigate} from 'react-router-dom'; 
 import { DarkmodeContext } from './context/Darkmodecontext';
+import { AuthContext } from './context/AuthContext';
 function App() {
-  const currentUser = true;
+  const {currentUser} = useContext(AuthContext);
   const {darkMode}= useContext(DarkmodeContext);
   const Layout =()=>
   {

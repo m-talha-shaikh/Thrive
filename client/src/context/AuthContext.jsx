@@ -4,16 +4,20 @@ export const AuthContext= createContext();
 
 export const AuthContextProvider = ({children})=>
 {
-    const [CurrentUser,setCurrentUser]= useState(JSON.parse(localStorage.getItem("user"))||null);
-    const toggel =()=>
+    const [currentUser,setCurrentUser]= useState(JSON.parse(localStorage.getItem("user"))||null);
+    const Login =()=>
     {
-        
+        setCurrentUser({
+            id:69,
+            name:"Hamza Tufail69",
+            Profile: "https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        });
     };
     useEffect(()=>
     {
-      localStorage.setItem("user",CurrentUser);
-    },[CurrentUser]);
+      localStorage.setItem("user",JSON.stringify(currentUser));
+    },[currentUser]);
     
     
-    return(<AuthContext.Provider value={{darkMode,toggel}}>{children}</AuthContext.Provider>);
+    return(<AuthContext.Provider value={{currentUser,Login}}>{children}</AuthContext.Provider>);
 }

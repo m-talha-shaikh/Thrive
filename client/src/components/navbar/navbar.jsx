@@ -11,10 +11,11 @@ import GridViewIcon from '@mui/icons-material/GridView';
 import { Link } from "react-router-dom";
 import "./navbar.scss"
 import { DarkmodeContext } from "../../context/Darkmodecontext";
+import { AuthContext } from "../../context/AuthContext";
 const Navbar = ()=>
 {
   const {toggel,darkMode}= useContext(DarkmodeContext);
-  
+  const {currentUser}= useContext(AuthContext);
     return(
         <div className='navbar'>
           <div className='left'>
@@ -39,8 +40,8 @@ const Navbar = ()=>
            <NotificationsActiveIcon/>
            <PersonIcon/>
            <div className='user'>
-            <img src="https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt=""  />
-            <span>Hamza Tufail</span>
+            <img src={currentUser.Profile} alt=""  />
+            <span>{currentUser.name}</span>
            </div>
           </div>
         </div>
