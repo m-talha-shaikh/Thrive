@@ -1,4 +1,6 @@
+@import "../../style.scss";
 .leftbar{
+    @include themify($themes){
     flex: 2;
     position: sticky;
     top: 70px;
@@ -9,6 +11,8 @@
     &::-webkit-scrollbar{
         display: none;
     }
+    background-color: themed('bg');
+     color: themed('textColor');
     .container {
          
         padding: 20px;
@@ -16,7 +20,7 @@
            margin: 20px 0px;
            border: none;
            height: 0.5px;
-           background-color: lightgray; 
+           background-color:themed("border"); 
           }
         .menu{
             display: flex;
@@ -35,9 +39,7 @@
                  border-radius: 50%;
                 object-fit: cover;
                 }
-                span{
-                    
-                }
+                
             }
             .item{
                 display: flex;
@@ -49,10 +51,9 @@
                  border-radius: 50%;
                 object-fit: cover;
                 }
-                span{
-
-                }
+                
             }
         }
     }
+}
 }

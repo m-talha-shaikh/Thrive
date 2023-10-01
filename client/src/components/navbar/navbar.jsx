@@ -1,5 +1,5 @@
-import React from "react";
-import classes from './navbar.module.css'
+import React, { useContext } from "react";
+
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
@@ -9,34 +9,39 @@ import MessageIcon from '@mui/icons-material/Message';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GridViewIcon from '@mui/icons-material/GridView';
 import { Link } from "react-router-dom";
+import "./navbar.scss"
+import { DarkmodeContext } from "../../context/Darkmodecontext";
+import { AuthContext } from "../../context/AuthContext";
 const Navbar = ()=>
 {
+  const {toggel,darkMode}= useContext(DarkmodeContext);
+  const {currentUser}= useContext(AuthContext);
     return(
-        <div className={classes.navbar}>
-          <div className={classes.left}>
+        <div className='navbar'>
+          <div className='left'>
            <Link to ='/' style={{textDecoration:"none"}}>
             <span style={{fontSize:"30px"}}>Thrive</span>
            </Link>
            <HomeRoundedIcon/>
-           <DarkModeIcon/>
+           {darkMode?<LightModeIcon onClick={toggel}/>:<DarkModeIcon onClick={toggel}/>}
            <GridViewIcon/>
-           <div className={classes.centercontainer}>
+          
 
-           <div className={classes.search}>
-            <span className={classes.searchicon}>
+           <div className='search'>
+           
             <SearchIcon/>    
-            </span>
+            
             <input type="text" placeholder="Search..."  />
            </div>
+          
           </div>
-          </div>
-          <div className={classes.right}>
+          <div className='right'>
            <MessageIcon/>
            <NotificationsActiveIcon/>
            <PersonIcon/>
-           <div className={classes.user}>
-            <img src="https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt=""  />
-            <span>Hamza Tufail</span>
+           <div className='user'>
+            <img src={currentUser.Profile} alt=""  />
+            <span>{currentUser.name}</span>
            </div>
           </div>
         </div>

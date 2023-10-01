@@ -1,11 +1,41 @@
-import classes from './home.module.css'
+import "./home.scss"
 import React from 'react';
 const home= ()=>
 {
    return(
-    <div>
+    <div className="home">
+        Home
+        <div className="home">
         Home
     
+    </div><div className="home">
+        Home
+    
+    </div><div className="home">
+        Home
+    
+    </div><div className="home">
+        Home
+    
+    </div><div className="home">
+        Home
+    
+    </div><div className="home">
+        Home
+    
+    </div><div className="home">
+        Home
+    
+    </div><div className="home">
+        Home
+    
+    </div><div className="home">
+        Home
+    
+    </div><div className="home">
+        Home
+    
+    </div>
     </div>
      
    )
