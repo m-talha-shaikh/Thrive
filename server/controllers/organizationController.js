@@ -1,24 +1,15 @@
-function executeQuery(db, query, params) {
-  return new Promise((resolve, reject) => {
-    db.query(query, params, (error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  })}; 
+const executeQuery = require('./../utils/executeQuery')
 
 exports.getOrganization = async(req, res, next) => {
     const organizationId = req.params.organizationId;
 
-    const basicInfoQuery = `SELECTi O.name, O.industry,
+    const basicInfoQuery = `SELECT O.name, O.industry,
                                     O.description, O.website_url, O.contact,
                                 L.city, L.state, L.country
-                                FROM Organization O
+                                FROM organization O
                                 JOIN location L
                                 ON O.location_id = L.location_id
-                                WHERE P.organization_id = ${organizationId}
+                                WHERE O.organization_id = ${organizationId}
                           `;
                          
 
@@ -34,7 +25,7 @@ exports.getOrganization = async(req, res, next) => {
       };
 
       res.json(organizationProfile);
-      
+
     } catch (error) {
       console.error('Database error:', error);
       res.status(500).json({ error: error });

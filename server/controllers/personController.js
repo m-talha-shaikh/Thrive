@@ -1,13 +1,4 @@
-function executeQuery(db, query, params) {
-  return new Promise((resolve, reject) => {
-    db.query(query, params, (error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  })}; 
+const executeQuery = require('./../utils/executeQuery')
 
 exports.getPerson = async(req, res, next) => {
     const personId = req.params.personId;
@@ -44,10 +35,10 @@ exports.getPerson = async(req, res, next) => {
                           `;
 
     const certificationQuery = `SELECT C.name, C.issuing_organization,
-                                C.issue_date, C.expiration_date,
+                                C.issue_date, C.expiration_date
                                 FROM certifications C
                                 WHERE C.person_id = ${personId}`
-                         
+                     
 
     try {
       const queryTasks = [
@@ -58,11 +49,12 @@ exports.getPerson = async(req, res, next) => {
 
       const results = await Promise.all(queryTasks);
 
+
       const userProfile = {
         person: results[0][0],
         education: results[1],
         certifications: results[2],
-        
+
       };
 
       res.json(userProfile);

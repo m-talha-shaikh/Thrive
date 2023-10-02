@@ -1,23 +1,12 @@
-function executeQuery(db, query, params) {
-  return new Promise((resolve, reject) => {
-    db.query(query, params, (error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  })}; 
-
-
+const executeQuery = require('./../utils/executeQuery')
 
 exports.getInstitute = async(req, res, next) => {
     const instituteId = req.params.instituteId;
 
-    const basicInfoQuery = `SELECTi I.name, I.institute_type,
+    const basicInfoQuery = `SELECT I.name, I.institute_type,
                                     I.description, I.website_url, I.contact,
                                 L.city, L.state, L.country
-                                FROM Institute I
+                                FROM institute I
                                 JOIN location L
                                 ON I.location_id = L.location_id
                                 WHERE I.institute_id = ${instituteId}
@@ -36,7 +25,7 @@ exports.getInstitute = async(req, res, next) => {
       };
 
       res.json(instituteProfile);
-      
+
     } catch (error) {
       console.error('Database error:', error);
       res.status(500).json({ error: error });
