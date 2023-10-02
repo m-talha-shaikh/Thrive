@@ -3,10 +3,13 @@ import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Comments from "../comments/comments";
 import "./Post.scss"
 import { Link } from 'react-router-dom';
+import { useState } from "react";
 const Post = ({ post }) => {
     const Liked = false;
+    const [commentdisplay,setCommentdisplay] = useState(false);
     return (
       <div className="post">
         <div className="container">
@@ -32,7 +35,7 @@ const Post = ({ post }) => {
             {Liked ?   <FavoriteOutlinedIcon/>:<FavoriteBorderOutlinedIcon/>}
             <span>12 Likes</span>
          </div>
-         <div className="item">
+         <div className="item" onClick={()=>setCommentdisplay(!commentdisplay)}>
          <TextsmsOutlinedIcon />
             <span>Comments</span>
          </div>
@@ -41,6 +44,7 @@ const Post = ({ post }) => {
             <span>Share</span>
          </div>
         </div>
+        {commentdisplay && <Comments/>}
       </div>
         </div>
     );
