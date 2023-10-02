@@ -9,7 +9,7 @@ exports.getOrganization = async(req, res, next) => {
                                 FROM organization O
                                 JOIN location L
                                 ON O.location_id = L.location_id
-                                WHERE P.organization_id = ${organizationId}
+                                WHERE O.organization_id = ${organizationId}
                           `;
                          
 
