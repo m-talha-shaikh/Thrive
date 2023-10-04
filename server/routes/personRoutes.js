@@ -1,23 +1,24 @@
 const express = require('express')
-const personController = require('../controllers/personController')
+const personController = require('./../controllers/personController')
+const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
 router
-    .route('/:person_id')
+    .route('/:user_id')
     .get(personController.getPerson)
 
 router
-    .route('/:person_id/education')
-    .post(personController.createEducation)
+    .route('/:user_id/education')
+    .post(authController.protect, personController.createEducation)
 
-// router
-//     .route('/:person_id/employment')
-//     .post(personController.createEmployment)
+router
+    .route('/:user_id/employment')
+    .post(authController.protect, personController.createEmployment)
 
-// router
-//     .route('/:person_id/certification')
-//     .post(personController.createCertification)
+router
+    .route('/:user_id/certification')
+    .post(authController.protect, personController.createCertification)
 
 
 module.exports = router;

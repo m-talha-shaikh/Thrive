@@ -4,7 +4,7 @@ const organizationController = require('../controllers/organizationController')
 const router = express.Router();
 
 router
-    .route('/:organization_id')
+    .route('/:user_id')
     .get(organizationController.getOrganization)
 
 module.exports = router;
