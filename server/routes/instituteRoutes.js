@@ -6,5 +6,9 @@ const router = express.Router();
 router
     .route('/:user_id')
     .get(instituteController.getInstitute)
+
+router
+    .route('/:user_id/affiliates')
+    .get(instituteController.getAffiliates)
     
 module.exports = router;

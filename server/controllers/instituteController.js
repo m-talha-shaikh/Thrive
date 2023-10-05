@@ -33,5 +33,38 @@ exports.getInstitute = async(req, res, next) => {
 
 };
 
+exports.getAffiliates = async(req, res, next) => {
+    const institute_user_id = req.params.user_id;
+
+    const affiliatesQuery = `SELECT  P.first_name, P.last_name,
+                                    E.title
+                                    FROM person P
+                                    JOIN education E
+                                    ON   P.person_id = E.person_id
+                                    WHERE E.institute_id = (SELECT institute_id
+                                                              FROM institute O
+                                                              WHERE user_id =  ${institute_user_id})
+                          `;                          
+                         
+
+    try {
+      const queryTasks = [
+        executeQuery(req.db, affiliatesQuery , [institute_user_id])
+    ];
+
+      const results = await Promise.all(queryTasks);
+
+      const affiliates = {
+        affiliates: results[0],
+      };
+
+      res.json(affiliates);
+
+    } catch (error) {
+      console.error('Database error:', error);
+      res.status(500).json({ error: error });
+    }
+
+};
                
 
