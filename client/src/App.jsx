@@ -10,9 +10,11 @@ import Rightbar from './components/Rightbar/Rightbar';
 import {createBrowserRouter,RouterProvider, Outlet, Navigate} from 'react-router-dom'; 
 import { DarkmodeContext } from './context/Darkmodecontext';
 import { AuthContext } from './context/AuthContext';
+
 function App() {
   const {currentUser} = useContext(AuthContext);
   const {darkMode}= useContext(DarkmodeContext);
+
   const Layout =()=>
   {
     return(
@@ -29,6 +31,7 @@ function App() {
       </div>
     )
   }
+  
   const ProtectedRoute= ({children})=>
   {
     if (!currentUser) {
@@ -36,6 +39,7 @@ function App() {
     }
     return children;
   }
+
   const router = createBrowserRouter([
     {
       path: '/',
@@ -53,6 +57,14 @@ function App() {
           element: <Profile/>
         }
       ]
+    },
+    {
+      path: '/api/v1/institutes/:user_id',
+      element: <Profile />
+    },
+    {
+      path: '/api/v1/organizations/:user_id',
+      element: <Profile />
     },
     {
       path: '/login',

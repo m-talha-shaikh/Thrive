@@ -1,6 +1,6 @@
 const express = require('express');
 const helmet = require('helmet');
-const xss = require('xss-clean');
+const cors = require(`cors`);
 const attachDb = require('./server/utils/dbMiddleware');
 
 //Rquired Routes
@@ -11,10 +11,11 @@ const organizationRouter = require('./server/routes/organizationRoutes')
 //Starting app
 const app = express();
 
+
 //Middlewares
+app.use(cors());
 app.use(helmet());
-app.use(express.json({ limit: '100kb' }))
-app.use(xss());
+app.use(express.json({ limit: `100kb` }))
 
 // Attach the database connection to all routes under '/api/v1'
 app.use('/api/v1', attachDb);
