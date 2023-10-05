@@ -4,7 +4,11 @@ const instituteController = require('../controllers/instituteController')
 const router = express.Router();
 
 router
-    .route('/:instituteId')
+    .route('/:user_id')
     .get(instituteController.getInstitute)
 
+router
+    .route('/:user_id/affiliates')
+    .get(instituteController.getAffiliates)
+    
 module.exports = router;

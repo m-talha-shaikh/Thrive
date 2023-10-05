@@ -1,17 +1,17 @@
-const executeQuery = require('./../utils/executeQuery')
+const executeQuery = require("./../utils/executeQuery");
 
-exports.getPerson = async(req, res, next) => {
-    const personId = req.params.personId;
+exports.getPerson = async (req, res, next) => {
+  const user_id = req.params.user_id;
 
-    const basicInfoQuery = `SELECT P.first_name, P.last_name,
+  const basicInfoQuery = `SELECT P.first_name, P.last_name,
                                 L.city, L.state, L.country
                                 FROM person P
                                 JOIN location L
                                 ON P.location_id = L.location_id
-                                WHERE P.person_id = ${personId}
+                                WHERE P.user_id = ${user_id}
                           `;
 
-    const educationQuery = `SELECT I.name, L.city, L.state, L.country,
+  const educationQuery = `SELECT I.name, L.city, L.state, L.country,
                                    E.year_enrolled, E.year_graduated,
                                    E.major, E.currently_studying, E.text_description 
                                    FROM education E
@@ -19,10 +19,12 @@ exports.getPerson = async(req, res, next) => {
                                    ON I.institute_id = E.institute_id
                                    JOIN location L
                                    ON I.location_id = L.location_id
-                                   WHERE E.person_id = ${personId}
-                          `; 
+                                   WHERE E.person_id = (SELECT person_id
+                                                      FROM person P
+                                                      WHERE P.user_id = ${user_id})
+                          `;
 
-    const employmentQuery = `SELECT O.name, L.city, L.state, L.country,
+  const employmentQuery = `SELECT O.name, L.city, L.state, L.country,
                                    E.year_started, E.year_left,
                                    E.month_started, E.month_left,
                                    E.title, E.text_description 
@@ -31,40 +33,169 @@ exports.getPerson = async(req, res, next) => {
                                    ON O.organization_id = E.organization_id
                                    JOIN location L
                                    ON O.location_id = L.location_id
-                                   WHERE E.person_id = ${personId}
+                                   WHERE E.person_id = (SELECT person_id
+                                                      FROM person P
+                                                      WHERE P.user_id = ${user_id})
                           `;
 
-    const certificationQuery = `SELECT C.name, C.issuing_organization,
+  const certificationQuery = `SELECT C.name, C.issuing_organization,
                                 C.issue_date, C.expiration_date
                                 FROM certifications C
-                                WHERE C.person_id = ${personId}`
-                     
+                                   WHERE C.person_id = (SELECT person_id
+                                                      FROM person P
+                                                      WHERE P.user_id = ${user_id})
+                            `;
 
-    try {
-      const queryTasks = [
-        executeQuery(req.db, basicInfoQuery, [personId]),
-        executeQuery(req.db, educationQuery, [personId]),
-        executeQuery(req.db, certificationQuery, [personId])
+  try {
+    const queryTasks = [
+      executeQuery(req.db, basicInfoQuery, [user_id]),
+      executeQuery(req.db, educationQuery, [user_id]),
+      executeQuery(req.db, certificationQuery, [user_id]),
     ];
 
-      const results = await Promise.all(queryTasks);
+    const results = await Promise.all(queryTasks);
 
+    const userProfile = {
+      person: results[0][0],
+      education: results[1],
+      certifications: results[2],
+    };
 
-      const userProfile = {
-        person: results[0][0],
-        education: results[1],
-        certifications: results[2],
-
-      };
-
-      res.json(userProfile);
-
-    } catch (error) {
-      console.error('Database error:', error);
-      res.status(500).json({ error: error });
-    }
-
+    res.json(userProfile);
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ error: error });
+  }
 };
 
-               
+exports.createEducation = async (req, res, next) => {
+  const user_id = req.user.user_id;
 
+  const {
+    year_enrolled,
+    year_graduated,
+    major,
+    currently_studying,
+    text_description,
+  } = req.body;
+
+  const insertEducationQuery = `
+    INSERT INTO education(institute_id, year_enrolled, year_graduated, major, currently_studying, text_description)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const queryValues = [
+    institute_id,
+    year_enrolled,
+    year_graduated,
+    major,
+    currently_studying,
+    text_description,
+  ];
+
+  try {
+    const queryTasks = [
+      executeQuery(req.db, insertEducationQuery, queryValues),
+    ];
+
+    const results = await Promise.all(queryTasks);
+
+    const educationRecord = {
+      educationRecord: results[0][0],
+    };
+
+    res.json(educationRecord);
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ error: error });
+  }
+};
+
+exports.createCertification = async (req, res, next) => {
+  const user_id = req.user.user_id;
+
+  const {
+    certification_id,
+    name,
+    issuing_organization,
+    issue_date,
+    expiration_date,
+  } = req.body;
+
+  const insertCertificationQuery = `
+    INSERT INTO certification(certification_id,  name , issuing_organization , issue_date , expiration_date)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const queryValues = [
+    user_id,
+    certification_id,
+    name,
+    issuing_organization,
+    issue_date,
+    expiration_date,
+  ];
+
+  try {
+    const queryTasks = [
+      executeQuery(req.db, insertCertificationQuery, queryValues),
+    ];
+
+    const results = await Promise.all(queryTasks);
+
+    const certificationRecord = {
+      certificationRecord: results[0][0],
+    };
+
+    res.json(certificationRecord);
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ error: error });
+  }
+};
+
+exports.createEmployment = async (req, res, next) => {
+  const user_id = req.user.user_id;
+
+  const {
+    employment_id,
+    organization_id,
+    year_started,
+    month_left,
+    year_left,
+    title,
+    text_description,
+  } = req.body;
+
+  const insertEmploymentQuery = `
+    INSERT INTO employment(employment_id , organization_id , year_started , month_left, year_left, title, text_description)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const queryValues = [
+    employment_id,
+    organization_id,
+    year_started,
+    month_left,
+    year_left,
+    title,
+    text_description,
+  ];
+
+  try {
+    const queryTasks = [
+      executeQuery(req.db, insertEmploymentQuery, queryValues),
+    ];
+
+    const results = await Promise.all(queryTasks);
+
+    const employmentRecord = {
+      employmentRecord: results[0][0],
+    };
+
+    res.json(employmentRecord);
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ error: error });
+  }
+};
