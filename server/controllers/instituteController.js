@@ -9,8 +9,7 @@ exports.getInstitute = async(req, res, next) => {
                                 FROM institute I
                                 JOIN location L
                                 ON I.location_id = L.location_id
-                                WHERE I.user_id = ${user_id}
-                          `;
+                                WHERE I.user_id = ?`
                          
 
     try {
@@ -24,7 +23,9 @@ exports.getInstitute = async(req, res, next) => {
         institute: results[0][0],
       };
 
-      res.json(instituteProfile);
+      res.json({
+        "institute": instituteProfile
+      });
 
     } catch (error) {
       console.error('Database error:', error);
@@ -33,11 +34,12 @@ exports.getInstitute = async(req, res, next) => {
 
 };
 
+
 exports.getAffiliates = async(req, res, next) => {
     const institute_user_id = req.params.user_id;
 
-    const affiliatesQuery = `SELECT  P.first_name, P.last_name,
-                                    E.title
+    const affiliatesQuery = `SELECT P.first_name, P.last_name,
+                                    E.major
                                     FROM person P
                                     JOIN education E
                                     ON   P.person_id = E.person_id
