@@ -1,8 +1,17 @@
-@import "../src/style.scss";
+
 
   body {
  
     margin: 0;
+    background-color:  #222;
   
   }
-  
+  /* Hide the scrollbar for webkit-based browsers */
+body::-webkit-scrollbar {
+  width: 0.5em; /* Adjust the width as needed */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Hide the thumb (dragging handle) */
+}
+
