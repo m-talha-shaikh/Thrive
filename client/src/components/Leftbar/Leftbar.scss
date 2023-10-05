@@ -8,6 +8,9 @@
     overflow: scroll;
     scrollbar-width: none; /* Hide scrollbar for Firefox */
     -ms-overflow-style: none;
+    @include mobile{
+        display: none;
+    }
     &::-webkit-scrollbar{
         display: none;
     }

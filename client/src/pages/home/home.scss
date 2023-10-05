@@ -14,4 +14,7 @@
             display: none;
         }
     }
+    @include mobile{
+        padding: 10px;
+    }
 }

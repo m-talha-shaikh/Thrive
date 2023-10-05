@@ -9,7 +9,7 @@ export const AuthContextProvider = ({children})=>
     {
         setCurrentUser({
             id:69,
-            name:"Hamza Tufail69",
+            name:"Gay_69",
             Profile: "https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
         });
     };
