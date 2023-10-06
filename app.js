@@ -7,7 +7,6 @@ const attachDb = require('./server/utils/dbMiddleware');
 const personRouter = require('./server/routes/personRoutes')
 const instituteRouter = require('./server/routes/instituteRoutes')
 const organizationRouter = require('./server/routes/organizationRoutes')
-
 const PostRoutes = require("./server/routes/posts");
 const AuthRoutes = require("./server/routes/Auth")
 
