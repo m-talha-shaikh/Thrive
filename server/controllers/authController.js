@@ -40,6 +40,11 @@ exports.signup = async (req, res, next) => {
   const { account_type, username, email, password, ...categoryData } = req.body;
 
   try {
+    const userNameExists = await executeQuery(req.db, `SELECT * FROM users WHERE username = ?`, [username])
+    if (userNameExists.length > 0) {
+      return res.status(400).json({ error: 'Username already exists'})
+    }
+
     const hashedPassword = await argon2.hash(password);
 
 
@@ -186,7 +191,7 @@ exports.protect = async (req, res, next) => {
 exports.restrictTo = (...allowedUserTypes) => {
   return (req, res, next) => {
     if (!allowedUserTypes.includes(req.user.account_type)) {
-      res.status(403).json({ error: 'Your account type does not support this functionality' });
+      return res.status(403).json({ error: 'Your account type does not support this functionality' });
     }
     next();
   };
