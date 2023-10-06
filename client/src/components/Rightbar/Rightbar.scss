@@ -14,6 +14,9 @@
     &::-webkit-scrollbar{
         display: none;
     }
+    @include mobile{
+        display: none;
+    }
     .container{
         padding: 20px 10px 10px 10px;
 

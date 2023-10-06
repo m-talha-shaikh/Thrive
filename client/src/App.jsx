@@ -10,7 +10,7 @@ import Rightbar from './components/Rightbar/Rightbar';
 import {createBrowserRouter,RouterProvider, Outlet, Navigate} from 'react-router-dom'; 
 import { DarkmodeContext } from './context/Darkmodecontext';
 import { AuthContext } from './context/AuthContext';
-
+import Jobs from "./pages/Jobs/Jobs"
 function App() {
   const {currentUser} = useContext(AuthContext);
   const {darkMode}= useContext(DarkmodeContext);
@@ -55,16 +55,12 @@ function App() {
         {
           path: '/profile/:id',
           element: <Profile/>
+        },
+        {
+          path: '/Jobs/:id',
+          element: <Jobs/>
         }
       ]
-    },
-    {
-      path: '/api/v1/institutes/:user_id',
-      element: <Profile />
-    },
-    {
-      path: '/api/v1/organizations/:user_id',
-      element: <Profile />
     },
     {
       path: '/login',
