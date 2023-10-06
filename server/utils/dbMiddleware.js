@@ -2,10 +2,10 @@ const mysql = require('mysql');
 
 // Create the MySQL connection pool
 const db = mysql.createPool({
-  host: 'sql12.freemysqlhosting.net',
-  user: 'sql12649802',
-  password: '8llcc6EsRD',
-  database: 'sql12649802'
+  host: 'localhost',
+  user: 'root',
+  password: 'hamza504',
+  database: 'THRIVE_DB'
 });
 
 // Middleware to pass the database connection pool to routes

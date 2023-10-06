@@ -1,9 +1,14 @@
+CREATE DATABASE IF NOT EXISTS THRIVE_DB;
+
+USE THRIVE_DB;
+
 CREATE TABLE `user` (
   `user_id` int PRIMARY KEY,
   `username` varchar(255) UNIQUE NOT NULL,
   `email` varchar(255) UNIQUE NOT NULL,
   `password` varchar(255) NOT NULL,
-    
+  `ProfilePic` varchar(255) ,
+   `CoverPic` varchar(255)
 );
 
 CREATE TABLE `location` (

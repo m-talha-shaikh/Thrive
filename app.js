@@ -7,7 +7,10 @@ const attachDb = require('./server/utils/dbMiddleware');
 const personRouter = require('./server/routes/personRoutes')
 const instituteRouter = require('./server/routes/instituteRoutes')
 const organizationRouter = require('./server/routes/organizationRoutes')
-
+const PostRoutes = require("./server/routes/posts");
+const commentRoutes = require("./server/routes/comments");
+const AuthRoutes = require("./server/routes/Auth");
+const LikeRoutes = require("./server/routes/likes");
 //Starting app
 const app = express();
 
@@ -24,6 +27,11 @@ app.use('/api/v1', attachDb);
 app.use('/api/v1/persons', personRouter);
 app.use('/api/v1/institutes', instituteRouter);
 app.use('/api/v1/organizations', organizationRouter);
+app.use('/api/v1/posts', PostRoutes);
+app.use('/api/v1/comments', commentRoutes);
+app.use('/api/v1/likes', LikeRoutes);
+app.use('/api/v1/auth', AuthRoutes);
+
 
 //404
 app.all('*', (req, res, next) => {
