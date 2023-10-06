@@ -3,8 +3,7 @@
   body {
  
     margin: 0;
-    background-color:  #222;
-  
+    
   }
   /* Hide the scrollbar for webkit-based browsers */
 body::-webkit-scrollbar {
