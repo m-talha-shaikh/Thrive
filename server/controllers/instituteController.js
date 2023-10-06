@@ -62,6 +62,7 @@ exports.getAffiliates = async(req, res, next) => {
 
       res.json(affiliates);
 
+      
     } catch (error) {
       console.error('Database error:', error);
       res.status(500).json({ error: error });
