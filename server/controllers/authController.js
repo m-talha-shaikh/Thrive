@@ -183,11 +183,22 @@ exports.protect = async (req, res, next) => {
   }
 };
 
-exports.authorize = (async, req, res) => {
-  if(req.user.user_id === req.params.user_id){
+exports.restrictTo = (...allowedUserTypes) => {
+  return (req, res, next) => {
+    if (!allowedUserTypes.includes(req.user.account_type)) {
+      res.status(403).json({ error: 'Your account type does not support this functionality' });
+    }
     next();
+  };
+};
+
+exports.authorize = () => {
+  return (req, res, next) => {
+    if(req.user.user_id === req.params.user_id){
+      next();
   }
-  else {
-    res.status(401).json({ error: 'You are not authorized' });
-  }
+    else {
+      res.status(403).json({ error: 'You are not authorized' });
+    }
+  };
 };

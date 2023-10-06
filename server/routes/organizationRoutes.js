@@ -9,7 +9,7 @@ const router = express.Router({ mergeParams: true });
 router.route('/:user_id')
   .get(organizationController.getOrganization);
 
-router.use('/:user_id', authController.protect, authController.authorize);
+router.use('/:user_id', authController.protect, authController.restrictTo('organization'), authController.authorize);
 
 router.route('/:user_id')
   .patch(organizationController.updateOrganization);
