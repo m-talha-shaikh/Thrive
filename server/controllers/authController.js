@@ -3,7 +3,9 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const executeQuery = require('../utils/executeQuery');
 const argon2 = require('argon2');
+
 const { error } = require('console');
+
 
 
 const signToken = (user_id) => {
@@ -38,27 +40,33 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = async (req, res, next) => {
+
   const { account_type, username, email, password,ProfilePic,CoverPic ,...categoryData } = req.body;
   const check_query = "SELECT FROM users Where username = ?";
   const checkqueryresult = await executeQuery(req.db, check_query, [username]).catch(error=>{
     res.sendStatus("503");
   });
   
+
   try {
     const userNameExists = await executeQuery(req.db, `SELECT * FROM users WHERE username = ?`, [username])
+   console.log("jefej");
     if (userNameExists.length > 0) {
       return res.status(400).json({ error: 'Username already exists'})
     }
-
+console.log("jefej");
     const hashedPassword = await argon2.hash(password);
 
-
+    console.log("paas wordk hass");
     const createUserQuery = `
+
       INSERT INTO users (account_type, username, email, password,ProfilePic,CoverPic)
+
       VALUES (?, ?, ?, ?,?,?)
     `;
 
     const userQueryValues = [account_type, username, email, hashedPassword,ProfilePic,CoverPic];
+
     const userQueryResult = await executeQuery(req.db, createUserQuery, userQueryValues);
 
     const user_id = userQueryResult.insertId;
