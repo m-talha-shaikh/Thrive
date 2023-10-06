@@ -9,11 +9,13 @@ const attachDb = require('./server/utils/dbMiddleware');
 const personRouter = require('./server/routes/personRoutes')
 const instituteRouter = require('./server/routes/instituteRoutes')
 const organizationRouter = require('./server/routes/organizationRoutes')
-
 const PostRoutes = require("./server/routes/posts");
+const CommentRoutes = require("./server/routes/comments");
 const AuthRoutes = require("./server/routes/Auth")
+const likeRoutes = require("./server/routes/likes")
 
 const jobRouter = require('./server/routes/jobRoutes')
+
 
 
 //Starting app
@@ -33,13 +35,15 @@ app.use('/api/v1/persons', personRouter);
 app.use('/api/v1/institutes', instituteRouter);
 app.use('/api/v1/organizations', organizationRouter);
 
+app.use("/api/v1/Auth",AuthRoutes);
+app.use("/api/v1/Posts",PostRoutes);
+
 app.use("/api/v1/Post",PostRoutes);
 app.use("/api/v1/Auth",AuthRoutes);
-// app.use("/", (req, res, next) => {
-//     res.send('This is a dummy route at the root URL ("/").');
-//   });
+
 
 app.use('/api/v1/jobs', jobRouter);
+
 
 
 //404
