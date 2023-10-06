@@ -136,7 +136,7 @@ exports.login = async (req, res, next) => {
     try {
       const user = await executeQuery(req.db, 'SELECT * FROM users WHERE email = ?', [email]);
       if (user.length > 0) {
-        const match = await argon2.verify(user[0].password, password);
+        const match = await argon2.verify(user[0].password , password);
 
         if (match) {
           createSendToken(user[0], 200, res);
