@@ -9,7 +9,7 @@ const router = express.Router({ mergeParams: true });
 router.route('/:user_id')
   .get(personController.getPerson);
 
-router.use('/:user_id', authController.protect, authController.authorize);
+router.use('/:user_id', authController.protect, authController.restrictTo('person'), authController.authorize);
 
 router.route('/:user_id/education')
   .post(personController.createEducation);
