@@ -45,6 +45,11 @@ exports.signup = async (req, res, next) => {
   });
   
   try {
+    const userNameExists = await executeQuery(req.db, `SELECT * FROM users WHERE username = ?`, [username])
+    if (userNameExists.length > 0) {
+      return res.status(400).json({ error: 'Username already exists'})
+    }
+
     const hashedPassword = await argon2.hash(password);
 
 
@@ -186,4 +191,24 @@ exports.protect = async (req, res, next) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }
+};
+
+exports.restrictTo = (...allowedUserTypes) => {
+  return (req, res, next) => {
+    if (!allowedUserTypes.includes(req.user.account_type)) {
+      return res.status(403).json({ error: 'Your account type does not support this functionality' });
+    }
+    next();
+  };
+};
+
+exports.authorize = () => {
+  return (req, res, next) => {
+    if(req.user.user_id === req.params.user_id){
+      next();
+  }
+    else {
+      res.status(403).json({ error: 'You are not authorized' });
+    }
+  };
 };
