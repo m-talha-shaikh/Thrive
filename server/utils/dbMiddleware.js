@@ -4,8 +4,8 @@ const mysql = require('mysql');
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'hamza504',
-  database: 'THRIVE_DB'
+  password: '',
+  database: 'thrive_db'
 });
 
 // Middleware to pass the database connection pool to routes
