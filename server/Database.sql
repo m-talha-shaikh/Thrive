@@ -6,10 +6,10 @@ CREATE TABLE `user` (
   `user_id` int PRIMARY KEY Auto_increment,
   `username` varchar(255) UNIQUE NOT NULL,
   `email` varchar(255) UNIQUE NOT NULL,
-   `account_type` varchar(255) NOT NULL ,
+  `account_type` varchar(255) NOT NULL ,
   `password` varchar(255) NOT NULL,
   `ProfilePic` varchar(255) ,
-   `CoverPic` varchar(255)
+  `CoverPic` varchar(255)
 );
 
 -- CREATE TABLE `location` (

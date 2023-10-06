@@ -1,16 +1,18 @@
+
+
+require('dotenv').config();
+
 const crypto = require('crypto');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const executeQuery = require('../utils/executeQuery');
 const argon2 = require('argon2');
-
 const { error } = require('console');
 
 
-
 const signToken = (user_id) => {
-  return jwt.sign({ user_id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
+  return jwt.sign({ user_id }, "my-ultra-secret", {
+    expiresIn: 90*24*60*60,
   });
 };
 
@@ -19,7 +21,7 @@ const createSendToken = (user, statusCode, res) => {
 
   const cookieOptions = {
     expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      Date.now() + 90 * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
   };
@@ -40,36 +42,27 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = async (req, res, next) => {
-
-  const { account_type, username, email, password,ProfilePic,CoverPic ,...categoryData } = req.body;
-  const check_query = "SELECT FROM users Where username = ?";
-  const checkqueryresult = await executeQuery(req.db, check_query, [username]).catch(error=>{
-    res.sendStatus("503");
-  });
+  const { user_id, username, email, person_id, account_type, password, ProfilePic, CoverPic, ...categoryData } = req.body;
+  const check_query = "SELECT * FROM user WHERE username = ?";
   
-
   try {
-    const userNameExists = await executeQuery(req.db, `SELECT * FROM users WHERE username = ?`, [username])
-   console.log("jefej");
-    if (userNameExists.length > 0) {
-      return res.status(400).json({ error: 'Username already exists'})
+    // Check if the username already exists
+    const checkqueryresult = await executeQuery(req.db, check_query, [username]);
+
+    if (checkqueryresult.length > 0) {
+      return res.status(400).json({ error: 'Username already exists' });
     }
-console.log("jefej");
+
     const hashedPassword = await argon2.hash(password);
 
-    console.log("paas wordk hass");
     const createUserQuery = `
-
-      INSERT INTO users (account_type, username, email, password,ProfilePic,CoverPic)
-
-      VALUES (?, ?, ?, ?,?,?)
+      INSERT INTO user (user_id, username, email, account_type, password, ProfilePic, CoverPic)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
-    const userQueryValues = [account_type, username, email, hashedPassword,ProfilePic,CoverPic];
-
+    const userQueryValues = [user_id, username, email, account_type, hashedPassword, ProfilePic, CoverPic];
     const userQueryResult = await executeQuery(req.db, createUserQuery, userQueryValues);
 
-    const user_id = userQueryResult.insertId;
 
     let categoryQuery;
     let categoryQueryValues;
@@ -78,17 +71,18 @@ console.log("jefej");
     if (account_type === 'person') {
       categoryTableName = 'person';
       categoryQuery = `
-        INSERT INTO person (user_id, first_name, last_name, date_of_birth, gender, location_id)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO person (user_id, person_id, first_name, last_name, date_of_birth, gender, location_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
 
       categoryQueryValues = [
         user_id,
+        person_id,
         categoryData.first_name,
         categoryData.last_name,
         categoryData.date_of_birth,
         categoryData.gender,
-        categoryData.location_id,
+        categoryData.location_id
       ];
     } else if (account_type === 'institute') {
       categoryTableName = 'institute';
@@ -147,12 +141,13 @@ console.log("jefej");
   }
 };
 
+
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (email && password) {
     try {
-      const user = await executeQuery(req.db, 'SELECT * FROM users WHERE email = ?', [email]);
+      const user = await executeQuery(req.db, 'SELECT * FROM user WHERE email = ?', [email]);
       if (user.length > 0) {
         const match = await argon2.verify(user[0].password , password);
 
@@ -184,9 +179,9 @@ exports.protect = async (req, res, next) => {
   }
 
   try {
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    const decoded = await promisify(jwt.verify)(token, "my-ultra-secret");
 
-    const protectQuery = `SELECT * FROM users WHERE user_id = ?`;
+    const protectQuery = `SELECT * FROM user WHERE user_id = ?`;
     const protectQueryValues = [decoded.user_id];
     const user = await executeQuery(req.db, protectQuery, protectQueryValues);
 
