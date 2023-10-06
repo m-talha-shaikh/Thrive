@@ -7,6 +7,7 @@ const attachDb = require('./server/utils/dbMiddleware');
 const personRouter = require('./server/routes/personRoutes')
 const instituteRouter = require('./server/routes/instituteRoutes')
 const organizationRouter = require('./server/routes/organizationRoutes')
+const jobRouter = require('./server/routes/jobRoutes')
 
 //Starting app
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/v1', attachDb);
 app.use('/api/v1/persons', personRouter);
 app.use('/api/v1/institutes', instituteRouter);
 app.use('/api/v1/organizations', organizationRouter);
+app.use('/api/v1/jobs', jobRouter);
 
 //404
 app.all('*', (req, res, next) => {
