@@ -45,7 +45,7 @@ exports.getAffiliates = async(req, res, next) => {
                                     ON   P.person_id = E.person_id
                                     WHERE E.institute_id = (SELECT institute_id
                                                               FROM institute O
-                                                              WHERE user_id =  ${institute_user_id})
+                                                              WHERE user_id =  ? )
                           `;                          
                          
 
