@@ -3,7 +3,9 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const executeQuery = require('../utils/executeQuery');
 const argon2 = require('argon2');
-const { error, log } = require('console');
+
+const { error } = require('console');
+
 
 
 const signToken = (user_id) => {
@@ -38,8 +40,14 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = async (req, res, next) => {
-  const { user_id,account_type, username, email, password,ProfilePic,CoverPic ,...categoryData } = req.body;  
-  console.log("jhchwehfuw ami");
+
+  const { account_type, username, email, password,ProfilePic,CoverPic ,...categoryData } = req.body;
+  const check_query = "SELECT FROM users Where username = ?";
+  const checkqueryresult = await executeQuery(req.db, check_query, [username]).catch(error=>{
+    res.sendStatus("503");
+  });
+  
+
   try {
     const userNameExists = await executeQuery(req.db, `SELECT * FROM users WHERE username = ?`, [username])
    console.log("jefej");
@@ -51,83 +59,86 @@ console.log("jefej");
 
     console.log("paas wordk hass");
     const createUserQuery = `
-      INSERT INTO users (user_id,account_type, username, email, password,ProfilePic,CoverPic)
+
+      INSERT INTO users (account_type, username, email, password,ProfilePic,CoverPic)
+
       VALUES (?, ?, ?, ?,?,?)
     `;
 
     const userQueryValues = [account_type, username, email, hashedPassword,ProfilePic,CoverPic];
-    const userQueryResult = await executeQuery(req.db, createUserQuery, userQueryValues).then(console.log("uploaded succesfully"));
 
-    // const user_id = userQueryResult.insertId;
+    const userQueryResult = await executeQuery(req.db, createUserQuery, userQueryValues);
 
-    // let categoryQuery;
-    // let categoryQueryValues;
-    // let categoryTableName;
+    const user_id = userQueryResult.insertId;
 
-    // if (account_type === 'person') {
-    //   categoryTableName = 'person';
-    //   categoryQuery = `
-    //     INSERT INTO person (user_id, first_name, last_name, date_of_birth, gender, location_id)
-    //     VALUES (?, ?, ?, ?, ?, ?)
-    //   `;
+    let categoryQuery;
+    let categoryQueryValues;
+    let categoryTableName;
 
-    //   categoryQueryValues = [
-    //     user_id,
-    //     categoryData.first_name,
-    //     categoryData.last_name,
-    //     categoryData.date_of_birth,
-    //     categoryData.gender,
-    //     categoryData.location_id,
-    //   ];
-    // } else if (account_type === 'institute') {
-    //   categoryTableName = 'institute';
-    //   categoryQuery = `
-    //     INSERT INTO institute (user_id, name, institute_type, location_id, description, website_url, contact)
-    //     VALUES (?, ?, ?, ?, ?, ?, ?)
-    //   `;
+    if (account_type === 'person') {
+      categoryTableName = 'person';
+      categoryQuery = `
+        INSERT INTO person (user_id, first_name, last_name, date_of_birth, gender, location_id)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
 
-    //   categoryQueryValues = [
-    //     user_id,
-    //     categoryData.name,
-    //     categoryData.institute_type,
-    //     categoryData.location_id,
-    //     categoryData.description,
-    //     categoryData.website_url,
-    //     categoryData.contact,
-    //   ];
-    // } else if (account_type === 'organization') {
-    //   categoryTableName = 'organization';
-    //   categoryQuery = `
-    //     INSERT INTO organization (user_id, name, industry, location_id, description, website_url, contact)
-    //     VALUES (?, ?, ?, ?, ?, ?, ?)
-    //   `;
+      categoryQueryValues = [
+        user_id,
+        categoryData.first_name,
+        categoryData.last_name,
+        categoryData.date_of_birth,
+        categoryData.gender,
+        categoryData.location_id,
+      ];
+    } else if (account_type === 'institute') {
+      categoryTableName = 'institute';
+      categoryQuery = `
+        INSERT INTO institute (user_id, name, institute_type, location_id, description, website_url, contact)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `;
 
-    //   categoryQueryValues = [
-    //     user_id,
-    //     categoryData.name,
-    //     categoryData.industry,
-    //     categoryData.location_id,
-    //     categoryData.description,
-    //     categoryData.website_url,
-    //     categoryData.contact,
-    //   ];
-    // } else {
-    //   return res.status(400).json({ message: 'Invalid account_type' });
-    // }
+      categoryQueryValues = [
+        user_id,
+        categoryData.name,
+        categoryData.institute_type,
+        categoryData.location_id,
+        categoryData.description,
+        categoryData.website_url,
+        categoryData.contact,
+      ];
+    } else if (account_type === 'organization') {
+      categoryTableName = 'organization';
+      categoryQuery = `
+        INSERT INTO organization (user_id, name, industry, location_id, description, website_url, contact)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `;
 
-    // await executeQuery(req.db, categoryQuery, categoryQueryValues);
+      categoryQueryValues = [
+        user_id,
+        categoryData.name,
+        categoryData.industry,
+        categoryData.location_id,
+        categoryData.description,
+        categoryData.website_url,
+        categoryData.contact,
+      ];
+    } else {
+      return res.status(400).json({ message: 'Invalid account_type' });
+    }
 
-    // const fetchCategoryQuery = `
-    //   SELECT * FROM ${categoryTableName} WHERE user_id = ?
-    // `;
+    await executeQuery(req.db, categoryQuery, categoryQueryValues);
 
-    // const categoryDataResult = await executeQuery(req.db, fetchCategoryQuery, [user_id]);
+    const fetchCategoryQuery = `
+      SELECT * FROM ${categoryTableName} WHERE user_id = ?
+    `;
 
-    // const user = {
-    //   user_id: user_id,
-    //   account_type: account_type,
-    //   category_data: categoryDataResult[0],
-    // };
+    const categoryDataResult = await executeQuery(req.db, fetchCategoryQuery, [user_id]);
+
+    const user = {
+      user_id: user_id,
+      account_type: account_type,
+      category_data: categoryDataResult[0],
+    };
 
     createSendToken(user, 201, res);
   } catch (error) {

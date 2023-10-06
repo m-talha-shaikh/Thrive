@@ -12,6 +12,9 @@ const CommentRoutes = require("./server/routes/comments");
 const AuthRoutes = require("./server/routes/Auth")
 const likeRoutes = require("./server/routes/likes")
 
+const jobRouter = require('./server/routes/jobRoutes')
+
+
 
 //Starting app
 const app = express();
@@ -29,8 +32,17 @@ app.use('/api/v1', attachDb);
 app.use('/api/v1/persons', personRouter);
 app.use('/api/v1/institutes', instituteRouter);
 app.use('/api/v1/organizations', organizationRouter);
+
 app.use("/api/v1/Auth",AuthRoutes);
 app.use("/api/v1/Posts",PostRoutes);
+
+app.use("/api/v1/Post",PostRoutes);
+app.use("/api/v1/Auth",AuthRoutes);
+
+
+app.use('/api/v1/jobs', jobRouter);
+
+
 
 //404
 app.all('*', (req, res, next) => {
