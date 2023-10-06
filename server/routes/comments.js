@@ -1,8 +1,8 @@
-import express from "express";
-import {getPost} from "../controllers/comment.js"
+const express = require('express');
+const {getpost} = require('../controllers/post');
 
 const router = express.Router();
-router.get("")
 
 
-export default router;
+
+module.export =router;
