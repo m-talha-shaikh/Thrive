@@ -182,3 +182,12 @@ exports.protect = async (req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+exports.authorize = (async, req, res) => {
+  if(req.user.user_id === req.params.user_id){
+    next();
+  }
+  else {
+    res.status(401).json({ error: 'You are not authorized' });
+  }
+};
