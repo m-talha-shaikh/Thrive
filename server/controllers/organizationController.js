@@ -165,7 +165,7 @@ exports.createJob = async (req, res, next) => {
   } = req.body;
 
   const insertJobQuery = `
-    INSERT INTO education(organization_id, title, description, requirements, post_date,  expiry_date, is_active)
+    INSERT INTO jobs(organization_id, title, description, requirements, post_date,  expiry_date, is_active)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -210,7 +210,7 @@ exports.updateJob = async (req, res, next) => {
   } = req.body;
 
   const updateJobQuery = `
-    UPDATE education
+    UPDATE jobs
     SET  title = ?, description = ?, requirements = ?,
         expiry_date = ?, is_active = ?
     WHERE job_id = ? AND organization_id = (SELECT organization_id
@@ -252,7 +252,7 @@ exports.deleteJob = async (req, res, next) => {
   const job_id = req.params.job_id || req.body.job_id;
 
   const deleteJobQuery = `
-    DELETE FROM education
+    DELETE FROM jobs
     WHERE job_id = ? AND organization_id = (SELECT organization_id
                                             FROM organization O
                                             WHERE user_id = ?)

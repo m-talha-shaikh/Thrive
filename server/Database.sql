@@ -31,22 +31,22 @@ CREATE TABLE `person` (
 
 CREATE TABLE `organization` (
   `organization_id` int PRIMARY KEY AUTO_INCREMENT,
-  `user_id` int NOT NULL,
+  `user_id` int,
   `name` varchar(255) NOT NULL,
-  `industry` varchar(255) NOT NULL,
-  `location_id` int NOT NULL,
-  `description` text NOT NULL,
+  `industry` varchar(255)
+  `location_id` int,
+  `description` text,
   `website_url` varchar(255),
   `contact` varchar(255)
 );
 
 CREATE TABLE `institute` (
   `institute_id` int PRIMARY KEY AUTO_INCREMENT,
-  `user_id` int NOT NULL,
+  `user_id` int,
   `name` varchar(255) NOT NULL,
-  `institute_type` varchar(255) NOT NULL,
-  `location_id` int NOT NULL,
-  `description` text NOT NULL,
+  `institute_type` varchar(255),
+  `location_id` int,
+  `description` text ,
   `website_url` varchar(255),
   `contact` varchar(255)
 );
