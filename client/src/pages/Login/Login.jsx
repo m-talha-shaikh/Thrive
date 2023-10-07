@@ -1,6 +1,6 @@
-import { useContext } from 'react';
-import classes from './Login.module.css'
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -54,9 +54,9 @@ const Login = ()=>
                 </form>
             </div>
         </div>
+      </div>
     </div>
-    )
-}
-
+  );
+};
 
 export default Login;
