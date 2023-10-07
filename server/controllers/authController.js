@@ -42,6 +42,7 @@ exports.signup = async (req, res, next) => {
   const check_query = "SELECT * FROM user WHERE username = ?";
   const check_location = "SELECT location_id FROM location WHERE city = ? AND state = ? AND country = ?";
   
+
   try {
     // Check if the username already exists
     const checkqueryresult = await executeQuery(req.db, check_query, [username]);
@@ -50,14 +51,17 @@ exports.signup = async (req, res, next) => {
       return res.status(400).json({ error: 'Username already exists' });
     }
 
-    let location_id = await executeQuery(req.db, check_location, [city, state, country]);
+let location = await executeQuery(req.db, check_location, [city, state, country]);
+let location_id;
 
-    if (!(location_id.length > 0)) {
-      const locationResult = await executeQuery(req.db, `INSERT INTO location (city, state, country)
-                                                           VALUES (?, ?, ?);`, [city, state, country]);
+if (location.length === 0) {
+  const locationResult = await executeQuery(req.db, `INSERT INTO location (city, state, country) VALUES (?, ?, ?);`, [city, state, country]);
+  location_id = locationResult.insertId;
+} else {
+  location_id = location[0].location_id;
+}
 
-      location_id = locationResult.insertId;
-    }
+
 
     const hashedPassword = await argon2.hash(password);
 
@@ -82,7 +86,6 @@ exports.signup = async (req, res, next) => {
         INSERT INTO person (user_id, first_name, last_name, date_of_birth, gender, location_id)
         VALUES (?, ?, ?, ?, ?, ?)
       `;
-
       categoryQueryValues = [
         user_id,
         categoryData.first_name,
@@ -91,6 +94,7 @@ exports.signup = async (req, res, next) => {
         categoryData.gender,
         location_id
       ];
+
     } else if (account_type === 'institute') {
       categoryTableName = 'institute';
       categoryQuery = `
@@ -124,6 +128,7 @@ exports.signup = async (req, res, next) => {
         categoryData.contact,
       ];
     } else {
+      console.log("Oh no");
       return res.status(400).json({ message: 'Invalid account_type' });
     }
 
@@ -151,15 +156,17 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
-
   if (email && password) {
     try {
-      const user = await executeQuery(req.db, 'SELECT * FROM user WHERE email = ?', [email]);
-      if (user.length > 0) {
-        const match = await argon2.verify(user[0].password , password);
+      const users = await executeQuery(req.db, 'SELECT * FROM user WHERE email = ?', [email]);
+      if (users.length > 0) {
+        const user = users[0];
+
+        const match = await argon2.verify(user.password, password);
 
         if (match) {
-          createSendToken(user[0], 200, res);
+          createSendToken(user, 200, res);
+
         } else {
           res.status(401).json({ error: 'Incorrect Email or password' });
         }
@@ -167,12 +174,13 @@ exports.login = async (req, res, next) => {
         res.status(401).json({ error: 'Incorrect Email or password' });
       }
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      console.log(error);
     }
   } else {
     res.status(400).json({ error: 'Missing email or password' });
   }
 };
+
 
 exports.protect = async (req, res, next) => {
   let token;
