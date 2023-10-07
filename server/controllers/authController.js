@@ -44,22 +44,21 @@ exports.signup = async (req, res, next) => {
   
 
   try {
-    // Check if the username already exists
     const checkqueryresult = await executeQuery(req.db, check_query, [username]);
 
     if (checkqueryresult.length > 0) {
       return res.status(400).json({ error: 'Username already exists' });
     }
 
-let location = await executeQuery(req.db, check_location, [city, state, country]);
-let location_id;
+  let location = await executeQuery(req.db, check_location, [city, state, country]);
+  let location_id;
 
-if (location.length === 0) {
-  const locationResult = await executeQuery(req.db, `INSERT INTO location (city, state, country) VALUES (?, ?, ?);`, [city, state, country]);
-  location_id = locationResult.insertId;
-} else {
-  location_id = location[0].location_id;
-}
+  if (location.length === 0) {
+    const locationResult = await executeQuery(req.db, `INSERT INTO location (city, state, country) VALUES (?, ?, ?);`, [city, state, country]);
+    location_id = locationResult.insertId;
+  } else {
+    location_id = location[0].location_id;
+  }
 
 
 
