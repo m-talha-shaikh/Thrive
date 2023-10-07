@@ -1,6 +1,6 @@
 import { Children, useContext } from 'react';
 import Login from './pages/Login/Login';
-import Register from './pages/register/register';
+import Register from './pages/register/Register';
 import Navbar from './components/navbar/navbar';
 import Leftbar from './components/Leftbar/Leftbar';
 import Profile from './pages/profile/Profile';
