@@ -1,7 +1,3 @@
-
-
-require('dotenv').config();
-
 const crypto = require('crypto');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
@@ -42,8 +38,9 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = async (req, res, next) => {
-  const { user_id, username, email, person_id, account_type, password, ProfilePic, CoverPic, ...categoryData } = req.body;
+  const { username, email, account_type, password, ProfilePic, CoverPic, city, state, country, ...categoryData } = req.body;
   const check_query = "SELECT * FROM user WHERE username = ?";
+  const check_location = "SELECT location_id FROM location WHERE city = ? AND state = ? AND country = ?";
   
   try {
     // Check if the username already exists
@@ -53,15 +50,26 @@ exports.signup = async (req, res, next) => {
       return res.status(400).json({ error: 'Username already exists' });
     }
 
+    let location_id = await executeQuery(req.db, check_location, [city, state, country]);
+
+    if (!(location_id.length > 0)) {
+      const locationResult = await executeQuery(req.db, `INSERT INTO location (city, state, country)
+                                                           VALUES (?, ?, ?);`, [city, state, country]);
+
+      location_id = locationResult.insertId;
+    }
+
     const hashedPassword = await argon2.hash(password);
 
     const createUserQuery = `
-      INSERT INTO user (user_id, username, email, account_type, password, ProfilePic, CoverPic)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO user (username, email, account_type, password, ProfilePic, CoverPic)
+      VALUES (?, ?, ?, ?, ?, ?)
     `;
 
-    const userQueryValues = [user_id, username, email, account_type, hashedPassword, ProfilePic, CoverPic];
+    const userQueryValues = [username, email, account_type, hashedPassword, ProfilePic, CoverPic];
     const userQueryResult = await executeQuery(req.db, createUserQuery, userQueryValues);
+
+    const user_id = userQueryResult.insertId;
 
 
     let categoryQuery;
@@ -71,18 +79,17 @@ exports.signup = async (req, res, next) => {
     if (account_type === 'person') {
       categoryTableName = 'person';
       categoryQuery = `
-        INSERT INTO person (user_id, person_id, first_name, last_name, date_of_birth, gender, location_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO person (user_id, first_name, last_name, date_of_birth, gender, location_id)
+        VALUES (?, ?, ?, ?, ?, ?)
       `;
 
       categoryQueryValues = [
         user_id,
-        person_id,
         categoryData.first_name,
         categoryData.last_name,
         categoryData.date_of_birth,
         categoryData.gender,
-        categoryData.location_id
+        location_id
       ];
     } else if (account_type === 'institute') {
       categoryTableName = 'institute';
@@ -95,7 +102,7 @@ exports.signup = async (req, res, next) => {
         user_id,
         categoryData.name,
         categoryData.institute_type,
-        categoryData.location_id,
+        location_id,
         categoryData.description,
         categoryData.website_url,
         categoryData.contact,
@@ -111,7 +118,7 @@ exports.signup = async (req, res, next) => {
         user_id,
         categoryData.name,
         categoryData.industry,
-        categoryData.location_id,
+        location_id,
         categoryData.description,
         categoryData.website_url,
         categoryData.contact,

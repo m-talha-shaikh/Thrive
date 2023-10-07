@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS THRIVE_DB;
 USE THRIVE_DB;
 
 CREATE TABLE `user` (
-  `user_id` int PRIMARY KEY,
+  `user_id` int PRIMARY KEY AUTO_INCREMENT,
   `username` varchar(255) UNIQUE NOT NULL,
   `email` varchar(255) UNIQUE NOT NULL,
   `account_type` varchar(255) NOT NULL ,
@@ -13,14 +13,14 @@ CREATE TABLE `user` (
 );
 
 CREATE TABLE `location` (
-  `location_id` int PRIMARY KEY,
+  `location_id` int PRIMARY KEY AUTO_INCREMENT,
   `city` varchar(255) NOT NULL,
   `state` varchar(255) NOT NULL,
   `country` varchar(255) NOT NULL
 );
 
 CREATE TABLE `person` (
-  `person_id` int PRIMARY KEY,
+  `person_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int UNIQUE NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE `person` (
 );
 
 CREATE TABLE `organization` (
-  `organization_id` int PRIMARY KEY,
+  `organization_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `name` varchar(255) NOT NULL,
   `industry` varchar(255) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE `organization` (
 );
 
 CREATE TABLE `institute` (
-  `institute_id` int PRIMARY KEY,
+  `institute_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `name` varchar(255) NOT NULL,
   `institute_type` varchar(255) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE `institute` (
 );
 
 CREATE TABLE `education` (
-  `education_id` int PRIMARY KEY,
+  `education_id` int PRIMARY KEY AUTO_INCREMENT,
   `person_id` int NOT NULL,
   `institute_id` int NOT NULL,
   `year_enrolled` int NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE `education` (
 );
 
 CREATE TABLE `employment` (
-  `employment_id` int PRIMARY KEY,
+  `employment_id` int PRIMARY KEY AUTO_INCREMENT,
   `person_id` int NOT NULL,
   `organization_id` int NOT NULL,
   `month_started` int NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE `employment` (
 );
 
 CREATE TABLE `certifications` (
-  `certification_id` int PRIMARY KEY,
+  `certification_id` int PRIMARY KEY AUTO_INCREMENT,
   `person_id` int NOT NULL,
   `name` varchar(255) NOT NULL,
   `issuing_organization` varchar(255) NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE `certifications` (
 );
 
 CREATE TABLE `posts` (
-  `post_id` int PRIMARY KEY,
+  `post_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `content` text NOT NULL,
   `image_url` varchar(255),
@@ -92,14 +92,14 @@ CREATE TABLE `posts` (
 );
 
 CREATE TABLE `likes` (
-  `like_id` int PRIMARY KEY,
+  `like_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `post_id` int NOT NULL,
   `like_date` datetime NOT NULL
 );
 
 CREATE TABLE `comments` (
-  `comment_id` int PRIMARY KEY,
+  `comment_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `post_id` int NOT NULL,
   `content` text NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE `comments` (
 );
 
 CREATE TABLE `communities` (
-  `community_id` int PRIMARY KEY,
+  `community_id` int PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `created_by` int NOT NULL,
@@ -115,14 +115,14 @@ CREATE TABLE `communities` (
 );
 
 CREATE TABLE `community_members` (
-  `membership_id` int PRIMARY KEY,
+  `membership_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `community_id` int NOT NULL,
   `join_date` datetime NOT NULL
 );
 
 CREATE TABLE `community_posts` (
-  `community_post_id` int PRIMARY KEY,
+  `community_post_id` int PRIMARY KEY AUTO_INCREMENT,
   `community_id` int NOT NULL,
   `user_id` int NOT NULL,
   `content` text NOT NULL,
@@ -131,7 +131,7 @@ CREATE TABLE `community_posts` (
 );
 
 CREATE TABLE `jobs` (
-  `job_id` int PRIMARY KEY,
+  `job_id` int PRIMARY KEY AUTO_INCREMENT,
   `organization_id` int NOT NULL,
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
@@ -142,14 +142,14 @@ CREATE TABLE `jobs` (
 );
 
 CREATE TABLE `job_applications` (
-  `application_id` int PRIMARY KEY,
+  `application_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `job_id` int NOT NULL,
   `application_date` datetime NOT NULL
 );
 
 CREATE TABLE `notifications` (
-  `notification_id` int PRIMARY KEY,
+  `notification_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `content` text NOT NULL,
   `notification_date` datetime NOT NULL,
@@ -157,7 +157,7 @@ CREATE TABLE `notifications` (
 );
 
 CREATE TABLE `video_calls` (
-  `call_id` int PRIMARY KEY,
+  `call_id` int PRIMARY KEY AUTO_INCREMENT,
   `caller_id` int NOT NULL,
   `receiver_id` int NOT NULL,
   `call_start_time` datetime NOT NULL,
@@ -165,14 +165,14 @@ CREATE TABLE `video_calls` (
 );
 
 CREATE TABLE `friends` (
-  `friendship_id` int PRIMARY KEY,
+  `friendship_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `friend_id` int NOT NULL,
   `friendship_date` datetime NOT NULL
 );
 
 CREATE TABLE `project` (
-  `project_id` int PRIMARY KEY,
+  `project_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
@@ -182,21 +182,21 @@ CREATE TABLE `project` (
 );
 
 CREATE TABLE `community_moderators` (
-  `moderator_id` int PRIMARY KEY,
+  `moderator_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `community_id` int NOT NULL,
   `admin` bool NOT NULL
 );
 
 CREATE TABLE `chat_conversations` (
-  `conversation_id` int PRIMARY KEY,
+  `conversation_id` int PRIMARY KEY AUTO_INCREMENT,
   `user1_id` int NOT NULL,
   `user2_id` int NOT NULL,
   `last_message` text
 );
 
 CREATE TABLE `messages` (
-  `message_id` int PRIMARY KEY,
+  `message_id` int PRIMARY KEY AUTO_INCREMENT,
   `conversation_id` int NOT NULL,
   `sender_id` int NOT NULL,
   `receiver_id` int NOT NULL,
@@ -206,7 +206,7 @@ CREATE TABLE `messages` (
 );
 
 CREATE TABLE `audio_calls` (
-  `call_id` int PRIMARY KEY,
+  `call_id` int PRIMARY KEY AUTO_INCREMENT,
   `caller_id` int NOT NULL,
   `receiver_id` int NOT NULL,
   `call_start_time` datetime NOT NULL,
