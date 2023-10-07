@@ -1,71 +1,58 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import classes from './Login.module.css';
 
-const Login = () => {
-  const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
-  });
-
-  const handleChange = (e) => {
-    setLoginData({
-      ...loginData,
-      [e.target.name]: e.target.value,
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+const Login = ()=>
+{
+    const [inputs,setInput] = useState({
+        email:"",
+        password:"",
     });
-  };
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        'http://localhost:3000/api/v1/Auth/login',
-        loginData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+    
+    const [err,SetErr]= useState(null);
+    const navigate = useNavigate();
+   const handleChange =  (e)=>
+   {
+     setInput(prev=>(
+       {...prev,[e.target.name]:e.target.value}));
+   }
+    const {Login} = useContext(AuthContext);
+    const HandleLogin = async (e)=>
+    {
+        e.preventDefault();
+        try {
+            
+            await Login(); 
+            navigate("/")
+        } catch (err) {
+            SetErr(err.response.data);
         }
-      );
-        console.log(response.data, response.status)
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  return (
-    <div className={classes.login}>
-      <div className={classes.card}>
-        <div className={classes.left}>
-          <h1 className={classes.fadeIn}>Thrive</h1>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, neque?</p>
-          <span>Don`t you have an account?</span>
-          <div>
-            <Link to="/register">
-              <button className={classes.bitto}>Register</button>
-            </Link>
-          </div>
-        </div>
-        <div className={classes.right}>
-          <h1>Login</h1>
-          <form>
-            <input
-              type="email"
-              placeholder="Email"
-              onChange={handleChange}
-              name="email"
-              value={loginData.email}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={handleChange}
-              name="password"
-              value={loginData.password}
-            />
-            <button onClick={handleLogin}>Login</button>
-          </form>
+    };
+    return (
+        <div className={classes.login}>
+        <div className={classes.card}>
+            <div className={classes.left}>
+                 <h1 className={classes.fadeIn}>Thrive</h1>
+                 <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, neque?
+                 </p>
+                 <span>Don't you have an acount?</span>
+                 <div>
+                    <Link to="/register">
+                 <button className={classes.bitto}>Register</button>
+                    </Link>
+                 </div>
+            </div>
+            <div className={classes.right}>
+                <h1>Login</h1>
+                <form >
+                  <input type="text" placeholder='Username' name="username" onChange={handleChange} />
+                  <input type="password" placeholder='Password' name='password' onChange={handleChange} />
+                  <button onClick={HandleLogin}>Login</button>
+                </form>
+            </div>
         </div>
       </div>
     </div>
