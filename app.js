@@ -18,7 +18,7 @@ const jobRouter = require('./server/routes/jobRoutes')
 
 //Starting app
 const app = express();
-
+    
 
 //Middlewares
 app.use(cors({
