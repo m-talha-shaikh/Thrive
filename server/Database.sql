@@ -213,80 +213,80 @@ CREATE TABLE `audio_calls` (
   `call_end_time` datetime NOT NULL
 );
 
-ALTER TABLE `person` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `person` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `person` ADD FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`);
+-- ALTER TABLE `person` ADD FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`);
 
-ALTER TABLE `organization` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `organization` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `organization` ADD FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`);
+-- ALTER TABLE `organization` ADD FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`);
 
-ALTER TABLE `institute` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `institute` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `institute` ADD FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`);
+-- ALTER TABLE `institute` ADD FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`);
 
-ALTER TABLE `education` ADD FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`);
+-- ALTER TABLE `education` ADD FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`);
 
-ALTER TABLE `education` ADD FOREIGN KEY (`institute_id`) REFERENCES `institute` (`institute_id`);
+-- ALTER TABLE `education` ADD FOREIGN KEY (`institute_id`) REFERENCES `institute` (`institute_id`);
 
-ALTER TABLE `employment` ADD FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`);
+-- ALTER TABLE `employment` ADD FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`);
 
-ALTER TABLE `employment` ADD FOREIGN KEY (`organization_id`) REFERENCES `institute` (`institute_id`);
+-- ALTER TABLE `employment` ADD FOREIGN KEY (`organization_id`) REFERENCES `institute` (`institute_id`);
 
-ALTER TABLE `certifications` ADD FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`);
+-- ALTER TABLE `certifications` ADD FOREIGN KEY (`person_id`) REFERENCES `person` (`person_id`);
 
-ALTER TABLE `posts` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `posts` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `likes` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `likes` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `likes` ADD FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`);
+-- ALTER TABLE `likes` ADD FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`);
 
-ALTER TABLE `comments` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `comments` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `comments` ADD FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`);
+-- ALTER TABLE `comments` ADD FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`);
 
-ALTER TABLE `communities` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `communities` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `community_members` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `community_members` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `community_members` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
+-- ALTER TABLE `community_members` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
 
-ALTER TABLE `community_posts` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
+-- ALTER TABLE `community_posts` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
 
-ALTER TABLE `community_posts` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `community_posts` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `jobs` ADD FOREIGN KEY (`organization_id`) REFERENCES `organization` (`organization_id`);
+-- ALTER TABLE `jobs` ADD FOREIGN KEY (`organization_id`) REFERENCES `organization` (`organization_id`);
 
-ALTER TABLE `job_applications` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `job_applications` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `job_applications` ADD FOREIGN KEY (`job_id`) REFERENCES `jobs` (`job_id`);
+-- ALTER TABLE `job_applications` ADD FOREIGN KEY (`job_id`) REFERENCES `jobs` (`job_id`);
 
-ALTER TABLE `notifications` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `notifications` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `video_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `video_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `video_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `video_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `friends` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `friends` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `friends` ADD FOREIGN KEY (`friend_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `friends` ADD FOREIGN KEY (`friend_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `project` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `project` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `community_moderators` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `community_moderators` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `community_moderators` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
+-- ALTER TABLE `community_moderators` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
 
-ALTER TABLE `chat_conversations` ADD FOREIGN KEY (`user1_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `chat_conversations` ADD FOREIGN KEY (`user1_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `chat_conversations` ADD FOREIGN KEY (`user2_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `chat_conversations` ADD FOREIGN KEY (`user2_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `messages` ADD FOREIGN KEY (`conversation_id`) REFERENCES `chat_conversations` (`conversation_id`);
+-- ALTER TABLE `messages` ADD FOREIGN KEY (`conversation_id`) REFERENCES `chat_conversations` (`conversation_id`);
 
-ALTER TABLE `messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `audio_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `audio_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user_id`);
 
-ALTER TABLE `audio_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
+-- ALTER TABLE `audio_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
