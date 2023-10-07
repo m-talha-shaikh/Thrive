@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express = require('express');
 const helmet = require('helmet');
 const cors = require(`cors`);
@@ -23,10 +21,16 @@ const app = express();
 
 
 //Middlewares
-app.use(cors());
+app.use(cors({
+    origin:"http://localhost:5173",
+}));
 app.use(helmet());
 app.use(express.json())
-
+app.use((req,res,next)=>
+{
+    res.header("Access-Control-Allow-Credentials",true);
+    next();
+})
 // Attach the database connection to all routes under '/api/v1'
 app.use('/api/v1', attachDb);
 
