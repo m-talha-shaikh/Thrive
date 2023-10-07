@@ -8,9 +8,12 @@ export const AuthContextProvider = ({children})=>
     const [currentUser,setCurrentUser]= useState(JSON.parse(localStorage.getItem("user"))||null);
     const Login =async (inputs)=>
     {
+        console.log(inputs);
         const res = await axios.post("http://localhost:3000/api/v1/Auth/login",inputs,{
-            withCredentials:true,
-        });
+            headers: {
+                'Content-Type': 'application/json',
+            } });
+            console.log(res.data);
         setCurrentUser(res.data);
     };
     useEffect(()=>

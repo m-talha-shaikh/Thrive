@@ -1,10 +1,9 @@
-const mysql = require('mysql');
-
+const mysql = require('mysql2'); // Use mysql2 instead of mysql
 // Create the MySQL connection pool
-const db = mysql.createPool({
+var db= mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'hamza504',
   database: 'thrive_db'
 });
 
