@@ -290,3 +290,43 @@ ALTER TABLE `messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_
 ALTER TABLE `audio_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user_id`);
 
 ALTER TABLE `audio_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
+
+--NEW ALTER COMMANDS
+
+
+ALTER TABLE employment
+MODIFY month_left int NULL,
+MODIFY year_left int NULL;
+
+-- Allow user_id, industry, location_sid, description, website_url, and contact to be NULL
+ALTER TABLE organization
+MODIFY user_id int NULL,
+MODIFY industry varchar(255) NULL,
+MODIFY location_id int NULL,
+MODIFY description text NULL,
+MODIFY website_url varchar(255) NULL,
+MODIFY contact varchar(255) NULL;
+
+
+-- Allow user_id, institute_type, location_id, description, website_url, and contact to be NULL
+ALTER TABLE institute
+MODIFY user_id int NULL,
+MODIFY institute_type varchar(255) NULL,
+MODIFY location_id int NULL,
+MODIFY description text NULL,
+MODIFY website_url varchar(255) NULL,
+MODIFY contact varchar(255) NULL;
+
+
+-- Allow year_graduated to be NULL in the education table
+ALTER TABLE education
+MODIFY year_graduated int NULL;
+
+-- Allow year_graduated to be NULL in the education table
+ALTER TABLE location
+MODIFY state int NULL;
+
+-- Allow issue_date and expiration_date to be NULL in the certifications table
+ALTER TABLE certifications
+MODIFY issue_date date NULL,
+MODIFY expiration_date date NULL;
