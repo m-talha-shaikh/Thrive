@@ -1,15 +1,27 @@
-const mysql = require('mysql2'); // Use mysql2 instead of mysql
+const mysql = require('mysql2');
+
 // Create the MySQL connection pool
-var db= mysql.createConnection({
+const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'hamza504',
-  database: 'thrive_db'
+  password: '',
+  database: 'thrive_db',
+  waitForConnections: true, 
+  connectionLimit: 10, 
+});
+
+pool.getConnection((err, connection) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+  } else {
+    console.log('Connected to MySQL');
+    connection.release();
+  }
 });
 
 // Middleware to pass the database connection pool to routes
 function attachDb(req, res, next) {
-  req.db = db;
+  req.db = pool;
   next();
 }
 
