@@ -11,14 +11,16 @@ import {createBrowserRouter,RouterProvider, Outlet, Navigate} from 'react-router
 import { DarkmodeContext } from './context/Darkmodecontext';
 import { AuthContext } from './context/AuthContext';
 import Jobs from "./pages/Jobs/Jobs"
+import { QueryClient,QueryClientProvider,useQuery } from 'react-query';
 function App() {
   const {currentUser} = useContext(AuthContext);
   const {darkMode}= useContext(DarkmodeContext);
-
+  const queryClient = new QueryClient();
   const Layout =()=>
   {
     return(
-      <div className={`theme-${darkMode ? "dark" :"light" }`}>
+      <QueryClientProvider client={queryClient}>
+<div className={`theme-${darkMode ? "dark" :"light" }`}>
       <Navbar/>
       <div style={{display:'flex'}}>
         <Leftbar/>
@@ -29,6 +31,9 @@ function App() {
         <Rightbar/>
       </div>
       </div>
+
+      </QueryClientProvider>
+      
     )
   }
   

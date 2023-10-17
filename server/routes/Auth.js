@@ -10,7 +10,7 @@ router.post("/login", login);
 router.post("/signup", signup);
 
 
-router.post("/logout")
+router.post("/logout",logout)
 
 
 module.exports = router; // Note the corrected export statement

@@ -231,3 +231,8 @@ exports.authorize = () => {
     }
   };
 };
+exports.logout = (req, res) => {
+  // Clear the JWT token from the client's cookies
+  res.clearCookie('jwt');
+  res.status(200).json({ status: 'success' });
+};
