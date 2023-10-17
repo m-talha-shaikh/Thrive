@@ -1,7 +1,56 @@
-.posts{
+@import "../../style.scss";
+
+.Posts {
+  @include themify($themes) {
     display: flex;
     flex-direction: column;
     gap: 50px;
     overflow: hidden;
-   
+    max-width: 100%;
+
+    .ShimmerPost {
+      width: 85%;
+      height: 20rem;
+      padding: 20px;
+      background: linear-gradient(90deg, transparent,themed("bg"), transparent);
+      border: 1px solid themed("border");
+      border-radius: 10px;
+      animation: shimmer 1.5s infinite linear alternate, pulse 4s infinite ease-in-out;
+
+      .ShimmerAvatar {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(90deg, transparent,themed("border"), transparent);
+        border-radius: 50%;
+      }
+
+      .ShimmerContent {
+        margin-top: 10px;
+
+        .ShimmerTitle {
+          width: 80%;
+          height: 20px;
+          background: linear-gradient(90deg, transparent, themed("border"), transparent);
+          margin-bottom: 10px;
+        }
+
+        .ShimmerDescription {
+          width: 100%;
+          height: 20px;
+          background: linear-gradient(90deg, transparent,themed("border"), transparent);
+        }
+      }
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px;
+    }
+    100% {
+      background-position: 1000px;
+    }
+  }
+
+  
 }

@@ -1,41 +1,48 @@
-.login{
+/* register.module.css */
+
+/* Styling for the entire registration page */
+.login {
     height: 100vh;
     width: 100vw;
     background-color: rgb(170, 204, 231);
     display: flex;
     align-items: center;
     justify-content: center;
-} 
-
-.card{
-
+  }
+  
+  .card {
     display: flex;
     background-color: white;
     width: 100%;
-    flex-direction:row-reverse ;
+    flex-direction: row-reverse;
     border-radius: 30px;
     min-height: 100%;
     overflow: hidden;
-}
-.left{
+  }
+  
+  .left {
     flex: 1;
-    background: linear-gradient(rgba(70, 93, 110, 0.5),rgba(227, 227, 227, 0.5)) ,url(https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1) center;
-     background-size: cover;
-     border-radius: 30px 0 0px 30px;
-     padding: 50px;
-     flex-direction: column;
-     gap: 30px;
-     color: white;
-}
-.left > h1{
-     font-size: 100px;
-     line-height: 100px;
-}
-.left > span{
-    font-size: 14px;
-
-}
-.left > div button{
+    background: linear-gradient(rgba(70, 93, 110, 0.5), rgba(227, 227, 227, 0.5)),
+      url('https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')
+        center;
+    background-size: cover;
+    border-radius: 30px 0px 0px 30px;
+    padding: 50px;
+    flex-direction: column;
+    gap: 30px;
+    color: white;
+  }
+  
+  .left > h1 {
+    font-size: 4rem;
+    line-height: 4rem;
+  }
+  
+  .left > span {
+    font-size: 1rem;
+  }
+  
+  .left > div button {
     width: 50%;
     margin-top: 10px;
     padding: 10px;
@@ -44,74 +51,100 @@
     color: rgb(139, 201, 255);
     border-radius: 10px;
     font-weight: bold;
-}
-.left > div button:hover{
-    width: 50%;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: rgb(156, 209, 255);
-    color: rgb(255, 255, 255);
-    border-radius: 10px;
-    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
     cursor: pointer;
-}
-
-.right{
-    flex: 1;
-     border-radius: 30px 0 0px 30px;
-     padding: 50px;
-     align-items: center;
-     flex-direction: column;
-     gap: 30px;
-     justify-content: center;
-     color: rgb(1, 0, 0);
-    
-}
-.right > h1 {
-    color: rgb(67, 95, 105);
-    font-size: 50px;
-}
-.right > form{
-     display: flex;
-     flex-direction: column;
-     gap: 30px;
-}
-.right >form input{
-   border: none;
-    border-bottom: 1px solid lightgray;
-    padding: 20px 10px;
-}
-.right >form button{
-   width: 50%;
-   padding: 10px;
-   font-weight: bold;
-   font: 1em sans-serif;
-   border: none;
-   border-radius: 10px;
-   background-color: rgb(162, 225, 255);
-   color: aliceblue;
-}
-.right >form button:hover{
-   width: 50%;
-   padding: 10px;
-   background-color: rgb(255, 255, 255);
-   font: 1em sans-serif;
-
-   color: rgb(162, 225, 255);
-   border: 2px solid rgb(162, 225, 255);
-   cursor: pointer;
-}
-@keyframes fadeIn {
-    0% {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(0);
-        opacity: 1;
-      }
   }
   
-  .fadeIn {
-    animation: fadeIn 1s ease-in-out;
+  .left > div button:hover {
+    background-color: rgb(156, 209, 255);
+    color: rgb(255, 255, 255);
+    cursor: pointer;
   }
+  
+  .right {
+    flex: 1;
+    border-radius: 0px 0 0px 0px;
+    
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+    color: rgb(67, 95, 105);
+  }
+  
+  .right > h1 {
+    font-size: 3rem;
+  }
+  
+  /* Styling for the registration form */
+  .right > form {
+   display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 80%;
+  margin: 0  auto;
+  overflow-y: auto; /* Add vertical scrollbar only to the form */
+  max-height: 70vh; 
+  }
+  
+  .right > form input {
+    border: none;
+    border-bottom: 1px solid lightgray;
+    padding: 15px 10px;
+    font-size: 1rem;
+  }
+  
+  .right > form select {
+    border: none;
+    padding: 15px;
+    font-size: 1rem;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+  }
+  
+  .right > form button {
+    width: 50%;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(162, 225, 255);
+    color: aliceblue;
+    cursor: pointer;
+    transition: background-color 0.3s, border 0.3s, color 0.3s;
+  }
+  
+  .right > form button:hover {
+    background-color: rgb(255, 255, 255);
+    font-size: 1.2rem;
+    color: rgb(162, 225, 255);
+    border: 2px solid rgb(162, 225, 255);
+  }
+  
+  .right > form label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: rgb(67, 95, 105);
+  }
+  
+  .right > form {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .right > form input:focus,
+  .right > form select:focus {
+    border-color: rgb(162, 225, 255);
+  }
+  
+  .right > form select {
+    appearance: none;
+    background: url('arrow-down-icon.png') no-repeat right center;
+  }
+  
+  /* Keyframes and fadeIn class remain the same */
+  

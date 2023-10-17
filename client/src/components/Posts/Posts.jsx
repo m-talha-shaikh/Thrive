@@ -1,34 +1,30 @@
-import "./Posts.scss"
+import "./Posts.scss";
 import Post from "../Post/Post";
+import { useQuery } from "react-query";
+import { makeRequest } from "../../axios";
 
-const Posts = ()=>
-{
-  const posts = [
-    {
-      id: 123,
-      name: "Arham Ahmed",
-      userId: 90,
-      profilePic:
-        "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1696183974/arham_c4mnx8.jpg",
-      desc: "check out this",
-      img: "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1696183974/arham_c4mnx8.jpg",
-    },
-    {
-      id: 34,
-      name: "Yousuf Ahmed",
-      userId: 23,
-      profilePic:
-        "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1696183974/arham_c4mnx8.jpg",
-      desc: "This is me",
-      img: "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1696183975/yousuf_mosgs4.jpg"
-    },
-  ];
-  return(
+const Posts = () => {
+  const { isLoading, error, data } = useQuery('posts', () =>
+    makeRequest.get("/posts").then((res) => res.data)
+  );
+
+  return (
     <div className="Posts">
-        {posts.map(post=>(
-          <Post post={post} key={post.id}/>
-        ))}
+      {!data
+        ? Array.from({ length: 10 }).map((_, index) => (
+            <div className="ShimmerPost" key={index}>
+              <div className="ShimmerAvatar"></div>
+              <div className="ShimmerContent">
+                <div className="ShimmerTitle"></div>
+                <div className="ShimmerDescription"></div>
+              </div>
+            </div>
+          ))
+        : data.map((post) => (
+            <Post post={post} key={post.id} />
+          ))}
     </div>
-  )
-}
+  );
+};
+
 export default Posts;

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@tanstack/react-query": "^5.0.0",
     "argon2": "^0.31.1",
     "axios": "^1.5.1",
     "cors": "^2.8.5",
@@ -14,6 +15,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.6.1",
     "nodemon": "^3.0.1",
+    "react-query": "^3.39.3",
     "xss-clean": "^0.1.4"
   },
   "name": "thrive",
