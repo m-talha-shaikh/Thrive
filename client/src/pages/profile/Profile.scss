@@ -3,7 +3,9 @@
 .profile {
   @include themify($themes) {
     background-color: themed("bgSoft");
-    height: 100%;
+    height: calc(100vh - 70px );
+    overflow: scroll;
+    scrollbar-width: none; 
     .education{
         
         -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);

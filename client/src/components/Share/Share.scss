@@ -9,9 +9,10 @@
     background-color: themed("bg");
     color: themed("textColor");
     margin-bottom: 20px;
-
+    width: 90%;
     .container {
       padding: 20px;
+   
       .top {
         display: flex;
         align-items: center;

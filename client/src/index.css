@@ -3,11 +3,11 @@
   body {
  
     margin: 0;
-    
+    overflow: hidden;
   }
   /* Hide the scrollbar for webkit-based browsers */
 body::-webkit-scrollbar {
-  width: 0.5em; /* Adjust the width as needed */
+  width: 0 em; /* Adjust the width as needed */
 }
 
 body::-webkit-scrollbar-thumb {
