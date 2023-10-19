@@ -16,6 +16,7 @@ const Navbar = ()=>
 {
   const {toggel,darkMode}= useContext(DarkmodeContext);
   const {currentUser}= useContext(AuthContext);
+ 
     return(
         <div className='navbar'>
           <div className='left'>
@@ -40,8 +41,8 @@ const Navbar = ()=>
            <NotificationsActiveIcon/>
            <PersonIcon/>
            <div className='user'>
-            <img src={currentUser.Profile} alt=""  />
-            <span>{currentUser.name}</span>
+            <img src={currentUser.data.user.ProfilePic} alt=""  />
+            <span>{currentUser.data.user.username}</span>
            </div>
           </div>
         </div>

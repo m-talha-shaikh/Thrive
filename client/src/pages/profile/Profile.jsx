@@ -51,7 +51,7 @@ const Profile = ()=>
        
             <div className="userinfo">
              <div className="center">
-                <span>{currentUser.name}</span>
+                <span>{currentUser.data.user.username}</span>
                 <div className="info">
                     <div className="item">
                         <PlaceIcon/>

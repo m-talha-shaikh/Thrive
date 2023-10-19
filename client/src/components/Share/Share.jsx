@@ -1,27 +1,61 @@
-import "./share.scss";
+import "./Share.scss";
 import Image from "../../assets/img.png";
 import Map from "../../assets/map.png";
 import Friend from "../../assets/friend.png";
 import { useContext, useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
+import { makeRequest } from "../../axios";
 import { AuthContext } from "../../context/AuthContext";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 const Share = () => {
   const [file, setFile] = useState(null);
-  const [desc, setDesc] = useState("");
-
-  
-
+  const [content, setDesc] = useState("");
+  const [image_url,setUrl] = useState("");
+  const upload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await makeRequest.post("/upload", formData);
+      return res.data;
+    } catch (err) {
+    
+      console.log(err);
+    }
+  };
   const { currentUser } = useContext(AuthContext);
 
- 
+  const queryClient = useQueryClient();
 
+  const mutation = useMutation(
+    async (newPost) => {
+      try {
+        const response = await makeRequest.post("/Posts/uploadPost",newPost);
+        return response.data; // Assuming your response contains the new post data
+      } catch (err) {
+        throw err; 
+      }
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["posts"]);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+  
 
   const handleClick = async (e) => {
     e.preventDefault();
-    let imgUrl = "";
-    if (file) imgUrl = await upload();
-    mutation.mutate({ desc, img: imgUrl });
+    let image_url;
+    if (file) {
+       image_url= await upload();
+    
+    }
+  
+    console.log(image_url);
+    mutation.mutate({ user_id:currentUser.data.user.user_id ,content,image_url });
     setDesc("");
     setFile(null);
   };
@@ -31,12 +65,12 @@ const Share = () => {
       <div className="container">
         <div className="top">
           <div className="left">
-            <img src={"/upload/" + currentUser.profilePic} alt="" />
+            <img src={ currentUser.data.user.ProfilePic} alt="" />
             <input
               type="text"
-              placeholder={`What's on your mind ${currentUser.name}?`}
+              placeholder={`What's on your mind ${currentUser.data.user.username}?`}
               onChange={(e) => setDesc(e.target.value)}
-              value={desc}
+              value={content}
             />
           </div>
           <div className="right">

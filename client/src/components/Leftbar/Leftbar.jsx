@@ -16,17 +16,18 @@ import Fund from "../../assets/13.png";
 import { AuthContext } from "../../context/AuthContext";
 const Leftbar = ()=>
 {
-    const {currentUser}=useContext(AuthContext) ;
+  const {currentUser}=useContext(AuthContext) ;
+  console.log(currentUser.data.user);
     return(
         <div className='leftbar'>
           <div className="container">
            <div className="menu">
             <div className="user">
-            <img src="https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt=""  />
-            <span>{currentUser.name}</span>
+            <img src={currentUser.data.user.ProfilePic} alt=""  />
+            <span>{currentUser.data.user.username}</span>
             </div>
             <div className="item">
-                <img src={Friends} alt="" srcset="" />
+                <img src={Friends} alt=""  />
                 <span>Friends</span>
             </div>
             <div className="item">
