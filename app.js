@@ -68,7 +68,7 @@ app.use('/api/v1/organizations', organizationRouter);
 app.use("/api/v1/Auth",AuthRoutes);
 app.use("/api/v1/Posts",PostRoutes);
 app.use('/api/v1/jobs', jobRouter);
-
+app.use('/api/v1/Comments', CommentRoutes);
 
 
 //404

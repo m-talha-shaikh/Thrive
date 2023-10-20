@@ -1,45 +1,66 @@
 import { AuthContext } from "../../context/AuthContext";
 import { useState,useContext } from "react";
+import { useQuery, useQueryClient,useMutation } from "react-query";
+import { makeRequest } from "../../axios";
 import "./comments.scss"
-const comments = ()=>
+import moment from "moment";
+
+const comments = ({postId})=>
 {
+    const [content,setcontent]= useState("");
     const {currentUser}= useContext(AuthContext);
-    const comments = [
-        {
-          id: 1,
-          desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-          name: "John Doe",
-          userId: 1,
-          profilePicture:
-            "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        },
-        {
-          id: 2,
-          desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-          name: "Jane Doe",
-          userId: 2,
-          profilePicture:
-            "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-        },
-      ];
+    const { isLoading, error, data } = useQuery('comments', async () => {
+      return  await makeRequest.get("/Comments?postId="+postId)
+        .then((res) => res.data);
+    });
+    const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    async (newComemnt) => {
+      try {
+        const response = await makeRequest.post("/Comments", newComemnt);
+        return response.data; // Assuming your response contains the new post data
+      } catch (err) {
+        throw err; 
+      }
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["comments"]);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+  
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    mutation.mutate({ content,postId ,user_id:currentUser.data.user.user_id  });
+    setcontent("");
+  };
+
    return(
     <div className="comments">
         <div className="write">
-            <img src={currentUser.Profile} alt="" />
-            
-            <input type="text" placeholder="Write a Comment"/>
-            <button>Send</button>
+            <img src={currentUser.data.user.ProfilePic} alt="" />
+            <input type="text" placeholder="Write a Comment" 
+            onChange={(e)=> setcontent(e.target.value)}
+            value={content}/>
+            <button onClick={handleClick}>Send</button>
             
             
         </div>
-       {comments.map(comment =>(
+       {isLoading ? "Loading" : data.map(comment =>(
         <div className="comment">
-           <img src={comment.profilePicture} alt="" />
+           <img src={comment.ProfilePic} alt="" />
         <div className="message">
             <span>{comment.name}</span>
-            <p>{comment.desc}</p>
+            <p>{comment.content}</p>
         </div>
-        <span className="date">1 Hour ago</span>
+        <span className="date">{moment(comment.createdAt).fromNow()}</span>
         </div>
         
        ))}
