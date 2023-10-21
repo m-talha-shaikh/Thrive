@@ -1,9 +1,13 @@
 import "./Profile.scss";
 import PlaceIcon from '@mui/icons-material/Place';
 import LanguageIcon from '@mui/icons-material/Language';
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { makeRequest } from "../../axios";
+import { useLocation } from "react-router-dom";
 
+import Update from "../../components/update/Update";
 const certificationItems = [
     {
       name: "Certified Web Developer",
@@ -40,29 +44,83 @@ const certificationItems = [
   ];
   
 const Profile = ()=>
-{ const {currentUser}=useContext(AuthContext) ;
+{ 
+  const [openupdate, setopenupdate] = useState(false);
+  const user_id = useLocation().pathname.split("/")[2];
+  console.log(user_id);
+  const {currentUser}=useContext(AuthContext) ;
+  const { isLoading, error, data } = useQuery(['persons',user_id],async () => {
+    return  await makeRequest.get(`/persons/${user_id}`)
+      .then((res) => res.data);
+  });
+  const {  data:friendsdata } = useQuery(['Connection'],async () => {
+    return  await makeRequest.get(`/Connection?user_id=${currentUser.data.user.user_id}`)
+      .then((res) => res.data);
+  });
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    async (following) => {
+      try {
+        if (following) {
+          const response = await makeRequest.delete(`/Connection`, {
+            params: {
+              friend_id: user_id,
+              user_id:currentUser.data.user.user_id
+            }
+          });
+          return response.data; 
+        }
+        else{
+          const response = await makeRequest.post("/Connection",{user_id: currentUser.data.user.user_id,friend_id:user_id} );
+          return response.data; // Assuming your response contains the new post data
+         
+        }
+        
+      } catch (err) {
+        throw err; 
+      }
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["Connection"]);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+  
+  const handlefriends= ()=>
+  {
+     mutation.mutate(friendsdata.includes(parseInt(user_id,10)))
+  }
     return (
        <div className="profile">
         <div className="images">
-        <img src="https://res.cloudinary.com/dzhkmbnbn/image/upload/v1696183975/yousuf_mosgs4.jpg" alt="" className="cover"/>
-        <img src="https://res.cloudinary.com/dzhkmbnbn/image/upload/v1696183974/arham_c4mnx8.jpg" alt=""  className="profilePic"/>
+        <img src={error?"This is some thing wrong":(isLoading?"Loading":"../../../public/uploads/"+data.person.CoverPic)} alt="" className="cover"/>
+        <img src={error?"This is some thing wrong":(isLoading?"Loading":"../../../public/uploads/"+data.person.ProfilePic)} alt=""  className="profilePic"/>
         </div>
         <div className="profilecontainer">
        
             <div className="userinfo">
              <div className="center">
-                <span>{currentUser.data.user.username}</span>
+                <span>{error?"This is some thing wrong":(isLoading?"Loading":data.person.first_name+" "+data.person.last_name)}</span>
                 <div className="info">
                     <div className="item">
                         <PlaceIcon/>
-                        <span>Pakistan</span>
+                    {error?"This is some thing wrong":(isLoading?"Loading":data.person.country)}
                     </div>
                     <div className="item">
                         <LanguageIcon/>
-                        <span>Urdu</span>
+                        <span>{error?"This is some thing wrong":(isLoading?"Loading":data.person.username)}</span>
                     </div>
-                    <button>Add Friend</button>
-                </div>
+                    
+                    {user_id==currentUser.data.user.user_id ?
+                    <button onClick={()=>setopenupdate(true)}>Update </button> : 
+                    <button onClick={handlefriends}>{!friendsdata?"Loading":(friendsdata.includes(parseInt(user_id, 10))?"Following":"Follow")}</button>}
+                 </div>
              </div>
             </div>
         </div>
@@ -79,6 +137,7 @@ const Profile = ()=>
     </div>
   ))}
          </div>
+
          <div className="education">
             <div className="heading">
 
@@ -93,6 +152,8 @@ const Profile = ()=>
   ))}
 
          </div>
+      
+         {isLoading?"Loading": (openupdate&& <Update setopenupdate={setopenupdate} user ={data.person}/>)}
        </div>
        
     )

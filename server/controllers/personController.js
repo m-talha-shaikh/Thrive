@@ -1,12 +1,32 @@
 const executeQuery = require("./../utils/executeQuery");
-
+exports.UpdatePerson = async(req,res)=>
+{
+    console.log(req.body.CoverPic);
+    try {
+      const q1 = `Update location set city= ?,state = ?,country = ? where location_id = (Select location_id from person where user_id = ?)`;
+      await executeQuery(req.db,q1,[req.body.city,req.body.state,req.body.country,req.body.user_id]);
+      const q2 = `Update person set first_name = ?,last_name = ? where user_id = ?`;
+      await executeQuery(req.db,q2,[req.body.first_name,req.body.last_name,req.body.user_id]);
+      const q3 = `Update user set username = ?,CoverPic= ?,ProfilePic=? where user_id =?`;
+      const finale =await executeQuery(req.db,q3,[req.body.username,req.body.CoverPic,req.body.ProfilePic,req.body.user_id]);
+      if (finale.affectedRows > 0) {
+        return res.json("Update Succesfully");
+      }
+      else{
+        return res.status.json("You can update your own post only");
+      }
+    } catch (er) {
+      console.log(er);
+    }
+   
+};
 exports.getPerson = async (req, res, next) => {
   const user_id = req.params.user_id;
 
   const basicInfoQuery = `
-    SELECT P.first_name, P.last_name,
+    SELECT U.CoverPic,U.ProfilePic,U.username,P.first_name, P.last_name,
       L.city, L.state, L.country
-    FROM person P
+    FROM person P Join User u On u.user_id = P.user_id
     JOIN location L
     ON P.location_id = L.location_id
     WHERE P.user_id = ?`;
