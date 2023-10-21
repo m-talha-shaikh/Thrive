@@ -8,11 +8,12 @@
     border-radius: 20px;
     background-color: themed("bg");
     color: themed("textColor");
-     width: 90%;
-     margin-top: 15px;
+    width: 90%;
+    margin-top: 15px;
+
     .container {
       padding: 20px;
-      
+
       .user {
         display: flex;
         align-items: center;
@@ -39,10 +40,20 @@
 
             .date {
               font-size: 12px;
-              
+
             }
           }
         }
+          button {
+             top: 30px;
+             right: 0;
+             border: none;
+            background-color: rgb(207, 138, 138);
+            padding: 5px;
+            cursor: pointer;
+            color: white;
+          }
+        
       }
 
       .content {

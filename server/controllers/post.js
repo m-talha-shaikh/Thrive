@@ -21,8 +21,7 @@ exports.getPost = async (req, res) => {
 }
 exports.addPost = async (req, res) => {
     
-   console.log("hel");
-   console.log(req.body);
+   
     try {
         const q = "INSERT INTO posts (`user_id`, `content`, `image_url`, `post_date`) VALUES (?)";
         const values =[
@@ -33,6 +32,20 @@ exports.addPost = async (req, res) => {
         ];
         const post = await executeQuery(req.db, q, [values]);
         return res.status(200).json("Post has been created");
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json(err);
+    }
+}
+exports.deletePost = async (req, res) => {
+    
+    console.log(req.query);
+    try {
+        const q1 = `DELETE FROM Likes Where post_id =? `;
+        await executeQuery(req.db, q1, [req.query.post_id])
+        const q = `DELETE FROM posts Where post_id =? AND user_id = ?`;
+        const post = await executeQuery(req.db, q, [req.query.post_id,req.query.user_id]);
+        return res.status(200).json("Post has been deleted");
     } catch (err) {
         console.log(err);
         return res.status(500).json(err);
