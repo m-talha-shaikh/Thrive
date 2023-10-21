@@ -141,10 +141,9 @@ exports.createEducation = async (req, res, next) => {
 
 
 exports.createCertification = async (req, res, next) => {
-  const user_id = req.user.user_id;
+  const user_id = req.params.user_id || req.user.user_id;
 
   const {
-    certification_id,
     name,
     issuing_organization,
     issue_date,
@@ -152,18 +151,27 @@ exports.createCertification = async (req, res, next) => {
   } = req.body;
 
   const insertCertificationQuery = `
-    INSERT INTO certifications(certification_id, name, issuing_organization, issue_date, expiration_date)
+    INSERT INTO certifications(person_id, name, issuing_organization, issue_date, expiration_date)
     VALUES (?, ?, ?, ?, ?)`;
 
-  const queryValues = [
-    certification_id,
+  const check_person = "SELECT person_id FROM person WHERE user_id = ?";
+  
+
+  
+
+  try {
+
+    const person = await executeQuery(req.db, check_person, [user_id]);
+    const person_id = person[0].person_id;
+
+    const queryValues = [
+      person_id,
     name,
     issuing_organization,
     issue_date,
     expiration_date,
   ];
 
-  try {
     const queryTasks = [
       executeQuery(req.db, insertCertificationQuery, queryValues),
     ];
@@ -249,7 +257,7 @@ exports.createEmployment = async (req, res, next) => {
 };
 
 exports.updateEducation = async (req, res, next) => {
-  const user_id = req.user.user_id;
+  const user_id = req.params.user_id;
   const education_id = req.params.education_id || req.body.education_id;
 
   const {
@@ -258,7 +266,7 @@ exports.updateEducation = async (req, res, next) => {
     major,
     currently_studying,
     text_description,
-    institute_id,
+    institute_name
   } = req.body;
 
   const updateEducationQuery = `
@@ -270,18 +278,35 @@ exports.updateEducation = async (req, res, next) => {
                                             WHERE P.user_id = ?)
   `;
 
-  const queryValues = [
-    institute_id,
-    year_enrolled,
-    year_graduated,
-    major,
-    currently_studying,
-    text_description,
-    education_id,
-    user_id,
-  ];
+  const check_institute = "SELECT institute_id FROM institute WHERE name = ?";
+  
+  let institute_id;
 
   try {
+    // Check if the institute exists
+    const instituteQuery = await executeQuery(req.db, check_institute, institute_name);
+    
+    if (instituteQuery.length > 0) {
+      // The institute exists, use the existing institute_id
+      institute_id = instituteQuery[0].institute_id;
+    } else {
+      // The institute doesn't exist, insert a new record and get the institute_id
+      const insertInstituteQuery = "INSERT INTO institute (name) VALUES (?)";
+      const insertInstituteResult = await executeQuery(req.db, insertInstituteQuery, institute_name);
+      institute_id = insertInstituteResult.insertId;
+    }
+
+    const queryValues = [
+      institute_id,
+      year_enrolled,
+      year_graduated,
+      major,
+      currently_studying,
+      text_description,
+      education_id,
+      user_id,
+    ];
+
     const queryTasks = [
       executeQuery(req.db, updateEducationQuery, queryValues),
     ];
@@ -299,8 +324,10 @@ exports.updateEducation = async (req, res, next) => {
   }
 };
 
+
+
 exports.updateCertification = async (req, res, next) => {
-  const user_id = req.user.user_id;
+  const user_id = req.params.user_id || req.user.user_id;
   const certification_id = req.params.certification_id || req.body.certification_id;
 
   const {
@@ -348,11 +375,11 @@ exports.updateCertification = async (req, res, next) => {
 
 
 exports.updateEmployment = async (req, res, next) => {
-  const user_id = req.user.user_id;
+  const user_id = req.params.user_id;
   const employment_id = req.params.employment_id || req.body.employment_id;
 
   const {
-    organization_id,
+    organization_name,
     year_started,
     month_left,
     year_left,
@@ -360,27 +387,45 @@ exports.updateEmployment = async (req, res, next) => {
     text_description,
   } = req.body;
 
-  const updateEmploymentQuery = `
-    UPDATE employment
-    SET organization_id = ?, year_started = ?, month_left = ?,
-        year_left = ?, title = ?, text_description = ?
-    WHERE employment_id = ? AND person_id = (SELECT person_id
-                                            FROM person P
-                                            WHERE P.user_id = ?)
-  `;
+  // Query to check if the organization exists
+  const check_organization = "SELECT organization_id FROM organization WHERE name = ?";
 
-  const queryValues = [
-    organization_id,
-    year_started,
-    month_left,
-    year_left,
-    title,
-    text_description,
-    employment_id,
-    user_id,
-  ];
+  let organization_id;
 
   try {
+    // Check if the organization exists
+    const organizationQuery = await executeQuery(req.db, check_organization, organization_name);
+
+    if (organizationQuery.length > 0) {
+      // The organization exists, use the existing organization_id
+      organization_id = organizationQuery[0].organization_id;
+    } else {
+      // The organization doesn't exist, insert a new record and get the organization_id
+      const insertOrganizationQuery = "INSERT INTO organization (name) VALUES (?)";
+      const insertOrganizationResult = await executeQuery(req.db, insertOrganizationQuery, organization_name);
+      organization_id = insertOrganizationResult.insertId;
+    }
+
+    const updateEmploymentQuery = `
+      UPDATE employment
+      SET organization_id = ?, year_started = ?, month_left = ?,
+          year_left = ?, title = ?, text_description = ?
+      WHERE employment_id = ? AND person_id = (SELECT person_id
+                                              FROM person P
+                                              WHERE P.user_id = ?)
+    `;
+
+    const queryValues = [
+      organization_id,
+      year_started,
+      month_left,
+      year_left,
+      title,
+      text_description,
+      employment_id,
+      user_id,
+    ];
+
     const queryTasks = [
       executeQuery(req.db, updateEmploymentQuery, queryValues),
     ];
@@ -398,8 +443,10 @@ exports.updateEmployment = async (req, res, next) => {
   }
 };
 
+
+
 exports.deleteEducation = async (req, res, next) => {
-  const user_id = req.user.user_id;
+  const user_id = req.params.user_id;
   const education_id = req.params.education_id || req.body.education_id;
 
   const deleteEducationQuery = `
@@ -426,7 +473,7 @@ exports.deleteEducation = async (req, res, next) => {
 };
 
 exports.deleteCertification = async (req, res, next) => {
-  const user_id = req.user.user_id;
+  const user_id = req.params.user_id;
   const certification_id = req.params.certification_id || req.body.certification_id;
 
   const deleteCertificationQuery = `
@@ -455,7 +502,7 @@ exports.deleteCertification = async (req, res, next) => {
 
 
 exports.deleteEmployment = async (req, res, next) => {
-  const user_id = req.user.user_id;
+  const user_id = req.params.user_id;
   const employment_id = req.params.employment_id || req.body.employment_id;
 
   const deleteEmploymentQuery = `

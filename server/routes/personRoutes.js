@@ -15,21 +15,21 @@ router.route('/:user_id/education')
   .post(personController.createEducation);
 
 router.route('/:user_id/education/:education_id')
-  .post(personController.updateEducation)
+  .patch(personController.updateEducation)
   .delete(personController.deleteEducation);
 
 router.route('/:user_id/employment')
   .post(personController.createEmployment);
 
 router.route('/:user_id/employment/:employment_id')
-  .post(personController.updateEmployment)
+  .patch(personController.updateEmployment)
   .delete(personController.deleteEmployment);
 
 router.route('/:user_id/certification')
   .post(personController.createCertification);
 
 router.route('/:user_id/certification/:certification_id')
-  .post(personController.updateCertification)
+  .patch(personController.updateCertification)
   .delete(personController.deleteCertification);
 
 module.exports = router;
