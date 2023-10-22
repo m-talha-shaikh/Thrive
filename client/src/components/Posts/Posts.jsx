@@ -9,7 +9,7 @@ const Posts = () => {
   const queryClient = useQueryClient();
   const {currentUser}=useContext(AuthContext) ;
   console.log(currentUser.data.user.user_id);
-  const { isLoading, error, data } = useQuery('posts', async () => {
+  const { isLoading, error, data } = useQuery('posts', async () => { 
     return  await makeRequest.get( `/Posts/getPost/${currentUser.data.user.user_id}`, {
       params: {
         userId: currentUser.data.user.user_id
@@ -23,7 +23,7 @@ const Posts = () => {
     <div className="Posts">
       {error ? "Something went wrong":(!data
         ? Array.from({ length: 10 }).map((_, index) => (
-            <div className="ShimmerPost" key={index}>
+             <div className="ShimmerPost" key={index}>
               <div className="ShimmerAvatar"></div>
               <div className="ShimmerContent">
                 <div className="ShimmerTitle"></div>

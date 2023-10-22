@@ -7,13 +7,91 @@ import Comments from "../comments/comments";
 import "./Post.scss"
 import { Link } from 'react-router-dom';
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import moment from "moment";
+import { useQuery,useQueryClient,useMutation } from "react-query";
+import { makeRequest } from "../../axios";
+import { AuthContext } from "../../context/AuthContext";
 
 const Post = ({ post }) => {
-    console.log(post);
-    const Liked = false;
+    
+    const [Liked,setLike]= useState(true);
+    const [menuOpen,setmenuOpen] = useState(false);
     const [commentdisplay,setCommentdisplay] = useState(false);
+    const {currentUser}= useContext(AuthContext);
+    const { isLoading, error, data } = useQuery(['Likes',post.post_id], async () => {
+      return  await makeRequest.get( `/Likes?postId=${post.post_id}`)
+        .then((res) => res.data);
+    });
+    const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    async (Like) => {
+      try {
+        if (!Like) {
+          const response = await makeRequest.post("/Likes",{user_id :currentUser.data.user.user_id,post_id: post.post_id} );
+        return response.data; // Assuming your response contains the new post data
+        }
+        else{
+        
+          const response = await makeRequest.delete(`/Likes`, {
+            params: {
+              post_id: post.post_id,
+              user_id:currentUser.data.user.user_id
+            }
+          });
+          return response.data; 
+        }
+        
+      } catch (err) {
+        throw err; 
+      }
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["Likes"]);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+  const deletemutation = useMutation(
+    async (poster) => {
+      try {
+       
+        const response = await makeRequest.delete("/Posts", {
+          params: {
+            user_id: currentUser.data.user.user_id,
+            post_id: post.post_id
+          }
+        });
+        
+        }
+        catch (err) {
+        throw err; 
+      }
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["posts"]);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+    const handleLiked=()=>
+    {
+      mutation.mutate(data.includes(currentUser.data.user.user_id));
+    }
+  
+     const HandledeletePost = ()=>
+     {
+      deletemutation.mutate({user_id:currentUser.data.user.user_id ,post_id:post.post_id});
+     }
     return (
       <div className="post">
         <div className="container">
@@ -28,7 +106,8 @@ const Post = ({ post }) => {
                 </Link>
             </div>
           </div>
-          <MoreHorizIcon />
+          <MoreHorizIcon  onClick={()=>setmenuOpen(!menuOpen)}/>
+          {menuOpen && post.user_id == currentUser.data.user.user_id&&<button onClick={HandledeletePost}>Delete</button>}
         </div>
         <div className="content">
             <p>{post.content}</p>
@@ -36,8 +115,12 @@ const Post = ({ post }) => {
         </div>
         <div className="info">
          <div className="item">
-            {Liked ?   <FavoriteOutlinedIcon/>:<FavoriteBorderOutlinedIcon/>}
-            <span>12 Likes</span>
+           
+            {isLoading?"Isloading":(data.includes(currentUser.data.user.user_id)?   
+            <FavoriteOutlinedIcon style={{color:"red"}} onClick={handleLiked} />:
+            <FavoriteBorderOutlinedIcon onClick={handleLiked} />)}
+            <span >{isLoading?
+            "Loading":data.length} Likes</span>
          </div>
          <div className="item" onClick={()=>setCommentdisplay(!commentdisplay)}>
          <TextsmsOutlinedIcon />

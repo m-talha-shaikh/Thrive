@@ -8,9 +8,14 @@ const router = express.Router({ mergeParams: true });
 //AUTHENTICAION OR AUTHORIZATION DONTTTTTTTT CHANGE ORDER !!!!!!!
 router.route('/:user_id').get(personController.getPerson);
 
-// router.use('/:user_id', authController.protect, authController.restrictTo('person'), authController.authorize);
 
-router.route('/:user_id/education').post(personController.createEducation);
+// router.use('/:user_id', authController.protect, authController.restrictTo('person'), authController.authorize);
+router.route('/:user_id/education')
+  .post(personController.createEducation);
+
+router.route('/')
+  .put(personController.UpdatePerson);
+
 
 router
   .route('/:user_id/education/:education_id')
