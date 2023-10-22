@@ -1,7 +1,7 @@
 const executeQuery = require("./../utils/executeQuery");
 exports.UpdatePerson = async(req,res)=>
 {
-    console.log(req.body.CoverPic);
+    console.log(req.headers);
     try {
       const q1 = `Update location set city= ?,state = ?,country = ? where location_id = (Select location_id from person where user_id = ?)`;
       await executeQuery(req.db,q1,[req.body.city,req.body.state,req.body.country,req.body.user_id]);

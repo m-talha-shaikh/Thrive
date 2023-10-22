@@ -1,0 +1,105 @@
+/* Chat.scss */
+
+.chat-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .contacts-pane {
+    flex: 1;
+    background-color: #f5f5f5;
+    padding: 16px;
+    overflow-y: auto;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  
+    &:hover {
+      background-color: #eaeaea;
+    }
+  
+    .contact-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+  
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .contact-name {
+      font-weight: 600;
+    }
+  
+    .contact-status {
+      color: #007bff;
+    }
+  }
+  
+  .message-pane {
+    flex: 2;
+    background-color: #ffffff;
+    padding: 16px;
+    overflow-y: auto;
+    box-shadow: -2px 0 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .messages {
+    height: calc(100% - 60px);
+    overflow-y: auto;
+  }
+  
+  .message {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    line-height: 1.5;
+  
+    &.sent {
+      background-color: #007bff;
+      color: #fff;
+      align-self: flex-end;
+    }
+  
+    &.received {
+      background-color: #f0f0f0;
+      align-self: flex-start;
+    }
+  }
+  
+  .message-form {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 10px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .message-input {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .send-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

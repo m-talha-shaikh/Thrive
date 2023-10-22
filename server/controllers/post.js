@@ -7,7 +7,7 @@ exports.getPost = async (req, res) => {
     console.log(req.params);
     // Check if the user is authenticated
     user_id = req.params.userId;
-
+     console.log(req.headers);
     try {
         const q = `SELECT p.*,u.user_id,username,u.ProfilePic from posts AS p JOIN user AS u ON (u.user_id= p.user_id) 
         LEFT JOIN friends AS f ON (p.user_id = f.friend_id) where f.user_id = ? OR p.user_id =?

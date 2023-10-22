@@ -72,6 +72,8 @@ app.use('/api/v1/jobs', jobRouter);
 app.use('/api/v1/Comments', CommentRoutes);
 app.use('/api/v1/Likes', likeRoutes);
 app.use('/api/v1/Connection',ConnectionRoutes);
+app.use('/api/v1/Chat',ConnectionRoutes);
+
 //404
 app.all('*', (req, res, next) => {
     res.send("Error 404");

@@ -5,6 +5,7 @@ import Navbar from './components/navbar/navbar';
 import Leftbar from './components/Leftbar/Leftbar';
 import Profile from './pages/profile/Profile';
 import Home from './pages/home/Home'
+import Chat from './components/Chat/Chat';
 import "./style.scss"
 import Rightbar from './components/Rightbar/Rightbar';
 import {createBrowserRouter,RouterProvider, Outlet, Navigate} from 'react-router-dom'; 
@@ -74,6 +75,10 @@ function App() {
     {
       path: '/register',
       element: <Register />
+    },
+    {
+      path: '/Chat',
+      element: <Chat/>
     }
   ]);
   return (
