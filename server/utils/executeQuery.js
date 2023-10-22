@@ -7,6 +7,7 @@ function executeQuery(db, query, params) {
         resolve(result);
       }
     });
-  })};
+  });
+}
 
 module.exports = executeQuery;

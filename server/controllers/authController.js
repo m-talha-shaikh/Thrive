@@ -1,4 +1,3 @@
-
 const crypto = require('crypto');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
@@ -6,10 +5,9 @@ const executeQuery = require('../utils/executeQuery');
 const argon2 = require('argon2');
 const { error } = require('console');
 
-
 const signToken = (user_id) => {
-  return jwt.sign({ user_id }, "my-ultra-secret", {
-    expiresIn: 90*24*60*60,
+  return jwt.sign({ user_id }, 'my-ultra-secret', {
+    expiresIn: 90 * 24 * 60 * 60,
   });
 };
 
@@ -17,9 +15,7 @@ const createSendToken = (user, statusCode, res) => {
   const token = signToken(user.user_id);
 
   const cookieOptions = {
-    expires: new Date(
-      Date.now() + 90 * 24 * 60 * 60 * 1000
-    ),
+    expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
     httpOnly: true,
   };
 
@@ -39,29 +35,48 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = async (req, res, next) => {
-  const { username, email, account_type, password, ProfilePic, CoverPic, city, state, country, ...categoryData } = req.body;
-  const check_query = "SELECT * FROM user WHERE username = ?";
-  const check_location = "SELECT location_id FROM location WHERE city = ? AND state = ? AND country = ?";
-  
+  const {
+    username,
+    email,
+    account_type,
+    password,
+    ProfilePic,
+    CoverPic,
+    city,
+    state,
+    country,
+    ...categoryData
+  } = req.body;
+  const check_query = 'SELECT * FROM user WHERE username = ?';
+  const check_location =
+    'SELECT location_id FROM location WHERE city = ? AND state = ? AND country = ?';
 
   try {
-    const checkqueryresult = await executeQuery(req.db, check_query, [username]);
+    const checkqueryresult = await executeQuery(req.db, check_query, [
+      username,
+    ]);
 
     if (checkqueryresult.length > 0) {
       return res.status(400).json({ error: 'Username already exists' });
     }
 
-  let location = await executeQuery(req.db, check_location, [city, state, country]);
-  let location_id;
+    let location = await executeQuery(req.db, check_location, [
+      city,
+      state,
+      country,
+    ]);
+    let location_id;
 
-  if (location.length === 0) {
-    const locationResult = await executeQuery(req.db, `INSERT INTO location (city, state, country) VALUES (?, ?, ?);`, [city, state, country]);
-    location_id = locationResult.insertId;
-  } else {
-    location_id = location[0].location_id;
-  }
-
-
+    if (location.length === 0) {
+      const locationResult = await executeQuery(
+        req.db,
+        `INSERT INTO location (city, state, country) VALUES (?, ?, ?);`,
+        [city, state, country]
+      );
+      location_id = locationResult.insertId;
+    } else {
+      location_id = location[0].location_id;
+    }
 
     const hashedPassword = await argon2.hash(password);
 
@@ -70,11 +85,21 @@ exports.signup = async (req, res, next) => {
       VALUES (?, ?, ?, ?, ?, ?)
     `;
 
-    const userQueryValues = [username, email, account_type, hashedPassword, ProfilePic, CoverPic];
-    const userQueryResult = await executeQuery(req.db, createUserQuery, userQueryValues);
+    const userQueryValues = [
+      username,
+      email,
+      account_type,
+      hashedPassword,
+      ProfilePic,
+      CoverPic,
+    ];
+    const userQueryResult = await executeQuery(
+      req.db,
+      createUserQuery,
+      userQueryValues
+    );
 
     const user_id = userQueryResult.insertId;
-
 
     let categoryQuery;
     let categoryQueryValues;
@@ -92,9 +117,8 @@ exports.signup = async (req, res, next) => {
         categoryData.last_name,
         categoryData.date_of_birth,
         categoryData.gender,
-        location_id
+        location_id,
       ];
-
     } else if (account_type === 'institute') {
       categoryTableName = 'institute';
       categoryQuery = `
@@ -128,7 +152,7 @@ exports.signup = async (req, res, next) => {
         categoryData.contact,
       ];
     } else {
-      console.log("Oh no");
+      console.log('Oh no');
       return res.status(400).json({ message: 'Invalid account_type' });
     }
 
@@ -138,7 +162,9 @@ exports.signup = async (req, res, next) => {
       SELECT * FROM ${categoryTableName} WHERE user_id = ?
     `;
 
-    const categoryDataResult = await executeQuery(req.db, fetchCategoryQuery, [user_id]);
+    const categoryDataResult = await executeQuery(req.db, fetchCategoryQuery, [
+      user_id,
+    ]);
 
     const user = {
       user_id: user_id,
@@ -153,12 +179,15 @@ exports.signup = async (req, res, next) => {
   }
 };
 
-
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
   if (email && password) {
     try {
-      const users = await executeQuery(req.db, 'SELECT * FROM user WHERE email = ?', [email]);
+      const users = await executeQuery(
+        req.db,
+        'SELECT * FROM user WHERE email = ?',
+        [email]
+      );
       if (users.length > 0) {
         const user = users[0];
 
@@ -166,7 +195,6 @@ exports.login = async (req, res, next) => {
 
         if (match) {
           createSendToken(user, 200, res);
-
         } else {
           res.status(401).json({ error: 'Incorrect Email or password' });
         }
@@ -181,11 +209,13 @@ exports.login = async (req, res, next) => {
   }
 };
 
-
 exports.protect = async (req, res, next) => {
   let token;
 
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
     token = req.headers.authorization.split(' ')[1];
   }
 
@@ -194,7 +224,7 @@ exports.protect = async (req, res, next) => {
   }
 
   try {
-    const decoded = await promisify(jwt.verify)(token, "my-ultra-secret");
+    const decoded = await promisify(jwt.verify)(token, 'my-ultra-secret');
 
     const protectQuery = `SELECT * FROM user WHERE user_id = ?`;
     const protectQueryValues = [decoded.user_id];
@@ -214,7 +244,9 @@ exports.protect = async (req, res, next) => {
 exports.restrictTo = (...allowedUserTypes) => {
   return (req, res, next) => {
     if (!allowedUserTypes.includes(req.user.account_type)) {
-      return res.status(403).json({ error: 'Your account type does not support this functionality' });
+      return res.status(403).json({
+        error: 'Your account type does not support this functionality',
+      });
     }
     next();
   };
@@ -222,10 +254,9 @@ exports.restrictTo = (...allowedUserTypes) => {
 
 exports.authorize = () => {
   return (req, res, next) => {
-    if(req.user.user_id === req.params.user_id){
+    if (req.user.user_id === req.params.user_id) {
       next();
-  }
-    else {
+    } else {
       res.status(403).json({ error: 'You are not authorized' });
     }
   };
