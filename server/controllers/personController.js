@@ -1,4 +1,4 @@
-const executeQuery = require("./../utils/executeQuery");
+const executeQuery = require('./../utils/executeQuery');
 
 exports.getPerson = async (req, res, next) => {
   const user_id = req.params.user_id;
@@ -68,7 +68,7 @@ exports.getPerson = async (req, res, next) => {
 
     res.json(userProfile);
   } catch (error) {
-    console.error("Database error:", error);
+    console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
@@ -85,8 +85,8 @@ exports.createEducation = async (req, res, next) => {
     institute_name,
   } = req.body;
 
-  const check_institute = "SELECT institute_id FROM institute WHERE name = ?";
-  const check_person = "SELECT person_id FROM person WHERE user_id = ?";
+  const check_institute = 'SELECT institute_id FROM institute WHERE name = ?';
+  const check_person = 'SELECT person_id FROM person WHERE user_id = ?';
 
   const insertEducationQuery = `
     INSERT INTO education(person_id, institute_id, year_enrolled, year_graduated, major, currently_studying, text_description)
@@ -96,14 +96,20 @@ exports.createEducation = async (req, res, next) => {
 
   try {
     // Check if the institute name already exists in the table
-    const institute = await executeQuery(req.db, check_institute, [institute_name]);
+    const institute = await executeQuery(req.db, check_institute, [
+      institute_name,
+    ]);
     const person = await executeQuery(req.db, check_person, [user_id]);
 
     const person_id = person[0].person_id;
 
     if (institute.length === 0) {
       // If it doesn't exist, insert the institute name and get the insertId
-      const instituteResult = await executeQuery(req.db, `INSERT INTO institute (name) VALUES (?);`, [institute_name]);
+      const instituteResult = await executeQuery(
+        req.db,
+        `INSERT INTO institute (name) VALUES (?);`,
+        [institute_name]
+      );
       institute_id = instituteResult.insertId;
     } else {
       // If it exists, use the existing institute_id
@@ -130,47 +136,36 @@ exports.createEducation = async (req, res, next) => {
       educationRecord: results[0][0],
     };
 
-    console.log("Done");
+    console.log('Done');
     res.json(educationRecord);
-    
   } catch (error) {
-    console.error("Database error:", error);
+    console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
 
-
 exports.createCertification = async (req, res, next) => {
   const user_id = req.params.user_id || req.user.user_id;
 
-  const {
-    name,
-    issuing_organization,
-    issue_date,
-    expiration_date,
-  } = req.body;
+  const { name, issuing_organization, issue_date, expiration_date } = req.body;
 
   const insertCertificationQuery = `
     INSERT INTO certifications(person_id, name, issuing_organization, issue_date, expiration_date)
     VALUES (?, ?, ?, ?, ?)`;
 
-  const check_person = "SELECT person_id FROM person WHERE user_id = ?";
-  
-
-  
+  const check_person = 'SELECT person_id FROM person WHERE user_id = ?';
 
   try {
-
     const person = await executeQuery(req.db, check_person, [user_id]);
     const person_id = person[0].person_id;
 
     const queryValues = [
       person_id,
-    name,
-    issuing_organization,
-    issue_date,
-    expiration_date,
-  ];
+      name,
+      issuing_organization,
+      issue_date,
+      expiration_date,
+    ];
 
     const queryTasks = [
       executeQuery(req.db, insertCertificationQuery, queryValues),
@@ -184,7 +179,7 @@ exports.createCertification = async (req, res, next) => {
 
     res.json(certificationRecord);
   } catch (error) {
-    console.error("Database error:", error);
+    console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
@@ -202,8 +197,9 @@ exports.createEmployment = async (req, res, next) => {
     organization_name,
   } = req.body;
 
-  const check_organization = "SELECT organization_id FROM organization WHERE name = ?";
-  const check_person = "SELECT person_id FROM person WHERE user_id = ?";
+  const check_organization =
+    'SELECT organization_id FROM organization WHERE name = ?';
+  const check_person = 'SELECT person_id FROM person WHERE user_id = ?';
 
   const insertEmploymentQuery = `
     INSERT INTO employment(person_id, organization_id, year_started, month_started, month_left, year_left, title, text_description)
@@ -211,34 +207,36 @@ exports.createEmployment = async (req, res, next) => {
 
   let organization_id;
 
-
-
   try {
+    let organization = await executeQuery(req.db, check_organization, [
+      organization_name,
+    ]);
+    const person = await executeQuery(req.db, check_person, [user_id]);
 
-      let organization = await executeQuery(req.db, check_organization, [organization_name]);
-      const person = await executeQuery(req.db, check_person, [user_id]);
-
-      const person_id = person[0].person_id;
+    const person_id = person[0].person_id;
 
     if (organization.length === 0) {
-      const organizationResult = await executeQuery(req.db, `INSERT INTO organization (name) VALUES (?);`, [organization_name]);
+      const organizationResult = await executeQuery(
+        req.db,
+        `INSERT INTO organization (name) VALUES (?);`,
+        [organization_name]
+      );
       organization_id = organizationResult.insertId;
     } else {
       organization_id = organization[0].organization_id;
     }
 
+    const queryValues = [
+      person_id,
+      organization_id,
+      year_started,
+      month_started,
+      month_left,
+      year_left,
+      title,
+      text_description,
+    ];
 
-      const queryValues = [
-        person_id,
-    organization_id,
-    year_started,
-    month_started,
-    month_left,
-    year_left,
-    title,
-    text_description,
-  ];
-  
     const queryTasks = [
       executeQuery(req.db, insertEmploymentQuery, queryValues),
     ];
@@ -251,7 +249,7 @@ exports.createEmployment = async (req, res, next) => {
 
     res.json(employmentRecord);
   } catch (error) {
-    console.error("Database error:", error);
+    console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
@@ -266,7 +264,7 @@ exports.updateEducation = async (req, res, next) => {
     major,
     currently_studying,
     text_description,
-    institute_name
+    institute_name,
   } = req.body;
 
   const updateEducationQuery = `
@@ -278,21 +276,29 @@ exports.updateEducation = async (req, res, next) => {
                                             WHERE P.user_id = ?)
   `;
 
-  const check_institute = "SELECT institute_id FROM institute WHERE name = ?";
-  
+  const check_institute = 'SELECT institute_id FROM institute WHERE name = ?';
+
   let institute_id;
 
   try {
     // Check if the institute exists
-    const instituteQuery = await executeQuery(req.db, check_institute, institute_name);
-    
+    const instituteQuery = await executeQuery(
+      req.db,
+      check_institute,
+      institute_name
+    );
+
     if (instituteQuery.length > 0) {
       // The institute exists, use the existing institute_id
       institute_id = instituteQuery[0].institute_id;
     } else {
       // The institute doesn't exist, insert a new record and get the institute_id
-      const insertInstituteQuery = "INSERT INTO institute (name) VALUES (?)";
-      const insertInstituteResult = await executeQuery(req.db, insertInstituteQuery, institute_name);
+      const insertInstituteQuery = 'INSERT INTO institute (name) VALUES (?)';
+      const insertInstituteResult = await executeQuery(
+        req.db,
+        insertInstituteQuery,
+        institute_name
+      );
       institute_id = insertInstituteResult.insertId;
     }
 
@@ -319,23 +325,17 @@ exports.updateEducation = async (req, res, next) => {
 
     res.json(educationRecord);
   } catch (error) {
-    console.error("Database error:", error);
+    console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
 
-
-
 exports.updateCertification = async (req, res, next) => {
   const user_id = req.params.user_id || req.user.user_id;
-  const certification_id = req.params.certification_id || req.body.certification_id;
+  const certification_id =
+    req.params.certification_id || req.body.certification_id;
 
-  const {
-    name,
-    issuing_organization,
-    issue_date,
-    expiration_date,
-  } = req.body;
+  const { name, issuing_organization, issue_date, expiration_date } = req.body;
 
   const updateCertificationQuery = `
     UPDATE certifications
@@ -368,11 +368,10 @@ exports.updateCertification = async (req, res, next) => {
 
     res.json(certificationRecord);
   } catch (error) {
-    console.error("Database error:", error);
+    console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
-
 
 exports.updateEmployment = async (req, res, next) => {
   const user_id = req.params.user_id;
@@ -388,21 +387,31 @@ exports.updateEmployment = async (req, res, next) => {
   } = req.body;
 
   // Query to check if the organization exists
-  const check_organization = "SELECT organization_id FROM organization WHERE name = ?";
+  const check_organization =
+    'SELECT organization_id FROM organization WHERE name = ?';
 
   let organization_id;
 
   try {
     // Check if the organization exists
-    const organizationQuery = await executeQuery(req.db, check_organization, organization_name);
+    const organizationQuery = await executeQuery(
+      req.db,
+      check_organization,
+      organization_name
+    );
 
     if (organizationQuery.length > 0) {
       // The organization exists, use the existing organization_id
       organization_id = organizationQuery[0].organization_id;
     } else {
       // The organization doesn't exist, insert a new record and get the organization_id
-      const insertOrganizationQuery = "INSERT INTO organization (name) VALUES (?)";
-      const insertOrganizationResult = await executeQuery(req.db, insertOrganizationQuery, organization_name);
+      const insertOrganizationQuery =
+        'INSERT INTO organization (name) VALUES (?)';
+      const insertOrganizationResult = await executeQuery(
+        req.db,
+        insertOrganizationQuery,
+        organization_name
+      );
       organization_id = insertOrganizationResult.insertId;
     }
 
@@ -438,12 +447,10 @@ exports.updateEmployment = async (req, res, next) => {
 
     res.json(employmentRecord);
   } catch (error) {
-    console.error("Database error:", error);
+    console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
-
-
 
 exports.deleteEducation = async (req, res, next) => {
   const user_id = req.params.user_id;
@@ -465,16 +472,17 @@ exports.deleteEducation = async (req, res, next) => {
 
     await Promise.all(queryTasks);
 
-    res.json({ message: "Education deleted successfully" });
+    res.json({ message: 'Education deleted successfully' });
   } catch (error) {
-    console.error("Database error:", error);
+    console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
 
 exports.deleteCertification = async (req, res, next) => {
   const user_id = req.params.user_id;
-  const certification_id = req.params.certification_id || req.body.certification_id;
+  const certification_id =
+    req.params.certification_id || req.body.certification_id;
 
   const deleteCertificationQuery = `
     DELETE FROM certifications
@@ -492,14 +500,12 @@ exports.deleteCertification = async (req, res, next) => {
 
     await Promise.all(queryTasks);
 
-    res.json({ message: "Certification deleted successfully" });
+    res.json({ message: 'Certification deleted successfully' });
   } catch (error) {
-    console.error("Database error:", error);
+    console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
-
-
 
 exports.deleteEmployment = async (req, res, next) => {
   const user_id = req.params.user_id;
@@ -521,10 +527,9 @@ exports.deleteEmployment = async (req, res, next) => {
 
     await Promise.all(queryTasks);
 
-    res.json({ message: "Employment deleted successfully" });
+    res.json({ message: 'Employment deleted successfully' });
   } catch (error) {
-    console.error("Database error:", error);
+    console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
-
