@@ -4,12 +4,14 @@ const moment = require('moment');
 exports.getPost = async (req, res) => {
   // Access user_id from req.user
 
+
   console.log(req.params);
   // Check if the user is authenticated
   user_id = req.params.userId;
 
   try {
     const q = `SELECT p.*,u.user_id,username,u.ProfilePic from posts AS p JOIN user AS u ON (u.user_id= p.user_id) 
+
         LEFT JOIN friends AS f ON (p.user_id = f.friend_id) where f.user_id = ? OR p.user_id =?
          ORDER BY p.post_date DESC`;
     const post = await executeQuery(req.db, q, [user_id, user_id]);
