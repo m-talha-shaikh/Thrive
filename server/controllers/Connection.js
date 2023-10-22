@@ -13,6 +13,21 @@ exports.getFriends =async (req,res)=>
         return res.status(500).json("Internal Server Error");
     }
 }
+exports.getFriends2 =async (req,res)=>
+{
+    console.log("part 2 hiites");
+    console.log(req.query.userId);
+ 
+    try {
+        const q = `Select user_id,ProfilePic,CoverPic,username From user where user_id IN (Select friend_id from friends where user_id=?)`;
+   const friends = await executeQuery(req.db, q, [req.query.userId]);
+   console.log(friends);
+   return res.status(200).json(friends);
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json("Internal Server Error");
+    }
+}
 exports.addFriend =async (req,res)=>
 {
     try {

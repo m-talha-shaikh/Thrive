@@ -78,7 +78,11 @@ function App() {
     },
     {
       path: '/Chat',
-      element: <Chat/>
+      element: 
+      <QueryClientProvider client={queryClient}>
+
+        <Chat/>
+      </QueryClientProvider>
     }
   ]);
   return (

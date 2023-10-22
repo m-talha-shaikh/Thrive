@@ -34,6 +34,7 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
+
 exports.signup = async (req, res, next) => {
   const {
     username,
@@ -50,6 +51,7 @@ exports.signup = async (req, res, next) => {
   const check_query = 'SELECT * FROM user WHERE username = ?';
   const check_location =
     'SELECT location_id FROM location WHERE city = ? AND state = ? AND country = ?';
+
 
   try {
     const checkqueryresult = await executeQuery(req.db, check_query, [
