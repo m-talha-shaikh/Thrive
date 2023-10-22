@@ -4,10 +4,10 @@ const mysql = require('mysql2');
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'hamza504',
+  password: '',
   database: 'thrive_db',
-  waitForConnections: true, 
-  connectionLimit: 10, 
+  waitForConnections: true,
+  connectionLimit: 10,
 });
 
 pool.getConnection((err, connection) => {

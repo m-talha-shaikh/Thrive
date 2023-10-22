@@ -1,4 +1,5 @@
 const express = require('express');
+
 const { tokesignup, login, logout } = require("../controllers/authController.js");
 
 const router = express.Router();
@@ -11,5 +12,6 @@ router.post("/login", login);
 
 // Logout route
 router.post("/logout", logout);
+
 
 module.exports = router;
