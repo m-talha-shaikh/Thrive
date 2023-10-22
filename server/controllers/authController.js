@@ -38,7 +38,7 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-exports.signup = async (req, res, next) => {
+exports.tokesignup = async (req, res, next) => {
   const { username, email, account_type, password, ProfilePic, CoverPic, city, state, country, ...categoryData } = req.body;
   const check_query = "SELECT * FROM user WHERE username = ?";
   const check_location = "SELECT location_id FROM location WHERE city = ? AND state = ? AND country = ?";

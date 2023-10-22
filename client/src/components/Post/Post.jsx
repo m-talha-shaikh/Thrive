@@ -98,7 +98,7 @@ const Post = ({ post }) => {
 
         <div className="user">
           <div className="userinfo">
-            <img src={post.ProfilePic} alt="" />
+            <img src={"../../../public/uploads/"+post.ProfilePic} alt="" />
             <div className="details">
                 <Link to={`/profile/${post.user_id}`} style={{textDecoration:"none",color:"inherit"}}>
                     <span>{post.username}</span>

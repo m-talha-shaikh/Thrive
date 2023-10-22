@@ -1,16 +1,15 @@
 const express = require('express');
-const { login, signup, logout } = require("../controllers/authController.js");
+const { tokesignup, login, logout } = require("../controllers/authController.js");
 
 const router = express.Router();
+
+// Signup route
+router.post("/signup", tokesignup);
 
 // Login route
 router.post("/login", login);
 
-// Signup route
-router.post("/signup", signup);
+// Logout route
+router.post("/logout", logout);
 
-
-router.post("/logout",logout)
-
-
-module.exports = router; // Note the corrected export statement
+module.exports = router;

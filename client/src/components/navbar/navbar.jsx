@@ -47,7 +47,7 @@ const Navbar = () => {
         <NotificationsActiveIcon />
         <PersonIcon />
         <div className='user'>
-          <img src={currentUser.data.user.ProfilePic} alt="" />
+          <img src={"../../../public/uploads/"+currentUser.data.user.ProfilePic} alt="" />
           <span>{currentUser.data.user.username}</span>
         </div>
         <button onClick={handleLogout}>Logout</button> {/* Add a logout button */}

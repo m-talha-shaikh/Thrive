@@ -14,6 +14,7 @@ const likeRoutes = require("./server/routes/likes")
 const multer  = require('multer')
 const jobRouter = require('./server/routes/jobRoutes');
 const ConnectionRoutes = require("./server/routes/ConnectionRoutes")
+const ChatRoutes = require("./server/routes/Chat")
 
 
 //Starting app
@@ -72,7 +73,7 @@ app.use('/api/v1/jobs', jobRouter);
 app.use('/api/v1/Comments', CommentRoutes);
 app.use('/api/v1/Likes', likeRoutes);
 app.use('/api/v1/Connection',ConnectionRoutes);
-app.use('/api/v1/Chat',ConnectionRoutes);
+app.use('/api/v1/Chat',ChatRoutes);
 
 //404
 app.all('*', (req, res, next) => {

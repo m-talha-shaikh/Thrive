@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import "./Update.scss"
+
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { makeRequest } from "../../axios";
 import { AuthContext } from "../../context/AuthContext";
@@ -33,6 +34,8 @@ const Update = ({setopenupdate,user})=>
       try {
      
         const response = await makeRequest.put("/persons",user);
+        console.log(response.data);
+        
         return response.data; // Assuming your response contains the new post data
       } catch (err) {
         throw err; 
@@ -59,6 +62,17 @@ const Update = ({setopenupdate,user})=>
     console.log(Cover_url);
     console.log(Profile_url);
     mutation.mutate({ ...inputs,CoverPic:Cover_url || inputs.CoverPic,ProfilePic:Profile_url || inputs.ProfilePic,user_id:currentUser.data.user.user_id });
+    setCurrentUser((prevUser) => ({
+      ...prevUser,
+      username: inputs.username,
+      first_name: inputs.first_name,
+      last_name: inputs.last_name,
+      city: inputs.city,
+      state: inputs.state,
+      country: inputs.country,
+      CoverPic: Cover_url || inputs.CoverPic, // Update CoverPic
+      ProfilePic: Profile_url || inputs.ProfilePic, // Update ProfilePic
+    }));
     setopenupdate(false);
   };
     return(
