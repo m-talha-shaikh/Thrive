@@ -2,8 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require(`cors`);
 const attachDb = require('./server/utils/dbMiddleware');
-const cookieParser = require('cookie-parser'); // Import cookie-parser
-//Rquired Routes
+const cookieParser = require('cookie-parser');
 const personRouter = require('./server/routes/personRoutes')
 const instituteRouter = require('./server/routes/instituteRoutes')
 const organizationRouter = require('./server/routes/organizationRoutes')
@@ -59,6 +58,8 @@ app.post("/api/v1/upload",upload.single("file"),(req,res)=>
     console.log(req.file);
     res.status(200).json(file.filename)
 })
+
+
 // Attach the database connection to all routes under '/api/v1'
 app.use('/api/v1', attachDb);
 

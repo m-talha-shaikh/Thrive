@@ -35,6 +35,7 @@ exports.getJobs = async (req, res, next) => {
     remote,
     job_type,
   } = req.query;
+  
   const filters = [];
   const queryValues = [];
 

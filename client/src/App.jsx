@@ -62,7 +62,7 @@ function App() {
           element: <Profile/>
         },
         {
-          path: '/Jobs/:id',
+          path: '/Jobs',
           element: <Jobs/>
         }
       ]
