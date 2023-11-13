@@ -7,6 +7,7 @@ import moment from "moment";
 
 const comments = ({postId})=>
 {
+  console.log("sdgnrjgjrgjrjnrnjrgjnnjdgvkekjer");
     const [content,setcontent]= useState("");
     const {currentUser}= useContext(AuthContext);
     const { isLoading, error, data } = useQuery('comments', async () => {
@@ -41,11 +42,11 @@ const comments = ({postId})=>
     mutation.mutate({ content,postId ,user_id:currentUser.data.user.user_id  });
     setcontent("");
   };
-
+  console.log(data);
    return(
     <div className="comments">
         <div className="write">
-            <img src={currentUser.data.user.ProfilePic} alt="" />
+            <img src={"../../../public/uploads/"+currentUser.data.user.ProfilePic} alt="" />
             <input type="text" placeholder="Write a Comment" 
             onChange={(e)=> setcontent(e.target.value)}
             value={content}/>
@@ -55,12 +56,14 @@ const comments = ({postId})=>
         </div>
        {isLoading ? "Loading" : data.map(comment =>(
         <div className="comment">
-           <img src={comment.ProfilePic} alt="" />
+    
+           <img src={"../../../public/uploads/"+comment.ProfilePic} alt="Image not availaibel" />
         <div className="message">
-            <span>{comment.name}</span>
+            <span>{comment.username}</span>
             <p>{comment.content}</p>
         </div>
-        <span className="date">{moment(comment.createdAt).fromNow()}</span>
+        
+        <span className="date">{moment(comment.comment_date).fromNow()}</span>
         </div>
         
        ))}
