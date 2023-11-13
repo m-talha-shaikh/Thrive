@@ -1,9 +1,8 @@
 const executeQuery = require('../utils/executeQuery');
 const moment = require('moment');
 exports.getComments = async (req, res) => {
-    
-    try {
-        const q = `SELECT c.*,u.user_id,username,u.ProfilePic from comments AS c JOIN user AS u ON (u.user_id= c.user_id) 
+  try {
+    const q = `SELECT c.*,u.user_id,username,u.ProfilePic from comments AS c JOIN user AS u ON (u.user_id= c.user_id) 
         Where c.post_id = ?
         ORDER BY c.comment_date DESC`;
    const comment = await executeQuery(req.db, q, [req.query.postId]);
@@ -35,3 +34,6 @@ exports.addComments = async (req, res) => {
     }
      
 }
+
+};
+

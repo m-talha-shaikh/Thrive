@@ -127,12 +127,18 @@ CREATE TABLE `jobs` (
   `organization_id` int NOT NULL,
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `requirements` text NOT NULL,
   `post_date` datetime NOT NULL,
   `expiry_date` datetime NOT NULL,
   `is_active` bool NOT NULL,
+  `salary_min` decimal(10, 2),
+  `salary_max` decimal(10, 2),
+  `country` varchar(255),
+  `job_type` varchar(255),
+  `openings` int,
+  `remote_work` bool,
     FOREIGN KEY (`organization_id`) REFERENCES `organization` (`organization_id`)
 );
+
 
 CREATE TABLE `job_applications` (
   `application_id` int PRIMARY KEY AUTO_INCREMENT,
@@ -358,4 +364,8 @@ MODIFY state int;
 ALTER TABLE certifications
 MODIFY issue_date date,
 MODIFY expiration_date date;
+
+
+ALTER TABLE jobs
+ADD FULLTEXT(title, description);
 
