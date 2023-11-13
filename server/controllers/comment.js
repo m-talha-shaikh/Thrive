@@ -7,6 +7,7 @@ exports.getComments = async (req, res) => {
         Where c.post_id = ?
         ORDER BY c.comment_date DESC`;
    const comment = await executeQuery(req.db, q, [req.query.postId]);
+   console.log("anfe");
    return res.status(200).json(comment);
     } catch (err) {
         console.log(err);
@@ -26,6 +27,7 @@ exports.addComments = async (req, res) => {
         
         ];
         const post = await executeQuery(req.db, q, [values]);
+        console.log(post);
         return res.status(200).json("Comment has been created has been created");
     } catch (err) {
         console.log(err);

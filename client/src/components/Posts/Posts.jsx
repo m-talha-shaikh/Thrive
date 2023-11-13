@@ -8,7 +8,6 @@ import { useContext } from "react";
 const Posts = () => {
   const queryClient = useQueryClient();
   const {currentUser}=useContext(AuthContext) ;
-  console.log(currentUser.data.user.user_id);
   const { isLoading, error, data } = useQuery('posts', async () => { 
     return  await makeRequest.get( `/Posts/getPost/${currentUser.data.user.user_id}`, {
       params: {
@@ -17,8 +16,6 @@ const Posts = () => {
     })
       .then((res) => res.data);
   });
-  
-  console.log(data);
   return (
     <div className="Posts">
       {error ? "Something went wrong":(!data

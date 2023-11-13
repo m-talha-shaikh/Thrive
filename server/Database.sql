@@ -1,7 +1,6 @@
 CREATE DATABASE IF NOT EXISTS THRIVE_DB;
-
+Select * from user;
 USE THRIVE_DB;
-
 CREATE TABLE `user` (
   `user_id` int PRIMARY KEY AUTO_INCREMENT,
   `username` varchar(255) UNIQUE NOT NULL,
@@ -100,8 +99,7 @@ CREATE TABLE `posts` (
   `content` text NOT NULL,
   `image_url` varchar(255),
   `post_date` datetime NOT NULL,
-    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-    
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
 
 CREATE TABLE `likes` (
@@ -155,98 +153,96 @@ CREATE TABLE `friendship_requests` (
   FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`)
 );
 
-CREATE TABLE `friendships` (
-  `friendship_id` int PRIMARY KEY AUTO_INCREMENT,
-  `user_id1` int NOT NULL,
-  `user_id2` int NOT NULL,
-  FOREIGN KEY (`user_id1`) REFERENCES `user` (`user_id`),
-  FOREIGN KEY (`user_id2`) REFERENCES `user` (`user_id`)
+CREATE TABLE `friends` (
+  `friendship_id` int PRIMARY KEY,
+  `user_id` int NOT NULL,
+  `friend_id` int NOT NULL,
+  `friendship_date` datetime NOT NULL
+);
+
+CREATE TABLE `communities` (
+  `community_id` int PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `created_by` int NOT NULL,
+  `creation_date` datetime NOT NULL
+);
+
+CREATE TABLE `community_members` (
+  `membership_id` int PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `community_id` int NOT NULL,
+  `join_date` datetime NOT NULL
+);
+
+CREATE TABLE `community_posts` (
+  `community_post_id` int PRIMARY KEY AUTO_INCREMENT,
+  `community_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `content` text NOT NULL,
+  `image_url` varchar(255),
+  `post_date` datetime NOT NULL
+);
+
+CREATE TABLE `notifications` (
+  `notification_id` int PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `content` text NOT NULL,
+  `notification_date` datetime NOT NULL,
+  `is_read` bool NOT NULL
+);
+
+CREATE TABLE `video_calls` (
+  `call_id` int PRIMARY KEY AUTO_INCREMENT,
+  `caller_id` int NOT NULL,
+  `receiver_id` int NOT NULL,
+  `call_start_time` datetime NOT NULL,
+  `call_end_time` datetime NOT NULL
 );
 
 
--- CREATE TABLE `communities` (
---   `community_id` int PRIMARY KEY AUTO_INCREMENT,
---   `name` varchar(255) NOT NULL,
---   `description` text NOT NULL,
---   `created_by` int NOT NULL,
---   `creation_date` datetime NOT NULL
--- );
 
--- CREATE TABLE `community_members` (
---   `membership_id` int PRIMARY KEY AUTO_INCREMENT,
---   `user_id` int NOT NULL,
---   `community_id` int NOT NULL,
---   `join_date` datetime NOT NULL
--- );
+CREATE TABLE `project` (
+  `project_id` int PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `skills_used` varchar(255) NOT NULL
+);
 
--- CREATE TABLE `community_posts` (
---   `community_post_id` int PRIMARY KEY AUTO_INCREMENT,
---   `community_id` int NOT NULL,
---   `user_id` int NOT NULL,
---   `content` text NOT NULL,
---   `image_url` varchar(255),
---   `post_date` datetime NOT NULL
--- );
+CREATE TABLE `community_moderators` (
+  `moderator_id` int PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `community_id` int NOT NULL,
+  `admin` bool NOT NULL
+);
 
--- CREATE TABLE `notifications` (
---   `notification_id` int PRIMARY KEY AUTO_INCREMENT,
---   `user_id` int NOT NULL,
---   `content` text NOT NULL,
---   `notification_date` datetime NOT NULL,
---   `is_read` bool NOT NULL
--- );
+CREATE TABLE `chat_conversations` (
+  `conversation_id` int PRIMARY KEY AUTO_INCREMENT,
+  `user1_id` int NOT NULL,
+  `user2_id` int NOT NULL,
+  `last_message` text
+);
 
--- CREATE TABLE `video_calls` (
---   `call_id` int PRIMARY KEY AUTO_INCREMENT,
---   `caller_id` int NOT NULL,
---   `receiver_id` int NOT NULL,
---   `call_start_time` datetime NOT NULL,
---   `call_end_time` datetime NOT NULL
--- );
+CREATE TABLE `messages` (
+  `message_id` int PRIMARY KEY AUTO_INCREMENT,
+  `conversation_id` int NOT NULL,
+  `sender_id` int NOT NULL,
+  `receiver_id` int NOT NULL,
+  `content` text NOT NULL,
+  `message_date` datetime NOT NULL,
+  `is_read` bool NOT NULL
+);
 
-
-
--- CREATE TABLE `project` (
---   `project_id` int PRIMARY KEY AUTO_INCREMENT,
---   `user_id` int NOT NULL,
---   `name` varchar(255) NOT NULL,
---   `description` text NOT NULL,
---   `start_date` date NOT NULL,
---   `end_date` date NOT NULL,
---   `skills_used` varchar(255) NOT NULL
--- );
-
--- CREATE TABLE `community_moderators` (
---   `moderator_id` int PRIMARY KEY AUTO_INCREMENT,
---   `user_id` int NOT NULL,
---   `community_id` int NOT NULL,
---   `admin` bool NOT NULL
--- );
-
--- CREATE TABLE `chat_conversations` (
---   `conversation_id` int PRIMARY KEY AUTO_INCREMENT,
---   `user1_id` int NOT NULL,
---   `user2_id` int NOT NULL,
---   `last_message` text
--- );
-
--- CREATE TABLE `messages` (
---   `message_id` int PRIMARY KEY AUTO_INCREMENT,
---   `conversation_id` int NOT NULL,
---   `sender_id` int NOT NULL,
---   `receiver_id` int NOT NULL,
---   `content` text NOT NULL,
---   `message_date` datetime NOT NULL,
---   `is_read` bool NOT NULL
--- );
-
--- CREATE TABLE `audio_calls` (
---   `call_id` int PRIMARY KEY AUTO_INCREMENT,
---   `caller_id` int NOT NULL,
---   `receiver_id` int NOT NULL,
---   `call_start_time` datetime NOT NULL,
---   `call_end_time` datetime NOT NULL
--- );
+CREATE TABLE `audio_calls` (
+  `call_id` int PRIMARY KEY AUTO_INCREMENT,
+  `caller_id` int NOT NULL,
+  `receiver_id` int NOT NULL,
+  `call_start_time` datetime NOT NULL,
+  `call_end_time` datetime NOT NULL
+);
 
 ALTER TABLE `person` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
@@ -286,54 +282,49 @@ ALTER TABLE `job_applications` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`u
 
 ALTER TABLE `job_applications` ADD FOREIGN KEY (`job_id`) REFERENCES `jobs` (`job_id`);
 
--- ALTER TABLE `friends` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+ALTER TABLE `friends` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
--- ALTER TABLE `friends` ADD FOREIGN KEY (`friend_id`) REFERENCES `user` (`user_id`);
+ALTER TABLE `friends` ADD FOREIGN KEY (`friend_id`) REFERENCES `user` (`user_id`);
 
--- ALTER TABLE `communities` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`user_id`);
+ALTER TABLE `communities` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`user_id`);
 
--- ALTER TABLE `community_members` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+ALTER TABLE `community_members` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
--- ALTER TABLE `community_members` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
+ALTER TABLE `community_members` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
 
--- ALTER TABLE `community_posts` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
+ALTER TABLE `community_posts` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
 
--- ALTER TABLE `community_posts` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+ALTER TABLE `community_posts` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
--- ALTER TABLE `notifications` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+ALTER TABLE `notifications` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
--- ALTER TABLE `video_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user_id`);
+ALTER TABLE `video_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user_id`);
 
--- ALTER TABLE `video_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
-
-
-
--- ALTER TABLE `project` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
-
--- ALTER TABLE `community_moderators` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
-
--- ALTER TABLE `community_moderators` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
-
--- ALTER TABLE `chat_conversations` ADD FOREIGN KEY (`user1_id`) REFERENCES `user` (`user_id`);
-
--- ALTER TABLE `chat_conversations` ADD FOREIGN KEY (`user2_id`) REFERENCES `user` (`user_id`);
-
--- ALTER TABLE `messages` ADD FOREIGN KEY (`conversation_id`) REFERENCES `chat_conversations` (`conversation_id`);
-
--- ALTER TABLE `messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`);
-
--- ALTER TABLE `messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
-
--- ALTER TABLE `audio_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user_id`);
-
--- ALTER TABLE `audio_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
-
---NEW ALTER COMMANDS
+ALTER TABLE `video_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
 
 
--- ALTER TABLE employment
-MODIFY month_left int ,
-MODIFY year_left int ;
+
+ALTER TABLE `project` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+ALTER TABLE `community_moderators` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+ALTER TABLE `community_moderators` ADD FOREIGN KEY (`community_id`) REFERENCES `communities` (`community_id`);
+
+ALTER TABLE `chat_conversations` ADD FOREIGN KEY (`user1_id`) REFERENCES `user` (`user_id`);
+
+ALTER TABLE `chat_conversations` ADD FOREIGN KEY (`user2_id`) REFERENCES `user` (`user_id`);
+
+ALTER TABLE `messages` ADD FOREIGN KEY (`conversation_id`) REFERENCES `chat_conversations` (`conversation_id`);
+
+ALTER TABLE `messages` ADD FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`);
+
+ALTER TABLE `messages` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
+
+ALTER TABLE `audio_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user_id`);
+
+ALTER TABLE `audio_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
+
+
 
 -- Allow user_id, industry, location_sid, description, website_url, and contact to be NULL
 ALTER TABLE organization
@@ -367,3 +358,4 @@ MODIFY state int;
 ALTER TABLE certifications
 MODIFY issue_date date,
 MODIFY expiration_date date;
+
