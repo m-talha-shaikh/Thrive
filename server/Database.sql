@@ -368,4 +368,3 @@ MODIFY expiration_date date;
 
 ALTER TABLE jobs
 ADD FULLTEXT(title, description);
-
