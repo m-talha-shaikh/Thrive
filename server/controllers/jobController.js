@@ -27,8 +27,6 @@ exports.getJob = async (req, res, next) => {
 exports.getJobs = async (req, res, next) => {
   const {
     keyword,
-    location,
-    isActive,
     min_salary,
     max_salary,
     country,
@@ -49,11 +47,6 @@ exports.getJobs = async (req, res, next) => {
     filters.push(keyword);
   }
 
-  if (location) {
-    searchQuery += ` AND (city = ? OR state = ? OR country = ?)`;
-    filters.push(location, location, location);
-  }
-
   if (min_salary) {
     searchQuery += ` AND salary_min >= ?`;
     filters.push(min_salary);
@@ -69,19 +62,24 @@ exports.getJobs = async (req, res, next) => {
     filters.push(country);
   }
 
-  if (remote === 'yes' || remote === 'no') {
+  if (remote == true) {
     searchQuery += ` AND remote_work = ?`;
     filters.push(remote === 'yes' ? 1 : 0);
   }
 
-  if (job_type) {
-    searchQuery += ` AND job_type = ?`;
-    filters.push(job_type);
-  }
+  if (job_type && job_type.length > 0) {
+    searchQuery += ' AND (';
 
-  if (isActive === 'true' || isActive === 'false') {
-    searchQuery += ` AND is_active = ?`;
-    filters.push(isActive === 'true' ? 1 : 0);
+    job_type.forEach((type, index) => {
+      if (index > 0) {
+        searchQuery += ' OR ';
+      }
+
+      searchQuery += `job_type = ?`;
+      filters.push(type);
+    });
+
+    searchQuery += ')';
   }
 
   try {
