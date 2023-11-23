@@ -99,16 +99,38 @@ exports.applyToJob = async (req, res, next) => {
   const user_id = req.params.user_id;
   const job_id = req.params.job_id;
 
-  const application_date = new Date();
-
-  const insertApplicationQuery = `
-    INSERT INTO job_applications (user_id, job_id, application_date)
-    VALUES (?, ?, ?)
+  // Assuming there's a column named 'person_id' in the 'Person' table
+  const selectPersonIdQuery = `
+    SELECT person_id FROM Person WHERE user_id = ?
   `;
 
-  const queryValues = [user_id, job_id, application_date];
+  const personIdValues = [user_id];
 
   try {
+    // Retrieve person_id from the Person table
+    const personResult = await executeQuery(
+      req.db,
+      selectPersonIdQuery,
+      personIdValues
+    );
+
+    if (personResult.length === 0) {
+      // If no person_id is found, handle the error
+      res.status(404).json({ error: 'Person not found for the given user_id' });
+      return;
+    }
+
+    const person_id = personResult[0].person_id;
+
+    // Insert into job_applications table
+    const application_date = new Date();
+    const insertApplicationQuery = `
+      INSERT INTO job_applications (person_id, job_id, application_date)
+      VALUES (?, ?, ?)
+    `;
+
+    const queryValues = [person_id, job_id, application_date];
+
     const result = await executeQuery(
       req.db,
       insertApplicationQuery,
@@ -127,3 +149,4 @@ exports.applyToJob = async (req, res, next) => {
     res.status(500).json({ error: error });
   }
 };
+

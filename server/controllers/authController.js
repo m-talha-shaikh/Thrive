@@ -183,6 +183,7 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
+
   if (email && password) {
     try {
       const users = await executeQuery(
@@ -190,26 +191,33 @@ exports.login = async (req, res, next) => {
         'SELECT * FROM user WHERE email = ?',
         [email]
       );
+
       if (users.length > 0) {
         const user = users[0];
 
         const match = await argon2.verify(user.password, password);
 
         if (match) {
+          console.log("User authenticated successfully");
           createSendToken(user, 200, res);
         } else {
+          console.log("Incorrect email or password");
           res.status(401).json({ error: 'Incorrect Email or password' });
         }
       } else {
+        console.log("User not found");
         res.status(401).json({ error: 'Incorrect Email or password' });
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error during login:", error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   } else {
+    console.log("Missing email or password");
     res.status(400).json({ error: 'Missing email or password' });
   }
 };
+
 
 exports.protect = async (req, res, next) => {
   let token;

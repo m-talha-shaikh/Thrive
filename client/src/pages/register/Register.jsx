@@ -69,7 +69,7 @@ const Register = () => {
             </select>
             <input type="text" placeholder="First Name" onChange={handleChange} name="first_name" />
             <input type="text" placeholder="Last Name" onChange={handleChange} name="last_name" />
-            <input type="text" placeholder="Date of Birth" onChange={handleChange} name="date_of_birth" />
+            <input type="date" placeholder="Date of Birth" onChange={handleChange} name="date_of_birth" />
             <input type="text" placeholder="City" onChange={handleChange} name="city" />
             <input type="text" placeholder="State" onChange={handleChange} name="state" />
             <input type="text" placeholder="Country" onChange={handleChange} name="country" />
