@@ -35,5 +35,5 @@ exports.addComments = async (req, res) => {
      
 }
 
-};
+
 

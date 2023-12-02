@@ -4,6 +4,8 @@ import Register from './pages/register/Register';
 import Navbar from './components/navbar/navbar';
 import Leftbar from './components/Leftbar/Leftbar';
 import Profile from './pages/profile/Profile';
+import Institute from './pages/Institute/Institute';
+import Organization from './pages/Organization/Organization';
 import Home from './pages/home/Home'
 import Chat from './components/Chat/Chat';
 import "./style.scss"
@@ -12,7 +14,9 @@ import {createBrowserRouter,RouterProvider, Outlet, Navigate} from 'react-router
 import { DarkmodeContext } from './context/Darkmodecontext';
 import { AuthContext } from './context/AuthContext';
 import Jobs from "./pages/Jobs/Jobs"
+import Job from "./pages/Job/Job"
 import { QueryClient,QueryClientProvider,useQuery } from 'react-query';
+
 function App() {
   const {currentUser} = useContext(AuthContext);
   const {darkMode}= useContext(DarkmodeContext);
@@ -63,8 +67,20 @@ function App() {
           element: <Profile/>
         },
         {
-          path: '/Jobs',
+          path: '/organization/:id',
+          element: <Organization/>
+        },
+        {
+          path: '/institute/:id',
+          element: <Institute/>
+        },
+        {
+          path: '/jobs',
           element: <Jobs/>
+        },
+        {
+          path: 'jobs/:job_id',
+          element: <Job/>
         }
       ]
     },

@@ -5,24 +5,33 @@ import classes from './register.module.css';
 
 const Register = () => {
   const navigate = useNavigate();
+  const [accType, setAccType] = useState('person');
 
   const [inputs, setInputs] = useState({
-    username: '',
-    email: '',
-    password: '',
-    city: '',
-    state: '',
-    country: '',
-    account_type: 'person',
-    ProfilePic: '',
-    CoverPic: '',
-    first_name: '',
-    last_name: '',
-    date_of_birth: '',
-    gender: 'male',
-  });
+  username: '',
+  email: '',
+  password: '',
+  city: '',
+  state: '',
+  country: '',
+  account_type: 'person',
+  ProfilePic: '',
+  CoverPic: '',
+  first_name: '',
+  last_name: '',
+  date_of_birth: '',
+  gender: 'male',
+  name: '',
+  website_url: '',
+  text_description: '',
+  institute_type: '',
+  industry: '',
+});
+
 
   const handleChange = (e) => {
+    const selectedValue = event.target.value;
+    setAccType(selectedValue);
     const { name, value } = e.target;
     setInputs((prev) => ({ ...prev, [name]: value }));
   };
@@ -36,10 +45,10 @@ const Register = () => {
           'Content-Type': 'application/json',
         },
       });
-      console.log(response);
+      // console.log(response);
       navigate('/login');
     } catch (err) {
-      console.log(err.response.data);
+      // console.log(err.response.data);
     }
   };
 
@@ -67,18 +76,28 @@ const Register = () => {
               <option value="institute">Institute</option>
               <option value="organization">Organization</option>
             </select>
-            <input type="text" placeholder="First Name" onChange={handleChange} name="first_name" />
-            <input type="text" placeholder="Last Name" onChange={handleChange} name="last_name" />
-            <input type="text" placeholder="Date of Birth" onChange={handleChange} name="date_of_birth" />
+            {accType === 'person' && <input type="text" placeholder="First Name" onChange={handleChange} name="first_name" />}
+            {accType === 'person' && <input type="text" placeholder="Last Name" onChange={handleChange} name="last_name" />}
+            {accType === 'person' && <input type="date" placeholder="Date of Birth" onChange={handleChange} name="date_of_birth" />}
+            {(accType === 'institute' || accType === 'organization') 
+            && <input type="text" placeholder="Name" onChange={handleChange} name="name" />}
+            {(accType === 'institute' || accType === 'organization') 
+            && <input type="text" placeholder="Website URL" onChange={handleChange} name="website_url" />}
+            {(accType === 'institute' || accType === 'organization') 
+            && <input type="text" placeholder="Text Description" onChange={handleChange} name="text_description" />}
+            {(accType === 'institute') 
+            && <input type="text" placeholder="Institute Type" onChange={handleChange} name="institute_type" />}
+            {(accType === 'organization') 
+            && <input type="text" placeholder="Industry" onChange={handleChange} name="industry" />}
             <input type="text" placeholder="City" onChange={handleChange} name="city" />
             <input type="text" placeholder="State" onChange={handleChange} name="state" />
             <input type="text" placeholder="Country" onChange={handleChange} name="country" />
             <input type="url" placeholder="Profile Picture URL" onChange={handleChange} name="ProfilePic" />
             <input type="url" placeholder="Cover Picture URL" onChange={handleChange} name="CoverPic" />
-            <select onChange={handleChange} name="gender" value={inputs.gender}>
+            {accType === 'person' && <select onChange={handleChange} name="gender" value={inputs.gender}>
               <option value="male">Male</option>
               <option value="female">Female</option>
-            </select>
+            </select>}
             <button onClick={handleclick}>Register</button>
           </form>
         </div>

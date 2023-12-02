@@ -1,11 +1,11 @@
 const express = require('express');
 
-const { tokesignup, login, logout } = require("../controllers/authController.js");
+const { signup, login, logout } = require("../controllers/authController.js");
 
 const router = express.Router();
 
 // Signup route
-router.post("/signup", tokesignup);
+router.post("/signup", signup);
 
 // Login route
 router.post("/login", login);
