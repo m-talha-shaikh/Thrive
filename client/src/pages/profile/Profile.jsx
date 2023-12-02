@@ -14,7 +14,7 @@ import { useForm, Controller } from "react-hook-form";
   
 const Profile = ()=>
 { 
-  //EDucation Form
+  //Education Form
   const [showEducationForm, setShowEducationForm] = useState(false);
   const [showEmploymentForm, setShowEmploymentForm] = useState(false);
   const [showCertificationsForm, setShowCertificationsForm] = useState(false);

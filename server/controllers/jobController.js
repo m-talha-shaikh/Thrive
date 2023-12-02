@@ -1,6 +1,7 @@
 const executeQuery = require('./../utils/executeQuery');
 
 exports.getJob = async (req, res, next) => {
+  console.log("OMG");
   const job_id = req.params.job_id;
 
   const jobQuery = `SELECT * FROM jobs J
@@ -25,6 +26,8 @@ exports.getJob = async (req, res, next) => {
 };
 
 exports.getJobs = async (req, res, next) => {
+  console.log("Hi");
+  console.log(req.query);
   const {
     keyword,
     min_salary,
@@ -38,55 +41,71 @@ exports.getJobs = async (req, res, next) => {
   const queryValues = [];
 
   let searchQuery = `
-    SELECT * FROM jobs
+    SELECT J.*, O.name FROM jobs J JOIN Organization O ON J.organization_id = O.organization_id
     WHERE 1
   `;
 
   if (keyword) {
-    searchQuery += ` AND MATCH (title, description) AGAINST (? IN NATURAL LANGUAGE MODE)`;
+    console.log("Yay");
+    searchQuery += ` AND MATCH (J.title, J.description) AGAINST (? IN NATURAL LANGUAGE MODE)`;
     filters.push(keyword);
+    console.log(filters);
   }
 
-  if (min_salary) {
-    searchQuery += ` AND salary_min >= ?`;
+  if (min_salary && !isNaN(parseInt(min_salary, 10))) {
+    searchQuery += ` AND J.salary_min >= ?`;
     filters.push(min_salary);
   }
 
-  if (max_salary) {
-    searchQuery += ` AND salary_max <= ?`;
+  if (max_salary && !isNaN(parseInt(max_salary, 10))) {
+    searchQuery += ` AND J.salary_max <= ?`;
     filters.push(max_salary);
   }
 
   if (country) {
-    searchQuery += ` AND country = ?`;
+    searchQuery += ` AND J.country = ?`;
     filters.push(country);
   }
 
-  if (remote == true) {
-    searchQuery += ` AND remote_work = ?`;
+  if (remote == 'true') {
+    searchQuery += ` AND J.remote_work = ?`;
     filters.push(remote === 'yes' ? 1 : 0);
   }
 
-  if (job_type && job_type.length > 0) {
+  if (job_type) {
+    console.log(job_type);
+    console.log("Hi");
+  // const jobTypeFilters = [];
+
+  // Object.entries(job_type).forEach(([type, value]) => {
+  //   if (value === 'true') {
+  //     jobTypeFilters.push(type);
+  //   }
+  // });
+
+  // if (jobTypeFilters.length > 0) {
     searchQuery += ' AND (';
+  //   jobTypeFilters.forEach((type, index) => {
+  //     if (index > 0) {
+  //       searchQuery += ' OR ';
+  //     }
 
-    job_type.forEach((type, index) => {
-      if (index > 0) {
-        searchQuery += ' OR ';
-      }
+  //     searchQuery += `J.job_type = ?`;
+  //     filters.push(type);
+  //   });
+  //   searchQuery += ')';
+  // }
+}
 
-      searchQuery += `job_type = ?`;
-      filters.push(type);
-    });
-
-    searchQuery += ')';
-  }
+  console.log(filters);
+  console.log(searchQuery);
 
   try {
     const results = await executeQuery(req.db, searchQuery, [
       ...queryValues,
       ...filters,
     ]);
+    console.log(results);
 
     res.json(results);
   } catch (error) {

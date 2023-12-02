@@ -4,11 +4,11 @@ const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
-router.use(
-  '/:user_id',
-  authController.protect,
-  authController.restrictTo('person')
-);
+// router.use(
+//   '/:user_id',
+//   authController.protect,
+//   authController.restrictTo('person')
+// );
 
 //Only Authentication Needed
 

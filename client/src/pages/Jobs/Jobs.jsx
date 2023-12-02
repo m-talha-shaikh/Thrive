@@ -1,44 +1,44 @@
 // Jobs component file
-
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import JobDetails from './../../components/Jobs/JobDetails';
 import { useForm } from 'react-hook-form';
 import { useQuery, QueryClient, QueryClientProvider } from 'react-query';
 import { TextField, Checkbox, FormControlLabel, Radio, RadioGroup, FormControl, FormLabel, Grid, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 import './Jobs.scss';
 
 const queryClient = new QueryClient();
 
-const fetchJobs = async (formData) => {
-    const apiUrl = 'http://127.0.0.1:3000/api/v1/Jobs';
-    const response = await fetch(`${apiUrl}`);
-    return response.json();
-};
-
-
-
 const Jobs = () => {
-    const { handleSubmit, register, control, reset } = useForm();
-
-    const { data, isLoading, isError } = useQuery('jobs', () => fetchJobs(data), {
-        onSuccess: (response) => {
-            console.log(response);
-        },
-    });
+  const { handleSubmit, register, control, reset } = useForm();
+  const [jobData , setJobData] = useState({});
+  const [selectedJob, setSelectedJob] = useState(null);
 
 
-    const onSubmit = (data) => {
-        if (!data.keyword) {
-            alert('Cannot search job without a keyword.');
-            return;
-        }
-        data.min_salary = parseInt(data.min_salary, 10);
-        data.max_salary = parseInt(data.max_salary, 10);
-        // Use React Query's fetch function to trigger the job search
-        queryClient.invalidateQueries('jobs', { exact: true, refetchInactive: true });
-    };
+  const onSubmit = async (data) => {
+    if (!data.keyword) {
+      alert('Cannot search job without a keyword.');
+      return;
+    }
+    data.min_salary = parseInt(data.min_salary, 10);
+    data.max_salary = parseInt(data.max_salary, 10);
 
+    try {
+      // Make a GET request to your backend
+      const response = await axios.get('http://127.0.0.1:3000/api/v1/Jobs', { params: data });
+      setJobData(response.data);
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+
+    // Use React Query's fetch function to trigger the job search
+    queryClient.invalidateQueries('jobs', { exact: true, refetchInactive: true });
+  };
+
+//   console.log(jobData);
 
     return (
         <>
@@ -79,7 +79,7 @@ const Jobs = () => {
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        <FormLabel component="legend">Job Type</FormLabel>
+                        <FormLabel component="legend">Remote Work</FormLabel>
                         <FormControlLabel
                             control={<Checkbox {...register('remote')} />}
                             label="Yes"
@@ -115,15 +115,26 @@ const Jobs = () => {
                 </form>
             </div>
         </QueryClientProvider>
-        <JobDetails
-            title="React Developer"
-            companyName="ABC Corp"
-            // salaryMin={60000}
-            salaryMax={80000}
-            openings={3}
-            remoteWork={true}
-            description="Systems Limiteeeeeeeeeeeed"
-            />
+                {jobData.length > 0 && (
+      <div className="job-details-container">
+        {jobData.map((job) => (
+            <div>
+               <Link to={`/jobs/${job.job_id}`}>
+              <JobDetails
+                key={job.job_id}
+                job_id = {job.job_id}
+                title={job.title}
+                companyName={job.companyName}
+                salaryMin={job.min_salary}
+                salaryMax={job.max_salary}
+                openings={job.openings}
+                remoteWork={job.remoteWork}
+              />
+              </Link> 
+            </div>
+          ))}
+      </div>
+    )}
         </>
     );
 };
