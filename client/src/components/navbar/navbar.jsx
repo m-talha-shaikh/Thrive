@@ -50,7 +50,7 @@ const Navbar = () => {
           <img src={"../../../public/uploads/"+currentUser.data.user.ProfilePic} alt="" />
           <span>{currentUser.data.user.username}</span>
         </div>
-        <button onClick={handleLogout}>Logout</button> {/* Add a logout button */}
+        <button className="button" onClick={handleLogout}>Logout</button> {/* Add a logout button */}
       </div>
     </div>
   );
