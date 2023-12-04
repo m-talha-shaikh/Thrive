@@ -13,7 +13,20 @@
     background-color: themed("bg");
     color:themed("textColor");
     z-index: 999;
-
+    .button {
+      border: none;
+      background-color: themed("bgSoft");
+      color: themed("textColor");
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    
+      &:hover {
+        background-color: themed("bg");
+      }
+    }
+    
     .left {
       display: flex;
       align-items: center;
