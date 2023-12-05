@@ -6,7 +6,9 @@ const executeQuery = require("./../utils/executeQuery");
 
 // UpdatePerson route
 exports.UpdatePerson = async (req, res) => {
+  console.log("HI");
   console.log(req.headers);
+  console.log( `Body ${req.body.username}`);
 
   try {
     // Call the stored procedure to update person information

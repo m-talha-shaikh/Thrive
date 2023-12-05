@@ -19,6 +19,7 @@ const Organization = ()=> {
   const user_id = useLocation().pathname.split("/")[2];
   const [selectedOption, setSelectedOption] = useState('Job Post')
   const {currentUser}=useContext(AuthContext) ;
+  
   const { isLoading, error, data } = useQuery(['persons',user_id],async () => {
     return  await makeRequest.get(`/organizations/${user_id}`)
       .then((res) => res.data);
@@ -75,9 +76,40 @@ const Organization = ()=> {
     return (
        <div className="profile">
         <div className="images">
-                {data && data.person && data.person.CoverPic ? ( <img src={`../../../public/uploads/${data.person.CoverPic}`} alt="" className="Cover" /> ) : ( <p> {error ? "Something went wrong with the cover picture" : isLoading ? "Loading cover picture..." : "No cover picture available"} </p> )}
-        {data && data.person && data.person.ProfilePic ? ( <img src={`../../../public/uploads/${data.person.ProfilePic}`} alt="" className="profilePic" /> ) : ( <p> {error ? "Something went wrong with the profile picture" : isLoading ? "Loading profile picture..." : "No profile picture available"} </p> )}
-        </div>
+  <div className="cover">
+    {data && data.organization && data.organization.CoverPic ? (
+      <img
+        src={`../../../public/uploads/${data.organization.CoverPic}`}
+        alt=""
+        className="coverPic"
+      />
+    ) : (
+      <p>
+        {error
+          ? "Something went wrong with the cover picture"
+          : isLoading
+          ? "Loading cover picture..."
+          : "No cover picture available"}
+      </p>
+    )}
+  </div>
+  {data && data.organization && data.organization.ProfilePic ? (
+    <img
+      src={`../../../public/uploads/${data.organization.ProfilePic}`}
+      alt=""
+      className="profilePic"
+    />
+  ) : (
+    <p>
+      {error
+        ? "Something went wrong with the profile picture"
+        : isLoading
+        ? "Loading profile picture..."
+        : "No profile picture available"}
+    </p>
+  )}
+</div>
+
         <div className="profilecontainer">
        
             <div className="userinfo">
@@ -90,7 +122,7 @@ const Organization = ()=> {
                     </div>
                     <div className="item">
                         <LanguageIcon/>
-                        <span>{error?"This is some thing wrong":(isLoading?"Loading":data.organization.username)}</span>
+                        <span>{error?"This is some thing wrong":(isLoading?"Loading":data.organization.website_url)}</span>
                     </div>
                     
                     {user_id==currentUser.data.user.user_id ?

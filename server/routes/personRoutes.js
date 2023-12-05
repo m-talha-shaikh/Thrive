@@ -13,9 +13,10 @@ router.route('/:user_id').get(personController.getPerson);
 router.route('/:user_id/education')
   .post(personController.createEducation);
 
+  console.log("Hey");
 router.route('/')
   .put(personController.UpdatePerson);
-
+  console.log("Hello");
 
 router
   .route('/:user_id/education/:education_id')
