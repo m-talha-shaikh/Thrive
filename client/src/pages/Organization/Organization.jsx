@@ -2,7 +2,7 @@ import "./Organization.scss";
 import { Button, TextField, Typography, Paper, Container} from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import LanguageIcon from '@mui/icons-material/Language';
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { makeRequest } from "../../axios";
@@ -15,6 +15,7 @@ import Applicants from "../../components/Applicants/Applicants"
   
 const Organization = ()=> { 
 
+  const [auth, setAuth] = useState(false);
   const [openupdate, setopenupdate] = useState(false);
   const user_id = useLocation().pathname.split("/")[2];
   const [selectedOption, setSelectedOption] = useState('Job Post')
@@ -30,6 +31,16 @@ const Organization = ()=> {
       .then((res) => res.data);
   });
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+  if (data && data.organization) {
+    if (currentUser.data.user.user_id === data.organization.user_id) {
+      setAuth(true);
+    }
+  }
+}, [currentUser.data.user.user_id, data]);
+
+
 
   const mutation = useMutation(
     async (following) => {
@@ -132,11 +143,11 @@ const Organization = ()=> {
              </div>
             </div>
             <div className="navbar">
-            <button onClick={() => setSelectedOption('Job Post')}>Job Post</button>
+            {auth && <button onClick={() => setSelectedOption('Job Post')}>Job Post</button>}
             <button onClick={() => setSelectedOption('Employees')}>Employees</button>
             <button onClick={() => setSelectedOption('Job Applicants')}>Jobs</button>
           </div>
-          {selectedOption === 'Job Post' && data && data.organization && <JobPost organization={data.organization} user_id={user_id} />}
+          {auth && selectedOption === 'Job Post' && data && data.organization && <JobPost organization={data.organization} user_id={user_id} />}
           {selectedOption === 'Employees' && data && data.organization && <Employees organization={data.organization} user_id={user_id} />}
           {selectedOption === 'Job Applicants' && data && data.organization && <Applicants user_id={user_id} />}
         </div>

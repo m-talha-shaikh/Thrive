@@ -3,7 +3,7 @@ const executeQuery = require('./../utils/executeQuery');
 exports.getOrganization = async (req, res, next) => {
   const user_id = req.params.user_id;
 
-  const basicInfoQuery = `SELECT U.ProfilePic, U.CoverPic, U.username, O.name, O.industry,
+  const basicInfoQuery = `SELECT U.user_id, U.ProfilePic, U.CoverPic, U.username, O.name, O.industry,
                                 O.description, O.website_url, O.contact,
                                 L.city, L.state, L.country
                                 FROM organization O
