@@ -6,6 +6,7 @@ import Leftbar from './components/Leftbar/Leftbar';
 import Profile from './pages/profile/Profile';
 import Institute from './pages/Institute/Institute';
 import Organization from './pages/Organization/Organization';
+import Person from './pages/Person/Person';
 import Home from './pages/home/Home'
 import Chat from './components/Chat/Chat';
 import "./style.scss"
@@ -65,6 +66,10 @@ function App() {
         {
           path: '/profile/:id',
           element: <Profile/>
+        },
+        {
+          path: '/person/:id',
+          element: <Person/>
         },
         {
           path: '/organization/:id',

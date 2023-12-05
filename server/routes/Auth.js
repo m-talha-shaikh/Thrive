@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { signup, login, logout } = require("../controllers/authController.js");
+const { signup, login, logout, userType } = require("../controllers/authController.js");
 
 const router = express.Router();
 
@@ -12,6 +12,9 @@ router.post("/login", login);
 
 // Logout route
 router.post("/logout", logout);
+
+//User Type
+router.get("/userType/:id", userType);
 
 
 module.exports = router;

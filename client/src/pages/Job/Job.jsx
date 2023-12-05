@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { AuthContext } from "../../context/AuthContext";
 import {
   Card,
   CardContent,
@@ -8,6 +9,7 @@ import {
   Grid,
   Chip,
   Avatar,
+  Button, // Import Button from @mui/material
   styled, // Import styled from @mui/system
 } from '@mui/material';
 
@@ -28,6 +30,8 @@ const StyledCard = styled(Card)({
 const Job = () => {
   const { job_id } = useParams();
   const [job, setJob] = useState(null);
+  const { currentUser } = useContext(AuthContext);
+  const [user_id, setUserId] = useState(currentUser.data.user.user_id);
 
   useEffect(() => {
     // Make a GET request when the component mounts
@@ -42,6 +46,20 @@ const Job = () => {
         console.error('Error fetching job data:', error);
       });
   }, [job_id]);
+
+  const handleApply = () => {
+    // Make a POST request to apply for the job
+    axios
+      .post(`http://127.0.0.1:3000/api/v1/Jobs/${job_id}`, { user_id })
+      .then((response) => {
+        // Handle the response if needed
+        console.log('Application successful:', response.data);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error('Error applying for the job:', error);
+      });
+  };
 
   return (
     <>
@@ -119,6 +137,14 @@ const Job = () => {
                 </Grid>
               )}
             </Grid>
+
+            <Grid container spacing={2} alignItems="center" marginBottom={2}>
+              <Grid item>
+                <Button variant="contained" color="primary" onClick={handleApply}>
+                  Apply
+                </Button>
+              </Grid>
+            </Grid>
           </CardContent>
         </StyledCard>
       )}
@@ -127,5 +153,3 @@ const Job = () => {
 };
 
 export default Job;
-
-

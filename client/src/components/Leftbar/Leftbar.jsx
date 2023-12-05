@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import "./Leftbar.scss"
 import Friends from "../../assets/1.png";
 import Groups from "../../assets/2.png";
-import Market from "../../assets/3.png";
+import Jobs from "../../assets/3.png";
 import Watch from "../../assets/4.png";
 import Memories from "../../assets/5.png";
 import Events from "../../assets/6.png";
@@ -58,10 +58,12 @@ const Leftbar = ()=>
             <img src={Groups} alt="" />
             <span>Groups</span>
           </div>
+          <Link to={`/jobs`}>
           <div className="item">
-            <img src={Market} alt="" />
-            <span>Marketplace</span>
+            <img src={Jobs} alt="" />
+            <span>Jobs</span>
           </div>
+          </Link>
           <div className="item">
             <img src={Watch} alt="" />
             <span>Watch</span>
