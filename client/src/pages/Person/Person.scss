@@ -58,11 +58,19 @@
             width: 100%;
             height: 300px;
             position: relative;
+            
 
-            .cover {
+            .coverPic{
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                overflow: hidden;
+            }
+
+            .cover{
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
             }
 
             .profilePic {

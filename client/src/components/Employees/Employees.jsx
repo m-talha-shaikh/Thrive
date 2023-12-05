@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, CircularProgress, Link } from '@mui/material';
+import { Card, CardContent, Typography, CircularProgress, Link, Avatar } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,6 +37,7 @@ const Employees = ({ user_id }) => {
           <Link key={index} onClick={() => handleCardClick(employee)} style={{ textDecoration: 'none' }}>
             <Card style={{ margin: '16px 0', cursor: 'pointer' }}>
               <CardContent>
+                <Avatar src={`../../../public/uploads/${employee.ProfilePic}`} alt={`${employee.first_name} ${employee.last_name}`} />
                 <Typography variant="h6">
                   {employee.first_name} {employee.last_name}
                 </Typography>
