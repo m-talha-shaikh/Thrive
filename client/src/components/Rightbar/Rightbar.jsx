@@ -1,75 +1,71 @@
-import React from "react";
-import "./Rightbar.scss"
-const Rightbar = ()=>
-{
-    return(
-        <div className="rightbar">
-            <div className="container">
-                <div className="item">
-                    <span>Suggestions For you</span>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img src="https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
-                            <span>Hamza Tufail</span>
-                        </div>
-                        <button>Follow</button>
-                        <button>dissmiss</button>
-                    </div>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img src="https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
-                            <span>Johnny bhai</span>
-                        </div>
-                        <button>Follow</button>
-                        <button>dissmiss</button>
-                    </div>
-                </div>
-                <div className="item">
-                    <span>Activities</span>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img src="https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
-                           <p>Changed their cover phote</p>
-                        </div>
-                        <span>1 min ago</span>
-                    </div>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img src="https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
-                           <p>Changed their cover phote</p>
-                        </div>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="item">
-                    <span>Online Friends</span>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img src="https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
-                          <div className="online" />
-                        <span>Dummy</span>
- 
-                        </div>
-                    </div>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img src="https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
-                          <div className="online" />
-                        <span>Dummy</span>
- 
-                        </div>
-                    </div>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img src="https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
-                          <div className="online" />
-                        <span>Dummy</span>
- 
-                        </div>
-                    </div>
-                </div>
-            </div>
+import React, { useContext } from "react";
+import "./Rightbar.scss";
+import { useMutation, useQuery } from "react-query";
+import { AuthContext } from "../../context/AuthContext";
+import { makeRequest } from "../../axios";
+import { Link } from "react-router-dom";
+
+const Rightbar = () => {
+  const { currentUser } = useContext(AuthContext);
+
+  const { isLoading, error, data } = useQuery('getfriends', async () => {
+    return await makeRequest.get(`/Connection/messagingfriends`, {
+      params: {
+        userId: currentUser.data.user.user_id
+      }
+    })
+    .then((res) => res.data);
+  });
+
+  const { isLoading: isLoading2, error: error2, data: data2 } = useQuery('getusers', async () => {
+    return await makeRequest.get(`/Connection/UsersNotfriends`, {
+      params: {
+        userId: currentUser.data.user.user_id
+      }
+    })
+    .then((res) => res.data);
+  });
+
+  // Function to render user components or a fallback message
+  const renderUsers = (userData, type) => {
+    if (userData === undefined) {
+      return <p>Loading...</p>; // or any fallback message
+    }
+
+    if (userData.length === 0) {
+      return <p  style={{ textDecoration: "none", color: "inherit" }}>No {type} available.</p>; // Fallback message for no users
+    }
+
+    return userData.map((contact) => (
+      <div className="user" key={contact.user_id}>
+        <div className="userInfo">
+          <img src={"../../../public/uploads/" + contact.ProfilePic} alt="" />
+          <div className="online">
+
+          </div>
+          <Link to={`/profile/${contact.user_id}`} style={{ textDecoration: "none", color: "inherit" }}>
+            <span>{contact.username}</span>
+          </Link>
         </div>
-    )
-}
+      </div>
+    ));
+  };
+
+  return (
+    <div className="rightbar">
+      <div className="container">
+        <div className="item">
+          <span>People you may know! </span>
+          {renderUsers(data2, 'people')}
+        </div>
+
+        <div className="item">
+          <span>Online Friends</span>
+          {renderUsers(data, 'friends')}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default Rightbar;

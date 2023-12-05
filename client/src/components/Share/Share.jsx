@@ -48,18 +48,24 @@ const Share = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    let image_url;
-    if (file) {
-       image_url= await upload();
-    
+  
+
+    if (!content.trim() && !file) {
+   
+      console.error("Cannot post an empty content.");
+      return;
     }
   
-    console.log(image_url);
-    mutation.mutate({ user_id:currentUser.data.user.user_id ,content,image_url });
+    let image_url;
+    if (file) {
+      image_url = await upload();
+    }
+  
+    mutation.mutate({ user_id: currentUser.data.user.user_id, content, image_url });
     setDesc("");
     setFile(null);
   };
-
+  
   return (
     <div className="share">
       <div className="container">

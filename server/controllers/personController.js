@@ -2,27 +2,34 @@
 
 
 const executeQuery = require("./../utils/executeQuery");
-exports.UpdatePerson = async(req,res)=>
-{
-    console.log(req.headers);
-    try {
-      const q1 = `Update location set city= ?,state = ?,country = ? where location_id = (Select location_id from person where user_id = ?)`;
-      await executeQuery(req.db,q1,[req.body.city,req.body.state,req.body.country,req.body.user_id]);
-      const q2 = `Update person set first_name = ?,last_name = ? where user_id = ?`;
-      await executeQuery(req.db,q2,[req.body.first_name,req.body.last_name,req.body.user_id]);
-      const q3 = `Update user set username = ?,CoverPic= ?,ProfilePic=? where user_id =?`;
-      const finale =await executeQuery(req.db,q3,[req.body.username,req.body.CoverPic,req.body.ProfilePic,req.body.user_id]);
-      if (finale.affectedRows > 0) {
-        return res.json("Update Succesfully");
-      }
-      else{
-        return res.status.json("You can update your own post only");
-      }
-    } catch (er) {
-      console.log(er);
-    }
-   
+
+
+// UpdatePerson route
+exports.UpdatePerson = async (req, res) => {
+  console.log(req.headers);
+
+  try {
+    // Call the stored procedure to update person information
+    const updateLocationQuery = `CALL UpdatePerson(?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    await executeQuery(req.db, updateLocationQuery, [
+      req.body.city,
+      req.body.state,
+      req.body.country,
+      req.body.user_id,
+      req.body.first_name,
+      req.body.last_name,
+      req.body.username,
+      req.body.CoverPic,
+      req.body.ProfilePic
+    ]);
+
+    return res.json("Update Successfully");
+  } catch (error) {
+    console.error("Error updating person:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 };
+
 
 exports.getPerson = async (req, res, next) => {
   const user_id = req.params.user_id;

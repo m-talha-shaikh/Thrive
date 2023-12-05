@@ -11,8 +11,22 @@
     position: sticky;
     top: 0;
     background-color: themed("bg");
-    color:themed("textColor");
+    color: themed("textColor");
     z-index: 999;
+
+    .button {
+      border: none;
+      background-color: themed("bgSoft");
+      color: themed("textColor");
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: themed("bg");
+      }
+    }
 
     .left {
       display: flex;
@@ -26,6 +40,7 @@
       }
 
       .search {
+        position: relative; /* Added position relative */
         display: flex;
         align-items: center;
         gap: 10px;
@@ -34,24 +49,90 @@
         padding: 5px;
         margin-left: 6rem;
         input {
-           border: none;
-
+          border: none;
           width: 500px;
-          background-color: transparent;
-          color: themed("textColor");
+          background-color:themed("bgSoft");;
+          color: themed("bg");
 
-          @include mobile{
+          @include mobile {
             display: none;
           }
 
-          @include tablet{
+          @include tablet {
             width: 200px;
           }
-          &:focus{
-           outline: none;
+
+          &:focus {
+            outline: none;
           }
         }
-        
+
+        /* Added styles for search results */
+        .search-results {
+          position: absolute;
+          top: 100%; /* Position the results below the search bar */
+          left: 0;
+          width: 100%;
+          background-color:themed("bg");
+          border: 1px solid #ccc;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          padding: 8px;
+          z-index: 1;
+          color: themed("textColor");
+          .user{
+            display: flex;
+            align-items: center;
+            justify-content: space-between ;
+            margin: 10px 0px;
+            .userInfo{
+             display: flex;
+             align-items: center;
+             gap: 20px;
+             position: relative;
+             img{
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+             }
+             .online{
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background-color: green;
+                position: absolute;
+                top:0 ;
+                left: 30px;
+             }
+             p{
+                color:themed("textColorSoft");
+             }
+             span{
+                font-weight: 500;
+                color: themed("textColor");
+             }
+            }
+            .buttons{
+               display: flex;
+               align-items: center;
+               gap: 10px;
+            }
+            button{
+                border: none;
+                
+                    padding: 5px;
+                    color: white;
+                    cursor: pointer;
+                
+               background: #3896ff;
+                
+                    &:last-child {
+                        background-color: red;
+                    }
+            }
+            
+        }
+        }
       }
     }
 
@@ -60,7 +141,7 @@
       align-items: center;
       gap: 20px;
 
-      @include mobile{
+      @include mobile {
         display: none;
       }
 
@@ -70,7 +151,7 @@
         gap: 10px;
         font-weight: 500;
 
-        @include tablet{
+        @include tablet {
           display: none;
         }
 
@@ -80,8 +161,6 @@
           border-radius: 50%;
           object-fit: cover;
         }
-
-        
       }
     }
   }
