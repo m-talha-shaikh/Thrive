@@ -121,6 +121,7 @@ const Jobs = () => {
             <div>
                <Link to={`/jobs/${job.job_id}`}>
               <JobDetails
+                ProfilePic={job.ProfilePic}
                 key={job.job_id}
                 job_id = {job.job_id}
                 title={job.title}

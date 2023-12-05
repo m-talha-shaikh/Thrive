@@ -121,7 +121,6 @@ CREATE TABLE `comments` (
     FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`)
 );
 
-
 CREATE TABLE `jobs` (
   `job_id` int PRIMARY KEY AUTO_INCREMENT,
   `organization_id` int NOT NULL,
@@ -151,7 +150,7 @@ CREATE TABLE `job_applications` (
 
 
 CREATE TABLE `friends` (
-  `friendship_id` int PRIMARY KEY,
+  `friendship_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `friend_id` int NOT NULL,
   `friendship_date` datetime NOT NULL,
@@ -159,15 +158,82 @@ CREATE TABLE `friends` (
   FOREIGN KEY (`friend_id`) REFERENCES `user` (`user_id`)
 );
 
-CREATE TABLE `friendship_requests` (
-  `request_id` int PRIMARY KEY AUTO_INCREMENT,
-  `sender_id` int NOT NULL,
-  `receiver_id` int NOT NULL,
-  `status` varchar(255) NOT NULL,
-  `request_date` datetime NOT NULL,
-  FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`),
-  FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`)
-);
+ALTER TABLE jobs
+ADD FULLTEXT(title, description);
+
+
+ALTER TABLE organization
+ADD COLUMN job_count INT DEFAULT 0;
+
+--Trigger
+
+DELIMITER //
+
+CREATE TRIGGER after_insert_job
+AFTER INSERT
+ON jobs FOR EACH ROW
+BEGIN
+    -- Increment the job_count for the corresponding organization
+    UPDATE organization
+    SET job_count = job_count + 1
+    WHERE organization_id = NEW.organization_id;
+END //
+
+DELIMITER ;
+
+--Stored Procedure
+
+DELIMITER //
+
+CREATE PROCEDURE UpdatePerson(
+  IN p_city VARCHAR(255),
+  IN p_state VARCHAR(255),
+  IN p_country VARCHAR(255),
+  IN p_user_id INT,
+  IN p_first_name VARCHAR(255),
+  IN p_last_name VARCHAR(255),
+  IN p_username VARCHAR(255),
+  IN p_cover_pic VARCHAR(255),
+  IN p_profile_pic VARCHAR(255)
+)
+BEGIN
+  -- Update location
+  UPDATE location
+  SET
+    city = p_city,
+    state = p_state,
+    country = p_country
+  WHERE location_id = (SELECT location_id FROM person WHERE user_id = p_user_id);
+
+  -- Update person
+  UPDATE person
+  SET
+    first_name = p_first_name,
+    last_name = p_last_name
+  WHERE user_id = p_user_id;
+
+  -- Update user
+  UPDATE user
+  SET
+    username = p_username,
+    CoverPic = p_cover_pic,
+    ProfilePic = p_profile_pic
+  WHERE user_id = p_user_id;
+
+END //
+
+DELIMITER ;
+
+
+-- CREATE TABLE `friendship_requests` (
+--   `request_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `sender_id` int NOT NULL,
+--   `receiver_id` int NOT NULL,
+--   `status` varchar(255) NOT NULL,
+--   `request_date` datetime NOT NULL,
+--   FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`),
+--   FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`)
+-- );
 
 
 -- CREATE TABLE `communities` (
@@ -312,8 +378,6 @@ ALTER TABLE `video_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user
 
 ALTER TABLE `video_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
 
-
-
 ALTER TABLE `project` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 ALTER TABLE `community_moderators` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
@@ -370,5 +434,4 @@ MODIFY issue_date date,
 MODIFY expiration_date date;
 
 
-ALTER TABLE jobs
-ADD FULLTEXT(title, description);
+

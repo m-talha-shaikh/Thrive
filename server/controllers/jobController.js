@@ -1,11 +1,20 @@
 const executeQuery = require('./../utils/executeQuery');
 
 exports.getJob = async (req, res, next) => {
-  console.log("OMG");
   const job_id = req.params.job_id;
 
-  const jobQuery = `SELECT * FROM jobs J
-                                WHERE J.job_id = ?`;
+  const jobQuery = `SELECT
+                      j.*,
+                      o.name,
+                      u.ProfilePic
+                  FROM
+                      jobs j
+                  JOIN
+                      organization o ON j.organization_id = o.organization_id
+                  JOIN
+                      user u ON o.user_id = u.user_id
+                  WHERE
+                      j.job_id = ?`;
 
   try {
     const queryTasks = [executeQuery(req.db, jobQuery, [job_id])];
@@ -50,7 +59,6 @@ exports.getApplicants = async (req, res, next) => {
 };
 
 exports.getJobs = async (req, res, next) => {
-  console.log("Hi");
   console.log(req.query);
   const {
     keyword,
@@ -65,8 +73,7 @@ exports.getJobs = async (req, res, next) => {
   const queryValues = [];
 
   let searchQuery = `
-    SELECT J.*, O.name FROM jobs J JOIN Organization O ON J.organization_id = O.organization_id
-    WHERE 1
+    SELECT J.*, O.name AS organization_name, U.ProfilePic FROM jobs J JOIN organization O ON J.organization_id = O.organization_id JOIN user U ON O.user_id = U.user_id WHERE 1
   `;
 
   if (keyword) {
@@ -98,28 +105,7 @@ exports.getJobs = async (req, res, next) => {
 
   if (job_type) {
     console.log(job_type);
-    console.log("Hi");
-  // const jobTypeFilters = [];
-
-  // Object.entries(job_type).forEach(([type, value]) => {
-  //   if (value === 'true') {
-  //     jobTypeFilters.push(type);
-  //   }
-  // });
-
-  // if (jobTypeFilters.length > 0) {
-    searchQuery += ' AND (';
-  //   jobTypeFilters.forEach((type, index) => {
-  //     if (index > 0) {
-  //       searchQuery += ' OR ';
-  //     }
-
-  //     searchQuery += `J.job_type = ?`;
-  //     filters.push(type);
-  //   });
-  //   searchQuery += ')';
-  // }
-}
+  }
 
   console.log(filters);
   console.log(searchQuery);

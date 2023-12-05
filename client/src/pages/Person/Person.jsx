@@ -1,6 +1,6 @@
 
 import "./Person.scss";
-import { Button, TextField, Typography, Paper, Container} from '@mui/material';
+import { Button, TextField, Typography, Paper, Container, Avatar, Link} from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useContext, useState, useEffect } from "react";
@@ -10,10 +10,21 @@ import { makeRequest } from "../../axios";
 import { useLocation } from "react-router-dom";
 import Update from "../../components/update/Update";
 import { useForm, Controller } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
 
   
 const Person = ()=>
 { 
+
+  const navigate = useNavigate();
+
+  const handleInstituteClick = (id) => {
+    navigate(`/institute/${id}`);
+  };
+
+  const handleOrganizationClick = (id) => {
+    navigate(`/organization/${id}`);
+  };
 
   const [authorized, setAuthorized] = useState(false);
   
@@ -186,7 +197,7 @@ const handleDeleteCertifications = async (certificationId) => {
     return (
        <div className="profile">
         <div className="images">
-        <div className="cover">{data && data.person && data.person.CoverPic ? ( <img src={`../../../public/uploads/${data.person.CoverPic}`} alt="" className="coverPic" /> ) : ( <p> {error ? "Something went wrong with the cover picture" : isLoading ? "Loading cover picture..." : "No cover picture available"} </p> )}></div>
+        <div className="cover">{data && data.person && data.person.CoverPic ? ( <img src={`../../../public/uploads/${data.person.CoverPic}`} alt="" className="coverPic" /> ) : ( <p> {error ? "Something went wrong with the cover picture" : isLoading ? "Loading cover picture..." : "No cover picture available"} </p> )}</div>
         {data && data.person && data.person.ProfilePic ? ( <img src={`../../../public/uploads/${data.person.ProfilePic}`} alt="" className="profilePic" /> ) : ( <p> {error ? "Something went wrong with the profile picture" : isLoading ? "Loading profile picture..." : "No profile picture available"} </p> )}
         </div>
         <div className="profilecontainer">
@@ -221,11 +232,14 @@ const handleDeleteCertifications = async (certificationId) => {
       </div>
       {data && data.education && data.education.map((item, index) => (
         <div key={index} className="education-item">
+          <Link key={index} onClick={() => handleInstituteClick(item.user_id)} style={{ textDecoration: 'none'}}>
           <div style={{ display: 'flex', justifyContent: 'space-evenly'}}>
             <Typography variant="h3" style={{ display: 'inline-block', marginRight: '10px'  }}>{item.major}</Typography>
             {authorized && ( <Button variant="contained" color="error" onClick={() => handleDeleteEducation(item.education_id)} style={{ display: 'inline-block', marginLeft: '10px' }} > Delete </Button> )}
           </div>
-          <Typography variant="body1">{item.name}</Typography>
+            <Avatar src={`../../../public/uploads/${item.ProfilePic}`}/>
+            <Typography variant="body1">{item.name}</Typography>
+          </Link>
           {item.year_graduated ? (
             <Typography variant="body1">{`${item.year_enrolled} - ${item.year_graduated}`}</Typography>
           ) : (
@@ -301,11 +315,14 @@ const handleDeleteCertifications = async (certificationId) => {
   </div>
   {data && data.employment && data.employment.map((item, index) => (
     <div key={index} className="employment-item">
+      <Link key={index} onClick={() => handleOrganizationClick(item.user_id)} style={{ textDecoration: 'none'}}>
       <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
         <h3 style={{ display: 'inline-block', marginRight: '10px' }}>{item.title}</h3>
         {authorized && ( <Button variant="contained" color="error" onClick={() => handleDeleteEmployment(item.employment_id)} style={{ display: 'inline-block', marginLeft: '10px' }} > Delete </Button> )}
       </div>
-      <p>{item.orgnaization_name}</p>
+            <Avatar src={`../../../public/uploads/${item.ProfilePic}`}/>
+            <Typography variant="body1">{item.name}</Typography>
+     </Link>
       {item.year_left ? (
         <p>{`${item.month_started}/${item.year_started} - ${item.month_left}/${item.year_left}`}</p>
       ) : (

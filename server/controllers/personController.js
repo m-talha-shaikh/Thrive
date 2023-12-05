@@ -8,7 +8,6 @@ const executeQuery = require("./../utils/executeQuery");
 exports.UpdatePerson = async (req, res) => {
   console.log("HI");
   console.log(req.headers);
-  console.log( `Body ${req.body.username}`);
 
   try {
     // Call the stored procedure to update person information
@@ -45,34 +44,35 @@ exports.getPerson = async (req, res, next) => {
     WHERE P.user_id = ?`;
 
   const educationQuery = `
-    SELECT E.education_id, I.institute_id, I.name,
+    SELECT I.user_id, E.education_id, I.institute_id, I.name,
+    U.ProfilePic,
     E.year_enrolled, E.year_graduated,
     E.major, E.currently_studying, E.text_description 
-    FROM education E
-    JOIN institute I
-    ON I.institute_id = E.institute_id
-    LEFT JOIN location L
-    ON I.location_id = L.location_id
-    WHERE E.person_id = (SELECT person_id
-      FROM person P
-      WHERE P.user_id = ?)
-    ORDER BY E.year_enrolled DESC 
+FROM education E
+JOIN institute I ON I.institute_id = E.institute_id
+JOIN user U ON U.user_id = I.user_id
+LEFT JOIN location L ON I.location_id = L.location_id
+WHERE E.person_id = (SELECT person_id
+                    FROM person P
+                    WHERE P.user_id = ?)
+ORDER BY E.year_enrolled DESC 
 `;
 
   const employmentQuery = `
-    SELECT E.employment_id, O.organization_id, O.name, L.city, L.state, L.country,
-      E.year_started, E.year_left,
-      E.month_started, E.month_left,
-      E.title, E.text_description 
-    FROM employment E
-    JOIN organization O
-    ON O.organization_id = E.organization_id
-    LEFT JOIN location L
-    ON O.location_id = L.location_id
-    WHERE E.person_id = (SELECT person_id
-      FROM person P
-      WHERE P.user_id = ?)
-      ORDER BY E.year_started DESC `;
+    SELECT O.user_id, E.employment_id, O.organization_id, O.name,
+    U.ProfilePic,
+    L.city, L.state, L.country,
+    E.year_started, E.year_left,
+    E.month_started, E.month_left,
+    E.title, E.text_description 
+FROM employment E
+JOIN organization O ON O.organization_id = E.organization_id
+JOIN user U ON U.user_id = O.user_id
+LEFT JOIN location L ON O.location_id = L.location_id
+WHERE E.person_id = (SELECT person_id
+                    FROM person P
+                    WHERE P.user_id = ?)
+ORDER BY E.year_started DESC`;
 
   const certificationQuery = `
     SELECT C.certification_id, C.name, C.issuing_organization,
