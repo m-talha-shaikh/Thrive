@@ -32,7 +32,7 @@ const Person = ()=>
 
     useEffect(() => {
     // Check if user_id is equal to the currentUser's user_id
-    if (user_id === currentUser.data.user.user_id) {
+    if (user_id == currentUser.data.user.user_id) {
       // Set authorized to true
       setAuthorized(true);
     } else {
