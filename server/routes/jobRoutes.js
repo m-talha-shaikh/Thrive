@@ -18,4 +18,6 @@ router.route('/:job_id').get(jobController.getJob);
 
 router.route('/:job_id').post(jobController.applyToJob);
 
+router.route('/:job_id/applicants').get(jobController.getApplicants);
+
 module.exports = router;

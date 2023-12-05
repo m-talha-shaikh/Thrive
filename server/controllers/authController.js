@@ -435,3 +435,49 @@ exports.logout = (req, res) => {
   res.clearCookie('jwt');
   res.status(200).json({ status: 'success' });
 };
+
+
+exports.userType = async (req, res) => {
+  const userId = req.params.id;
+
+  const userTypeQuery = 'SELECT account_type FROM user WHERE user_id = ?';
+
+  try {
+    const result = await executeQuery(req.db, userTypeQuery, [userId]);
+
+    if (result.length === 0) {
+      // User not found
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const accountType = result[0].account_type;
+    res.json({ accountType: accountType });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// exports.userType = async (req, res) => {
+//   // Assuming you have a MySQL connection pool set up
+
+//   // Extracting id from req.params
+//   const userId = req.params.id;
+
+//   try {
+//     // Performing MySQL query using executeQuery middleware
+//     const result = await executeQuery(req.db, 'SELECT account_type FROM user WHERE user_id = ?', [userId]);
+
+//     // Assuming there is only one result (or you want the first one)
+//     const accountType = result[0] ? result[0].account_type : null;
+//     console.log(`Acc ${accountType}`);
+//     // Logging the result
+//     console.log('Account Type:', accountType);
+
+//     // Responding to the client
+//     res.status(200).json({ accountType });
+//   } catch (error) {
+//     console.error('Error executing MySQL query:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };

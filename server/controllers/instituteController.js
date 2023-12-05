@@ -32,7 +32,7 @@ exports.getInstitute = async (req, res, next) => {
 exports.getAffiliates = async (req, res, next) => {
   const institute_user_id = req.params.user_id;
 
-  const affiliatesQuery = `SELECT P.first_name, P.last_name,
+  const affiliatesQuery = `SELECT P.user_id, P.first_name, P.last_name,
                                     E.major
                                     FROM person P
                                     JOIN education E
