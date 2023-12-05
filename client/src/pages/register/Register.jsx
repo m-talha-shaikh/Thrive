@@ -8,47 +8,54 @@ const Register = () => {
   const [accType, setAccType] = useState('person');
 
   const [inputs, setInputs] = useState({
-  username: '',
-  email: '',
-  password: '',
-  city: '',
-  state: '',
-  country: '',
-  account_type: 'person',
-  ProfilePic: '',
-  CoverPic: '',
-  first_name: '',
-  last_name: '',
-  date_of_birth: '',
-  gender: 'male',
-  name: '',
-  website_url: '',
-  text_description: '',
-  institute_type: '',
-  industry: '',
-});
-
+    username: '',
+    email: '',
+    password: '',
+    city: '',
+    state: '',
+    country: '',
+    account_type: 'person',
+    ProfilePic: '',
+    CoverPic: '',
+    first_name: '',
+    last_name: '',
+    date_of_birth: '',
+    gender: 'male',
+    name: '',
+    website_url: '',
+    text_description: '',
+    institute_type: '',
+    industry: '',
+  });
 
   const handleChange = (e) => {
-    const selectedValue = event.target.value;
-    setAccType(selectedValue);
     const { name, value } = e.target;
-    setInputs((prev) => ({ ...prev, [name]: value }));
+    setInputs((prev) => ({
+      ...prev,
+      [name]: value,
+      // Preserve the existing values for First Name and Last Name
+      first_name: accType === 'person' ? prev.first_name : '',
+      last_name: accType === 'person' ? prev.last_name : '',
+    }));
   };
-
+  
   const handleclick = async (e) => {
     e.preventDefault();
     try {
       console.log(inputs);
-      const response = await axios.post('http://localhost:3000/api/v1/Auth/signup', inputs, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      // console.log(response);
+      const response = await axios.post(
+        'http://localhost:3000/api/v1/Auth/signup',
+        inputs,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log(response);
       navigate('/login');
     } catch (err) {
-      // console.log(err.response.data);
+      console.log(err.response.data);
     }
   };
 
@@ -79,16 +86,11 @@ const Register = () => {
             {accType === 'person' && <input type="text" placeholder="First Name" onChange={handleChange} name="first_name" />}
             {accType === 'person' && <input type="text" placeholder="Last Name" onChange={handleChange} name="last_name" />}
             {accType === 'person' && <input type="date" placeholder="Date of Birth" onChange={handleChange} name="date_of_birth" />}
-            {(accType === 'institute' || accType === 'organization') 
-            && <input type="text" placeholder="Name" onChange={handleChange} name="name" />}
-            {(accType === 'institute' || accType === 'organization') 
-            && <input type="text" placeholder="Website URL" onChange={handleChange} name="website_url" />}
-            {(accType === 'institute' || accType === 'organization') 
-            && <input type="text" placeholder="Text Description" onChange={handleChange} name="text_description" />}
-            {(accType === 'institute') 
-            && <input type="text" placeholder="Institute Type" onChange={handleChange} name="institute_type" />}
-            {(accType === 'organization') 
-            && <input type="text" placeholder="Industry" onChange={handleChange} name="industry" />}
+            {(accType === 'institute' || accType === 'organization') && <input type="text" placeholder="Name" onChange={handleChange} name="name" />}
+            {(accType === 'institute' || accType === 'organization') && <input type="text" placeholder="Website URL" onChange={handleChange} name="website_url" />}
+            {(accType === 'institute' || accType === 'organization') && <input type="text" placeholder="Text Description" onChange={handleChange} name="text_description" />}
+            {(accType === 'institute') && <input type="text" placeholder="Institute Type" onChange={handleChange} name="institute_type" />}
+            {(accType === 'organization') && <input type="text" placeholder="Industry" onChange={handleChange} name="industry" />}
             <input type="text" placeholder="City" onChange={handleChange} name="city" />
             <input type="text" placeholder="State" onChange={handleChange} name="state" />
             <input type="text" placeholder="Country" onChange={handleChange} name="country" />
