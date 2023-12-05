@@ -284,6 +284,7 @@ const handleDeleteCertifications = async (certificationId) => {
           <div>
             <Button type="submit" variant="contained">Submit</Button>
           </div>
+          <div></div>
         </form>
       )}
     </div>
