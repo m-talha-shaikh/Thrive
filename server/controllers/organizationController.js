@@ -80,7 +80,7 @@ exports.updateOrganization = async (req, res, next) => {
 exports.getEmployees = async (req, res, next) => {
   const organization_user_id = req.params.user_id;
 
-  const employeesQuery = `SELECT  P.first_name, P.last_name,
+  const employeesQuery = `SELECT   P.user_id, P.first_name, P.last_name,
                                     E.title
                                     FROM person P
                                     JOIN employment E
@@ -96,7 +96,6 @@ exports.getEmployees = async (req, res, next) => {
     ];
 
     const results = await Promise.all(queryTasks);
-
     const employees = {
       employees: results[0],
     };
@@ -139,6 +138,7 @@ exports.getJobs = async (req, res, next) => {
 };
 
 exports.createJob = async (req, res, next) => {
+
   const user_id = req.params.user_id;
   const post_date = new Date();
 
@@ -154,6 +154,11 @@ exports.createJob = async (req, res, next) => {
     openings,
     remote_work,
   } = req.body;
+
+  console.log(post_date);
+  const formattedExpiryDate = new Date(expiry_date).toISOString().slice(0, 19).replace("T", " ");
+
+  console.log("OMG");
 
   const retrieveOrgIdQuery = `
     SELECT organization_id
@@ -176,7 +181,7 @@ exports.createJob = async (req, res, next) => {
         title,
         description,
         post_date,
-        expiry_date,
+        formattedExpiryDate,
         is_active,
         salary_min,
         salary_max,

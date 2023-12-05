@@ -70,7 +70,7 @@ app.use('/api/v1/institutes', instituteRouter);
 app.use('/api/v1/organizations', organizationRouter);
 app.use("/api/v1/Auth",AuthRoutes);
 app.use("/api/v1/Posts",PostRoutes);
-app.use('/api/v1/jobs', jobRouter);
+app.use('/api/v1/Jobs', jobRouter);
 app.use('/api/v1/Comments', CommentRoutes);
 app.use('/api/v1/Likes', likeRoutes);
 app.use('/api/v1/Connection',ConnectionRoutes);

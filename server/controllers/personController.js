@@ -36,7 +36,7 @@ exports.getPerson = async (req, res, next) => {
     WHERE P.user_id = ?`;
 
   const educationQuery = `
-    SELECT I.institute_id, I.name,
+    SELECT E.education_id, I.institute_id, I.name,
     E.year_enrolled, E.year_graduated,
     E.major, E.currently_studying, E.text_description 
     FROM education E
@@ -51,7 +51,7 @@ exports.getPerson = async (req, res, next) => {
 `;
 
   const employmentQuery = `
-    SELECT O.organization_id, O.name, L.city, L.state, L.country,
+    SELECT E.employment_id, O.organization_id, O.name, L.city, L.state, L.country,
       E.year_started, E.year_left,
       E.month_started, E.month_left,
       E.title, E.text_description 
@@ -66,7 +66,7 @@ exports.getPerson = async (req, res, next) => {
       ORDER BY E.year_started DESC `;
 
   const certificationQuery = `
-    SELECT C.name, C.issuing_organization,
+    SELECT C.certification_id, C.name, C.issuing_organization,
       C.issue_date, C.expiration_date
     FROM certifications C
     WHERE C.person_id = (SELECT person_id
