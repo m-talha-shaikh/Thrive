@@ -3,7 +3,7 @@ import "./Person.scss";
 import { Button, TextField, Typography, Paper, Container} from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import LanguageIcon from '@mui/icons-material/Language';
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { makeRequest } from "../../axios";
@@ -15,6 +15,9 @@ import { useForm, Controller } from "react-hook-form";
 const Person = ()=>
 { 
 
+  const [authorized, setAuthorized] = useState(false);
+  
+
   //Education Form
   const [showEducationForm, setShowEducationForm] = useState(false);
   const [showEmploymentForm, setShowEmploymentForm] = useState(false);
@@ -23,6 +26,21 @@ const Person = ()=>
   const [openupdate, setopenupdate] = useState(false);
   const user_id = useLocation().pathname.split("/")[2];
   const {currentUser}=useContext(AuthContext) ;
+  //  if(user_id == currentUser.data.user.user_id){
+  //   setAuthorized(true);
+  // }
+
+    useEffect(() => {
+    // Check if user_id is equal to the currentUser's user_id
+    if (user_id === currentUser.data.user.user_id) {
+      // Set authorized to true
+      setAuthorized(true);
+    } else {
+      // Set authorized to false if the condition is not met
+      setAuthorized(false);
+    }
+  }, [currentUser, user_id]);
+
   const { isLoading, error, data } = useQuery(['persons',user_id],async () => {
     return  await makeRequest.get(`/persons/${user_id}`)
       .then((res) => res.data);
@@ -163,8 +181,7 @@ const handleDeleteCertifications = async (certificationId) => {
 
 
 
-
-
+ 
 
     return (
        <div className="profile">
@@ -199,15 +216,14 @@ const handleDeleteCertifications = async (certificationId) => {
       <div className="heading">
     <h2 style={{ display: 'inline-block'}}>Education</h2>
     {showEducationForm && <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEducationForm(false)}>X</Button>}
-    {!showEducationForm && <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEducationForm(true)}>Add</Button>}
+    {authorized && !showEducationForm && ( <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEducationForm(true)} > Add </Button> )}
 
       </div>
       {data && data.education && data.education.map((item, index) => (
         <div key={index} className="education-item">
           <div style={{ display: 'flex', justifyContent: 'space-evenly'}}>
             <Typography variant="h3" style={{ display: 'inline-block', marginRight: '10px'  }}>{item.major}</Typography>
-            <Button variant="contained"  color="error"onClick={() => handleDeleteEducation(item.education_id)}
-           style={{ display: 'inline-block', marginLeft: '10px'}}> Delete </Button>
+            {authorized && ( <Button variant="contained" color="error" onClick={() => handleDeleteEducation(item.education_id)} style={{ display: 'inline-block', marginLeft: '10px' }} > Delete </Button> )}
           </div>
           <Typography variant="body1">{item.name}</Typography>
           {item.year_graduated ? (
@@ -279,21 +295,14 @@ const handleDeleteCertifications = async (certificationId) => {
   <div className="heading">
     <h2 style={{ display: 'inline-block'}}>Employment </h2>
     {showEmploymentForm && <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEmploymentForm(false)}>X</Button>}
-    {!showEmploymentForm && <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEmploymentForm(true)}>Add</Button>}
+    {authorized && !showEmploymentForm && ( <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEmploymentForm(true)} > Add </Button> )}
 
   </div>
   {data && data.employment && data.employment.map((item, index) => (
     <div key={index} className="employment-item">
       <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
         <h3 style={{ display: 'inline-block', marginRight: '10px' }}>{item.title}</h3>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={() => handleDeleteEmployment(item.employment_id)}
-          style={{ display: 'inline-block', marginLeft: '10px' }}
-        >
-          Delete
-        </Button>
+        {authorized && ( <Button variant="contained" color="error" onClick={() => handleDeleteEmployment(item.employment_id)} style={{ display: 'inline-block', marginLeft: '10px' }} > Delete </Button> )}
       </div>
       <p>{item.orgnaization_name}</p>
       {item.year_left ? (
@@ -375,7 +384,7 @@ const handleDeleteCertifications = async (certificationId) => {
   <div className="heading">
     <h2 style={{ display: 'inline-block'}}>Certifications </h2>
     {showCertificationsForm && <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowCertificationsForm(false)}>X</Button>}
-{!showCertificationsForm && <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowCertificationsForm(true)}>Add</Button>}
+{authorized && !showCertificationsForm && ( <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowCertificationsForm(true)} > Add </Button> )}
 
 
   </div>
