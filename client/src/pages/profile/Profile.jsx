@@ -44,7 +44,7 @@ const Profile = () => {
 
   return (
     <div>
-      {/* Render additional content based on userType if needed */}
+      
     </div>
   );
 };

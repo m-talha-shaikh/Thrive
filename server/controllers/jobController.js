@@ -72,14 +72,19 @@ exports.getApplicants = async (req, res, next) => {
 
 exports.getJobs = async (req, res, next) => {
   console.log(req.query);
-  const {
+  let {
     keyword,
     min_salary,
     max_salary,
     country,
     remote,
-    job_type,
+    jobType,
   } = req.query;
+  
+  min_salary =  parseFloat(min_salary);
+  max_salary = parseFloat(max_salary);
+  console.log(min_salary);
+  console.log("jobby", jobType);
   
   const filters = [];
   const queryValues = [];
@@ -95,12 +100,12 @@ exports.getJobs = async (req, res, next) => {
     console.log(filters);
   }
 
-  if (min_salary && !isNaN(parseInt(min_salary, 10))) {
+  if (min_salary) {
     searchQuery += ` AND J.salary_min >= ?`;
     filters.push(min_salary);
   }
 
-  if (max_salary && !isNaN(parseInt(max_salary, 10))) {
+  if (max_salary) {
     searchQuery += ` AND J.salary_max <= ?`;
     filters.push(max_salary);
   }
@@ -115,9 +120,26 @@ exports.getJobs = async (req, res, next) => {
     filters.push(remote === 'yes' ? 1 : 0);
   }
 
-  if (job_type) {
-    console.log(job_type);
+  if (jobType) {
+  const jobTypeConditions = [];
+  if (jobType.fullTime === 'true') {
+    jobTypeConditions.push('full_time');
   }
+  if (jobType.partTime === 'true') {
+    jobTypeConditions.push('part_time');
+  }
+  if (jobType.internship === 'true') {
+    jobTypeConditions.push('internship');
+  }
+  if (jobType.contract === 'true') {
+    jobTypeConditions.push('contract');
+  }
+
+  if (jobTypeConditions.length > 0) {
+    searchQuery += ` AND J.job_type IN (${jobTypeConditions.map(type => `"${type}"`).join(', ')})`;
+  }
+}
+
 
   console.log(filters);
   console.log(searchQuery);
@@ -127,6 +149,10 @@ exports.getJobs = async (req, res, next) => {
       ...queryValues,
       ...filters,
     ]);
+    results.forEach((job) => {
+    job.salary_min = parseFloat(job.salary_min);
+    job.salary_max = parseFloat(job.salary_max);
+  });
     console.log(results);
 
     res.json(results);

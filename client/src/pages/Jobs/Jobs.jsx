@@ -126,8 +126,8 @@ const Jobs = () => {
                 job_id = {job.job_id}
                 title={job.title}
                 companyName={job.companyName}
-                salaryMin={job.min_salary}
-                salaryMax={job.max_salary}
+                salaryMin={job.salary_min}
+                salaryMax={job.salary_max}
                 openings={job.openings}
                 remoteWork={job.remoteWork}
               />

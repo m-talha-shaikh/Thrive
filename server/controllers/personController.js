@@ -326,10 +326,9 @@ exports.updateEducation = async (req, res, next) => {
     );
 
     if (instituteQuery.length > 0) {
-      // The institute exists, use the existing institute_id
+
       institute_id = instituteQuery[0].institute_id;
     } else {
-      // The institute doesn't exist, insert a new record and get the institute_id
       const insertInstituteQuery = 'INSERT INTO institute (name) VALUES (?)';
       const insertInstituteResult = await executeQuery(
         req.db,

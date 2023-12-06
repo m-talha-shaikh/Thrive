@@ -1,4 +1,4 @@
-import "./Job.scss"
+import "./Job.scss";
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -17,6 +17,7 @@ import {
 import RoomIcon from '@mui/icons-material/Room';
 import WorkIcon from '@mui/icons-material/Work';
 import EventIcon from '@mui/icons-material/Event';
+import BusinessIcon from '@mui/icons-material/Business'; // Import BusinessIcon for jobType
 
 // Use styled utility instead of makeStyles
 const StyledCard = styled(Card)({
@@ -29,19 +30,21 @@ const StyledCard = styled(Card)({
 });
 
 const Job = () => {
+  const [canApply, setCanApply] = useState(false);
   const { job_id } = useParams();
   const [job, setJob] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const [user_id, setUserId] = useState(currentUser.data.user.user_id);
 
   useEffect(() => {
-    // Make a GET request when the component mounts
     axios
       .get(`http://localhost:3000/api/v1/Jobs/${job_id}`)
       .then((response) => {
-        // Handle the response data
         const { job } = response.data.job;
         setJob(job);
+        if(currentUser.data.user.account_type === 'person'){
+          setCanApply(true);
+        }
         console.log(job);
       })
       .catch((error) => {
@@ -50,16 +53,16 @@ const Job = () => {
   }, [job_id]);
 
   const handleApply = () => {
-    // Make a POST request to apply for the job
     axios
       .post(`http://localhost:3000/api/v1/Jobs/${job_id}`, { user_id })
       .then((response) => {
-        // Handle the response if needed
         console.log('Application successful:', response.data);
       })
       .catch((error) => {
-        // Handle errors
         console.error('Error applying for the job:', error);
+        if (error.response && error.response.status === 400) {
+          window.alert('You have already applied for this job');
+        }
       });
   };
 
@@ -68,11 +71,10 @@ const Job = () => {
       {job && (
         <StyledCard className="job-card">
           <CardContent>
-            {
-              job.ProfilePic && (
-                <Avatar src={`../../../public/uploads/${job.ProfilePic}`} />
-              )
-            }
+            {job.ProfilePic && (
+              <Avatar src={`../../../public/uploads/${job.ProfilePic}`} />
+            )}
+
             {job.title && (
               <Typography className="job-title" variant="h5" fontSize="1.5rem" fontWeight="bold" marginBottom={1}>
                 {job.title}
@@ -80,18 +82,11 @@ const Job = () => {
             )}
 
             {job.name && (
-              <Typography className="job-name" variant="body1" fontSize="1rem" color="textSecondary">
+              <Typography className="job-name" variant="h6" fontSize="1.8rem" color="primary" marginBottom={1}>
                 {job.name}
               </Typography>
             )}
 
-            <Grid container justify="space-between" alignItems="center" marginBottom={2}>
-              {job.job_type && (
-                <Typography className="job-type" variant="subtitle1" color="textSecondary">
-                  {job.job_type}
-                </Typography>
-              )}
-            </Grid>
 
             {job.description && (
               <Typography className="job-description" variant="body1" color="textSecondary">
@@ -124,6 +119,23 @@ const Job = () => {
                   />
                 </Grid>
               )}
+
+              {job.job_type && (
+                <Grid item>
+                  <Chip
+                    icon={<BusinessIcon marginRight={1} />}
+                    label={job.job_type}
+                    sx={{
+                      backgroundColor: '#e0e0e0',
+                      borderRadius: '8px',
+                      padding: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      fontSize: '1rem',
+                    }}
+                  />
+                </Grid>
+              )}
             </Grid>
 
             <Grid container spacing={2} alignItems="center" marginBottom={2}>
@@ -145,13 +157,15 @@ const Job = () => {
               )}
             </Grid>
 
-            <Grid container spacing={2} alignItems="center" marginBottom={2}>
-              <Grid item>
-                <Button className="apply-button" variant="contained" color="primary" onClick={handleApply}>
-                  Apply
-                </Button>
+            {canApply && (
+              <Grid container spacing={2} alignItems="center" marginBottom={2}>
+                <Grid item>
+                  <Button className="apply-button" variant="contained" color="primary" onClick={handleApply}>
+                    Apply
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
+            )}
           </CardContent>
         </StyledCard>
       )}
