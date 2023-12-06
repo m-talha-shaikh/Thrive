@@ -27,7 +27,7 @@ const Jobs = () => {
 
     try {
       // Make a GET request to your backend
-      const response = await axios.get('http://127.0.0.1:3000/api/v1/Jobs', { params: data });
+      const response = await axios.get('http://localhost:3000/api/v1/Jobs', { params: data });
       setJobData(response.data);
 
     } catch (error) {

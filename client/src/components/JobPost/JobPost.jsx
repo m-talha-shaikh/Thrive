@@ -25,7 +25,7 @@ const JobPost = ({ organization, user_id }) => {
   const onSubmit = async (data) => {
     try {
         console.log(user_id)
-      const apiUrl = `http://127.0.0.1:3000/api/v1/organizations/${user_id}/jobs`;
+      const apiUrl = `http://localhost:3000/api/v1/organizations/${user_id}/jobs`;
 
 
       const formattedData = {

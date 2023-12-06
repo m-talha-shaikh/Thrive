@@ -10,7 +10,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:3000/api/v1/Auth/userType/${id}`);
+        const response = await axios.get(`http://localhost:3000/api/v1/Auth/userType/${id}`);
         setUserType(response.data.accountType);
       } catch (error) {
         console.error('Error fetching user type:', error);

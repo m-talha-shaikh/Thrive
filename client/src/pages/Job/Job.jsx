@@ -37,7 +37,7 @@ const Job = () => {
   useEffect(() => {
     // Make a GET request when the component mounts
     axios
-      .get(`http://127.0.0.1:3000/api/v1/Jobs/${job_id}`)
+      .get(`http://localhost:3000/api/v1/Jobs/${job_id}`)
       .then((response) => {
         // Handle the response data
         const { job } = response.data.job;
@@ -52,7 +52,7 @@ const Job = () => {
   const handleApply = () => {
     // Make a POST request to apply for the job
     axios
-      .post(`http://127.0.0.1:3000/api/v1/Jobs/${job_id}`, { user_id })
+      .post(`http://localhost:3000/api/v1/Jobs/${job_id}`, { user_id })
       .then((response) => {
         // Handle the response if needed
         console.log('Application successful:', response.data);

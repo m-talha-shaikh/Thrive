@@ -11,7 +11,7 @@ const Affiliates = ({ user_id }) => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:3000/api/v1/institutes/${user_id}/affiliates`);
+        const response = await axios.get(`http://localhost:3000/api/v1/institutes/${user_id}/affiliates`);
         setAffiliates(response.data.affiliates);
         console.log(affiliates[0].ProfilePic)
         setLoading(false);

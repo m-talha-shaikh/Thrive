@@ -11,7 +11,7 @@ const Employees = ({ user_id }) => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:3000/api/v1/organizations/${user_id}/employees`);
+        const response = await axios.get(`http://localhost:3000/api/v1/organizations/${user_id}/employees`);
         setEmployees(response.data.employees);
         setLoading(false);
       } catch (error) {

@@ -19,11 +19,21 @@ const Person = ()=>
   const navigate = useNavigate();
 
   const handleInstituteClick = (id) => {
-    navigate(`/institute/${id}`);
+    if(id === null){
+      alert("This institute does not have a user account yet");
+    }
+    else{
+      navigate(`/institute/${id}`);
+    }
   };
 
   const handleOrganizationClick = (id) => {
-    navigate(`/organization/${id}`);
+    if(id === null){
+      alert("This organziation does not have a user account yet");
+    }
+    else{
+      navigate(`/organization/${id}`);
+    }
   };
 
   const [authorized, setAuthorized] = useState(false);
@@ -201,7 +211,6 @@ const handleDeleteCertifications = async (certificationId) => {
         {data && data.person && data.person.ProfilePic ? ( <img src={`../../../public/uploads/${data.person.ProfilePic}`} alt="" className="profilePic" /> ) : ( <p> {error ? "Something went wrong with the profile picture" : isLoading ? "Loading profile picture..." : "No profile picture available"} </p> )}
         </div>
         <div className="profilecontainer">
-       
             <div className="userinfo">
              <div className="center">
                 <span>{error?"This is some thing wrong":(isLoading?"Loading":data.person.first_name+" "+data.person.last_name)}</span>
