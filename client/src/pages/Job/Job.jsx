@@ -57,6 +57,7 @@ const Job = () => {
       .post(`http://localhost:3000/api/v1/Jobs/${job_id}`, { user_id })
       .then((response) => {
         console.log('Application successful:', response.data);
+        alert("Successfully Applied for Job");
       })
       .catch((error) => {
         console.error('Error applying for the job:', error);
