@@ -58,7 +58,7 @@ const Leftbar = ()=>
             <img src={Groups} alt="" />
             <span>Groups</span>
           </div>
-          <Link to={`/jobs`}>
+          <Link to={`/jobs`} style={{textDecoration:"none",color:"inherit"}}>
           <div className="item">
             <img src={Jobs} alt="" />
             <span>Jobs</span>
