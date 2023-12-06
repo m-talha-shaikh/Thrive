@@ -36,51 +36,53 @@ exports.getPerson = async (req, res, next) => {
   const user_id = req.params.user_id;
 
   const basicInfoQuery = `
-    SELECT U.CoverPic,U.ProfilePic,U.username,P.first_name, P.last_name,
+    SELECT U.CoverPic, U.ProfilePic, U.username, P.first_name, P.last_name,
       L.city, L.state, L.country
-    FROM person P Join User u On u.user_id = P.user_id
-    JOIN location L
-    ON P.location_id = L.location_id
+    FROM person P 
+    JOIN user U ON U.user_id = P.user_id
+    JOIN location L ON P.location_id = L.location_id
     WHERE P.user_id = ?`;
 
   const educationQuery = `
     SELECT I.user_id, E.education_id, I.institute_id, I.name,
-    U.ProfilePic,
-    E.year_enrolled, E.year_graduated,
-    E.major, E.currently_studying, E.text_description 
-FROM education E
-JOIN institute I ON I.institute_id = E.institute_id
-JOIN user U ON U.user_id = I.user_id
-LEFT JOIN location L ON I.location_id = L.location_id
-WHERE E.person_id = (SELECT person_id
-                    FROM person P
-                    WHERE P.user_id = ?)
-ORDER BY E.year_enrolled DESC 
-`;
+      U.ProfilePic,
+      E.year_enrolled, E.year_graduated,
+      E.major, E.currently_studying, E.text_description 
+    FROM education E
+    LEFT JOIN institute I ON I.institute_id = E.institute_id
+    LEFT JOIN user U ON U.user_id = I.user_id
+    LEFT JOIN location L ON I.location_id = L.location_id
+    WHERE E.person_id = (SELECT person_id
+                        FROM person P
+                        WHERE P.user_id = ?)
+    ORDER BY E.year_enrolled DESC 
+  `;
 
   const employmentQuery = `
     SELECT O.user_id, E.employment_id, O.organization_id, O.name,
-    U.ProfilePic,
-    L.city, L.state, L.country,
-    E.year_started, E.year_left,
-    E.month_started, E.month_left,
-    E.title, E.text_description 
-FROM employment E
-JOIN organization O ON O.organization_id = E.organization_id
-JOIN user U ON U.user_id = O.user_id
-LEFT JOIN location L ON O.location_id = L.location_id
-WHERE E.person_id = (SELECT person_id
-                    FROM person P
-                    WHERE P.user_id = ?)
-ORDER BY E.year_started DESC`;
+      U.ProfilePic,
+      L.city, L.state, L.country,
+      E.year_started, E.year_left,
+      E.month_started, E.month_left,
+      E.title, E.text_description 
+    FROM employment E
+    LEFT JOIN organization O ON O.organization_id = E.organization_id
+    LEFT JOIN user U ON U.user_id = O.user_id
+    LEFT JOIN location L ON O.location_id = L.location_id
+    WHERE E.person_id = (SELECT person_id
+                        FROM person P
+                        WHERE P.user_id = ?)
+    ORDER BY E.year_started DESC
+  `;
 
   const certificationQuery = `
     SELECT C.certification_id, C.name, C.issuing_organization,
       C.issue_date, C.expiration_date
     FROM certifications C
     WHERE C.person_id = (SELECT person_id
-      FROM person P
-      WHERE P.user_id = ?)`;
+                        FROM person P
+                        WHERE P.user_id = ?)
+  `;
 
   try {
     const queryTasks = [
@@ -99,12 +101,14 @@ ORDER BY E.year_started DESC`;
       certifications: results[3],
     };
 
+    console.log(userProfile);
     res.json(userProfile);
   } catch (error) {
     console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
+
 
 exports.createEducation = async (req, res, next) => {
   const user_id = req.params.user_id || req.user.user_id;
