@@ -37,16 +37,26 @@ exports.getJob = async (req, res, next) => {
 exports.getApplicants = async (req, res, next) => {
   const job_id = req.params.job_id;
 
-  const jobQuery = `SELECT * FROM job_applications J
-                                WHERE J.job_id = ?`;
+  const jobQuery = `
+    SELECT 
+      JA.application_id,
+      U.user_id,
+      P.first_name,
+      P.last_name,
+      U.ProfilePic
+    FROM 
+      job_applications JA
+      JOIN user U ON JA.user_id = U.user_id
+      JOIN person P ON U.user_id = P.user_id
+    WHERE 
+      JA.job_id = ?
+  `;
 
   try {
-    const queryTasks = [executeQuery(req.db, jobQuery, [job_id])];
-
-    const results = await Promise.all(queryTasks);
+    const results = await executeQuery(req.db, jobQuery, [job_id]);
 
     const jobRecord = {
-      job: results[0][0],
+      applicants: results,
     };
 
     res.json({
@@ -57,6 +67,8 @@ exports.getApplicants = async (req, res, next) => {
     res.status(500).json({ error: error });
   }
 };
+
+
 
 exports.getJobs = async (req, res, next) => {
   console.log(req.query);
@@ -128,54 +140,48 @@ exports.applyToJob = async (req, res, next) => {
   const user_id = req.body.user_id;
   const job_id = req.params.job_id;
 
-  // Assuming there's a column named 'person_id' in the 'Person' table
-  // const selectPersonIdQuery = `
-  //   SELECT person_id FROM Person WHERE user_id = ?
-  // `;
-
-  // const personIdValues = [user_id];
-
   try {
-    // Retrieve person_id from the Person table
-    // const personResult = await executeQuery(
-    //   req.db,
-    //   selectPersonIdQuery,
-    //   personIdValues
-    // );
-
-    // if (personResult.length === 0) {
-    //   // If no person_id is found, handle the error
-    //   res.status(404).json({ error: 'Person not found for the given user_id' });
-    //   return;
-    // }
-
-    // const person_id = personResult[0].person_id;
-
-    // Insert into job_applications table
-    const application_date = new Date();
-    const insertApplicationQuery = `
-      INSERT INTO job_applications (user_id, job_id, application_date)
-      VALUES (?, ?, ?)
+    const checkExistingQuery = `
+      SELECT COUNT(*) AS count
+      FROM job_applications
+      WHERE user_id = ? AND job_id = ?
     `;
 
-    const queryValues = [user_id, job_id, application_date];
+    const checkExistingValues = [user_id, job_id];
 
-    const result = await executeQuery(
+    const existingResult = await executeQuery(
       req.db,
-      insertApplicationQuery,
-      queryValues
+      checkExistingQuery,
+      checkExistingValues
     );
 
-    if (result.affectedRows === 1) {
-      res
-        .status(201)
-        .json({ message: 'Job application submitted successfully' });
+    if (existingResult[0].count > 0) {
+      res.status(400).json({ error: 'Job application already submitted for this user and job' });
     } else {
-      res.status(500).json({ error: 'Failed to apply for the job' });
+      const application_date = new Date();
+      const insertApplicationQuery = `
+        INSERT INTO job_applications (user_id, job_id, application_date)
+        VALUES (?, ?, ?)
+      `;
+
+      const queryValues = [user_id, job_id, application_date];
+
+      const result = await executeQuery(
+        req.db,
+        insertApplicationQuery,
+        queryValues
+      );
+
+      if (result.affectedRows === 1) {
+        res.status(201).json({ message: 'Job application submitted successfully' });
+      } else {
+        res.status(500).json({ error: 'Failed to apply for the job' });
+      }
     }
   } catch (error) {
     console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
+
 
