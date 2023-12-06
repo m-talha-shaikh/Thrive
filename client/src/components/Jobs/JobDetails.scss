@@ -1,0 +1,58 @@
+// JobDetails.scss
+
+$primaryColor: #3498db;
+$secondaryColor: #2ecc71;
+$fontFamily: 'Roboto', sans-serif;
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+
+    .job-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: $primaryColor;
+      cursor: pointer;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $secondaryColor;
+      }
+    }
+
+    .company-name {
+      font-size: 1.4rem;
+      margin-top: 8px;
+      color: #555;
+    }
+
+    .salary {
+      font-size: 1.2rem;
+      margin-top: 8px;
+      color: #777;
+    }
+
+    .openings {
+      font-size: 1.2rem;
+      margin-top: 8px;
+      color: #777;
+    }
+
+    .remote-work {
+      font-size: 1.2rem;
+      margin-top: 8px;
+      color: #777;
+    }
+  }
+}

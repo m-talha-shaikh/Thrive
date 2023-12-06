@@ -24,6 +24,10 @@ const Register = () => {
   const [industry, setIndustry] = useState('');
   const [account_type, setAccType] = useState('person');
 
+const handleAccountTypeChange = (value) => {
+    setAccType(value);
+    setInputs((prevInputs) => ({ ...prevInputs, account_type: value }));
+  };
 
 
 const [inputs, setInputs] = useState({
@@ -110,7 +114,7 @@ const handleClick = async (e) => {
             <input type="text" placeholder="Username" onChange={(e) => {  setUsername(e.target.value);  }} name="username" />
             <input type="email" placeholder="Email" onChange={(e) => {  setEmail(e.target.value);  }} name="email" />
             <input type="password" placeholder="Password" onChange={(e) => {  setPassword(e.target.value);  }} name="password" />
-            <select onChange={(e) => {  setAccType(e.target.value);  }} name="account_type" value={inputs.account_type} >
+            <select onChange={(e) => handleAccountTypeChange(e.target.value)} name="account_type" value={account_type}>
               <option value="person">Person</option>
               <option value="institute">Institute</option>
               <option value="organization">Organization</option>

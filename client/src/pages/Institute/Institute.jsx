@@ -21,7 +21,6 @@ const Institute = ()=> {
   const { isLoading, error, data } = useQuery(['persons',user_id],async () => {
     return  await makeRequest.get(`/institutes/${user_id}`)
       .then((res) => res.data.institute);
-
   });
   const {  data:friendsdata } = useQuery(['Connection'],async () => {
     return  await makeRequest.get(`/Connection?user_id=${currentUser.data.user.user_id}`)
@@ -75,11 +74,40 @@ const Institute = ()=> {
     return (
        <div className="profile">
         <div className="images">
-                  {data && data.person && data.person.CoverPic ? ( <img src={`../../../public/uploads/${data.person.CoverPic}`} alt="" className="Cover" /> ) : ( <p> {error ? "Something went wrong with the cover picture" : isLoading ? "Loading cover picture..." : "No cover picture available"} </p> )}
-        {data && data.person && data.person.ProfilePic ? ( <img src={`../../../public/uploads/${data.person.ProfilePic}`} alt="" className="profilePic" /> ) : ( <p> {error ? "Something went wrong with the profile picture" : isLoading ? "Loading profile picture..." : "No profile picture available"} </p> )}
-        {/* <img src={error?"This is some thing wrong":(isLoading?"Loading":"../../../public/uploads/"+data.person.CoverPic)} alt="" className="cover"/>
-        <img src={error?"This is some thing wrong":(isLoading?"Loading":"../../../public/uploads/"+data.person.ProfilePic)} alt=""  className="profilePic"/> */}
-        </div>
+  <div className="cover">
+    {data && data.institute && data.institute.CoverPic ? (
+      <img
+        src={`../../../public/uploads/${data.institute.CoverPic}`}
+        alt=""
+        className="coverPic"
+      />
+    ) : (
+      <p>
+        {error
+          ? "Something went wrong with the cover picture"
+          : isLoading
+          ? "Loading cover picture..."
+          : "No cover picture available"}
+      </p>
+    )}
+  </div>
+  {data && data.institute && data.institute.ProfilePic ? (
+    <img
+      src={`../../../public/uploads/${data.institute.ProfilePic}`}
+      alt=""
+      className="profilePic"
+    />
+  ) : (
+    <p>
+      {error
+        ? "Something went wrong with the profile picture"
+        : isLoading
+        ? "Loading profile picture..."
+        : "No profile picture available"}
+    </p>
+  )}
+</div>
+
         <div className="profilecontainer">
        
             <div className="userinfo">
@@ -92,7 +120,7 @@ const Institute = ()=> {
                     </div>
                     <div className="item">
                         <LanguageIcon/>
-                        <span>{error?"This is some thing wrong":(isLoading?"Loading":data.institute.username)}</span>
+                        <span>{error?"This is some thing wrong":(isLoading?"Loading":data.institute.website_url)}</span>
                     </div>
                     
                     {user_id==currentUser.data.user.user_id ?

@@ -2,7 +2,7 @@ import "./Organization.scss";
 import { Button, TextField, Typography, Paper, Container} from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import LanguageIcon from '@mui/icons-material/Language';
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { makeRequest } from "../../axios";
@@ -15,10 +15,12 @@ import Applicants from "../../components/Applicants/Applicants"
   
 const Organization = ()=> { 
 
+  const [auth, setAuth] = useState(false);
   const [openupdate, setopenupdate] = useState(false);
   const user_id = useLocation().pathname.split("/")[2];
   const [selectedOption, setSelectedOption] = useState('Job Post')
   const {currentUser}=useContext(AuthContext) ;
+  
   const { isLoading, error, data } = useQuery(['persons',user_id],async () => {
     return  await makeRequest.get(`/organizations/${user_id}`)
       .then((res) => res.data);
@@ -29,6 +31,16 @@ const Organization = ()=> {
       .then((res) => res.data);
   });
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+  if (data && data.organization) {
+    if (currentUser.data.user.user_id === data.organization.user_id) {
+      setAuth(true);
+    }
+  }
+}, [currentUser.data.user.user_id, data]);
+
+
 
   const mutation = useMutation(
     async (following) => {
@@ -75,9 +87,40 @@ const Organization = ()=> {
     return (
        <div className="profile">
         <div className="images">
-                {data && data.person && data.person.CoverPic ? ( <img src={`../../../public/uploads/${data.person.CoverPic}`} alt="" className="Cover" /> ) : ( <p> {error ? "Something went wrong with the cover picture" : isLoading ? "Loading cover picture..." : "No cover picture available"} </p> )}
-        {data && data.person && data.person.ProfilePic ? ( <img src={`../../../public/uploads/${data.person.ProfilePic}`} alt="" className="profilePic" /> ) : ( <p> {error ? "Something went wrong with the profile picture" : isLoading ? "Loading profile picture..." : "No profile picture available"} </p> )}
-        </div>
+  <div className="cover">
+    {data && data.organization && data.organization.CoverPic ? (
+      <img
+        src={`../../../public/uploads/${data.organization.CoverPic}`}
+        alt=""
+        className="coverPic"
+      />
+    ) : (
+      <p>
+        {error
+          ? "Something went wrong with the cover picture"
+          : isLoading
+          ? "Loading cover picture..."
+          : "No cover picture available"}
+      </p>
+    )}
+  </div>
+  {data && data.organization && data.organization.ProfilePic ? (
+    <img
+      src={`../../../public/uploads/${data.organization.ProfilePic}`}
+      alt=""
+      className="profilePic"
+    />
+  ) : (
+    <p>
+      {error
+        ? "Something went wrong with the profile picture"
+        : isLoading
+        ? "Loading profile picture..."
+        : "No profile picture available"}
+    </p>
+  )}
+</div>
+
         <div className="profilecontainer">
        
             <div className="userinfo">
@@ -90,7 +133,7 @@ const Organization = ()=> {
                     </div>
                     <div className="item">
                         <LanguageIcon/>
-                        <span>{error?"This is some thing wrong":(isLoading?"Loading":data.organization.username)}</span>
+                        <span>{error?"This is some thing wrong":(isLoading?"Loading":data.organization.website_url)}</span>
                     </div>
                     
                     {user_id==currentUser.data.user.user_id ?
@@ -100,11 +143,11 @@ const Organization = ()=> {
              </div>
             </div>
             <div className="navbar">
-            <button onClick={() => setSelectedOption('Job Post')}>Job Post</button>
+            {auth && <button onClick={() => setSelectedOption('Job Post')}>Job Post</button>}
             <button onClick={() => setSelectedOption('Employees')}>Employees</button>
             <button onClick={() => setSelectedOption('Job Applicants')}>Jobs</button>
           </div>
-          {selectedOption === 'Job Post' && data && data.organization && <JobPost organization={data.organization} user_id={user_id} />}
+          {auth && selectedOption === 'Job Post' && data && data.organization && <JobPost organization={data.organization} user_id={user_id} />}
           {selectedOption === 'Employees' && data && data.organization && <Employees organization={data.organization} user_id={user_id} />}
           {selectedOption === 'Job Applicants' && data && data.organization && <Applicants user_id={user_id} />}
         </div>

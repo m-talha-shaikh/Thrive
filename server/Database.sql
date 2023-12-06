@@ -121,7 +121,6 @@ CREATE TABLE `comments` (
     FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`)
 );
 
-
 CREATE TABLE `jobs` (
   `job_id` int PRIMARY KEY AUTO_INCREMENT,
   `organization_id` int NOT NULL,
@@ -149,106 +148,177 @@ CREATE TABLE `job_applications` (
     FOREIGN KEY (`job_id`) REFERENCES `jobs` (`job_id`)
 );
 
-CREATE TABLE `friendship_requests` (
-  `request_id` int PRIMARY KEY AUTO_INCREMENT,
-  `sender_id` int NOT NULL,
-  `receiver_id` int NOT NULL,
-  `status` varchar(255) NOT NULL,
-  `request_date` datetime NOT NULL,
-  FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`),
-  FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`)
-);
 
 CREATE TABLE `friends` (
-  `friendship_id` int PRIMARY KEY,
+  `friendship_id` int PRIMARY KEY AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `friend_id` int NOT NULL,
-  `friendship_date` datetime NOT NULL
+  `friendship_date` datetime NOT NULL,
+  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  FOREIGN KEY (`friend_id`) REFERENCES `user` (`user_id`)
 );
 
-CREATE TABLE `communities` (
-  `community_id` int PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `created_by` int NOT NULL,
-  `creation_date` datetime NOT NULL
-);
-
-CREATE TABLE `community_members` (
-  `membership_id` int PRIMARY KEY AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `community_id` int NOT NULL,
-  `join_date` datetime NOT NULL
-);
-
-CREATE TABLE `community_posts` (
-  `community_post_id` int PRIMARY KEY AUTO_INCREMENT,
-  `community_id` int NOT NULL,
-  `user_id` int NOT NULL,
-  `content` text NOT NULL,
-  `image_url` varchar(255),
-  `post_date` datetime NOT NULL
-);
-
-CREATE TABLE `notifications` (
-  `notification_id` int PRIMARY KEY AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `content` text NOT NULL,
-  `notification_date` datetime NOT NULL,
-  `is_read` bool NOT NULL
-);
-
-CREATE TABLE `video_calls` (
-  `call_id` int PRIMARY KEY AUTO_INCREMENT,
-  `caller_id` int NOT NULL,
-  `receiver_id` int NOT NULL,
-  `call_start_time` datetime NOT NULL,
-  `call_end_time` datetime NOT NULL
-);
+ALTER TABLE jobs
+ADD FULLTEXT(title, description);
 
 
+ALTER TABLE organization
+ADD COLUMN job_count INT DEFAULT 0;
 
-CREATE TABLE `project` (
-  `project_id` int PRIMARY KEY AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
-  `skills_used` varchar(255) NOT NULL
-);
+--Trigger
 
-CREATE TABLE `community_moderators` (
-  `moderator_id` int PRIMARY KEY AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `community_id` int NOT NULL,
-  `admin` bool NOT NULL
-);
+DELIMITER //
 
-CREATE TABLE `chat_conversations` (
-  `conversation_id` int PRIMARY KEY AUTO_INCREMENT,
-  `user1_id` int NOT NULL,
-  `user2_id` int NOT NULL,
-  `last_message` text
-);
+CREATE TRIGGER after_insert_job
+AFTER INSERT
+ON jobs FOR EACH ROW
+BEGIN
+    -- Increment the job_count for the corresponding organization
+    UPDATE organization
+    SET job_count = job_count + 1
+    WHERE organization_id = NEW.organization_id;
+END //
 
-CREATE TABLE `messages` (
-  `message_id` int PRIMARY KEY AUTO_INCREMENT,
-  `conversation_id` int NOT NULL,
-  `sender_id` int NOT NULL,
-  `receiver_id` int NOT NULL,
-  `content` text NOT NULL,
-  `message_date` datetime NOT NULL,
-  `is_read` bool NOT NULL
-);
+DELIMITER ;
 
-CREATE TABLE `audio_calls` (
-  `call_id` int PRIMARY KEY AUTO_INCREMENT,
-  `caller_id` int NOT NULL,
-  `receiver_id` int NOT NULL,
-  `call_start_time` datetime NOT NULL,
-  `call_end_time` datetime NOT NULL
-);
+--Stored Procedure
+
+DELIMITER //
+
+CREATE PROCEDURE UpdatePerson(
+  IN p_city VARCHAR(255),
+  IN p_state VARCHAR(255),
+  IN p_country VARCHAR(255),
+  IN p_user_id INT,
+  IN p_first_name VARCHAR(255),
+  IN p_last_name VARCHAR(255),
+  IN p_username VARCHAR(255),
+  IN p_cover_pic VARCHAR(255),
+  IN p_profile_pic VARCHAR(255)
+)
+BEGIN
+  -- Update location
+  UPDATE location
+  SET
+    city = p_city,
+    state = p_state,
+    country = p_country
+  WHERE location_id = (SELECT location_id FROM person WHERE user_id = p_user_id);
+
+  -- Update person
+  UPDATE person
+  SET
+    first_name = p_first_name,
+    last_name = p_last_name
+  WHERE user_id = p_user_id;
+
+  -- Update user
+  UPDATE user
+  SET
+    username = p_username,
+    CoverPic = p_cover_pic,
+    ProfilePic = p_profile_pic
+  WHERE user_id = p_user_id;
+
+END //
+
+DELIMITER ;
+
+
+-- CREATE TABLE `friendship_requests` (
+--   `request_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `sender_id` int NOT NULL,
+--   `receiver_id` int NOT NULL,
+--   `status` varchar(255) NOT NULL,
+--   `request_date` datetime NOT NULL,
+--   FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`),
+--   FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`)
+-- );
+
+
+-- CREATE TABLE `communities` (
+--   `community_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `name` varchar(255) NOT NULL,
+--   `description` text NOT NULL,
+--   `created_by` int NOT NULL,
+--   `creation_date` datetime NOT NULL
+-- );
+
+-- CREATE TABLE `community_members` (
+--   `membership_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `user_id` int NOT NULL,
+--   `community_id` int NOT NULL,
+--   `join_date` datetime NOT NULL
+-- );
+
+-- CREATE TABLE `community_posts` (
+--   `community_post_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `community_id` int NOT NULL,
+--   `user_id` int NOT NULL,
+--   `content` text NOT NULL,
+--   `image_url` varchar(255),
+--   `post_date` datetime NOT NULL
+-- );
+
+-- CREATE TABLE `notifications` (
+--   `notification_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `user_id` int NOT NULL,
+--   `content` text NOT NULL,
+--   `notification_date` datetime NOT NULL,
+--   `is_read` bool NOT NULL
+-- );
+
+-- CREATE TABLE `video_calls` (
+--   `call_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `caller_id` int NOT NULL,
+--   `receiver_id` int NOT NULL,
+--   `call_start_time` datetime NOT NULL,
+--   `call_end_time` datetime NOT NULL
+-- );
+
+
+
+-- CREATE TABLE `project` (
+--   `project_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `user_id` int NOT NULL,
+--   `name` varchar(255) NOT NULL,
+--   `description` text NOT NULL,
+--   `start_date` date NOT NULL,
+--   `end_date` date NOT NULL,
+--   `skills_used` varchar(255) NOT NULL
+-- );
+
+-- CREATE TABLE `community_moderators` (
+--   `moderator_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `user_id` int NOT NULL,
+--   `community_id` int NOT NULL,
+--   `admin` bool NOT NULL
+-- );
+
+-- CREATE TABLE `chat_conversations` (
+--   `conversation_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `user1_id` int NOT NULL,
+--   `user2_id` int NOT NULL,
+--   `last_message` text
+-- );
+
+-- CREATE TABLE `messages` (
+--   `message_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `conversation_id` int NOT NULL,
+--   `sender_id` int NOT NULL,
+--   `receiver_id` int NOT NULL,
+--   `content` text NOT NULL,
+--   `message_date` datetime NOT NULL,
+--   `is_read` bool NOT NULL
+-- );
+
+-- CREATE TABLE `audio_calls` (
+--   `call_id` int PRIMARY KEY AUTO_INCREMENT,
+--   `caller_id` int NOT NULL,
+--   `receiver_id` int NOT NULL,
+--   `call_start_time` datetime NOT NULL,
+--   `call_end_time` datetime NOT NULL
+-- );
 
 ALTER TABLE `person` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
@@ -308,8 +378,6 @@ ALTER TABLE `video_calls` ADD FOREIGN KEY (`caller_id`) REFERENCES `user` (`user
 
 ALTER TABLE `video_calls` ADD FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`);
 
-
-
 ALTER TABLE `project` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 ALTER TABLE `community_moderators` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
@@ -366,5 +434,4 @@ MODIFY issue_date date,
 MODIFY expiration_date date;
 
 
-ALTER TABLE jobs
-ADD FULLTEXT(title, description);
+

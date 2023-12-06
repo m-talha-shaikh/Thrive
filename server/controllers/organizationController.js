@@ -3,12 +3,14 @@ const executeQuery = require('./../utils/executeQuery');
 exports.getOrganization = async (req, res, next) => {
   const user_id = req.params.user_id;
 
-  const basicInfoQuery = `SELECT O.name, O.industry,
+  const basicInfoQuery = `SELECT U.user_id, U.ProfilePic, U.CoverPic, U.username, O.name, O.industry,
                                 O.description, O.website_url, O.contact,
                                 L.city, L.state, L.country
                                 FROM organization O
                                 JOIN location L
                                 ON O.location_id = L.location_id
+                                JOIN user U
+                                ON O.user_id = U.user_id
                                 WHERE O.user_id = ?
                           `;
 
@@ -29,8 +31,9 @@ exports.getOrganization = async (req, res, next) => {
 };
 
 exports.updateOrganization = async (req, res, next) => {
-  const user_id = req.user.user_id;
+  const user_id = req.params.user_id;
 
+  console.log(req.body);
   const {
     name,
     industry,
@@ -40,51 +43,96 @@ exports.updateOrganization = async (req, res, next) => {
     city,
     state,
     country,
+    ProfilePic,
+    CoverPic,
   } = req.body;
+
+  // Check if the location already exists
+  const checkLocationQuery = `
+    SELECT location_id FROM location WHERE city = ? AND state = ? AND country = ?
+  `;
+
+  const locationCheckValues = [city, state, country];
+
+  const checkLocationResult = await executeQuery(req.db, checkLocationQuery, locationCheckValues);
+
+  let location_id;
+
+  if (checkLocationResult.length > 0) {
+    // Location exists, use existing location_id
+    location_id = checkLocationResult[0].location_id;
+  } else {
+    // Location doesn't exist, create a new location and get the new location_id
+    const createLocationQuery = `
+      INSERT INTO location (city, state, country) VALUES (?, ?, ?)
+    `;
+
+    const createLocationValues = [city, state, country];
+
+    const createLocationResult = await executeQuery(req.db, createLocationQuery, createLocationValues);
+    location_id = createLocationResult.insertId;
+  }
 
   const updateOrganizationQuery = `
     UPDATE organization O
-    JOIN location L
-    ON O.location_id = L.location_id
-    SET O.name = ?, O.industry = ?, O.description = ?,
-        O.website_url = ?, O.contact = ?, L.city = ?, L.state = ?, L.country = ?
+    SET 
+      O.name = ?,
+      O.industry = ?,
+      O.description = ?,
+      O.website_url = ?,
+      O.contact = ?,
+      O.location_id = ?
     WHERE O.user_id = ?
   `;
 
-  const queryValues = [
+  const updateUserQuery = `
+    UPDATE user U
+    SET U.ProfilePic = ?,
+        U.CoverPic = ?
+    WHERE U.user_id = ?
+  `;
+
+  const organizationQueryValues = [
     name,
     industry,
     description,
     website_url,
     contact,
-    city,
-    state,
-    country,
+    location_id,
     user_id,
   ];
 
+  const userQueryValues = [ProfilePic, CoverPic, user_id];
+
   try {
-    const queryTasks = [
-      executeQuery(req.db, updateOrganizationQuery, queryValues),
-    ];
+    // Update Organization
+    const organizationUpdateResult = await executeQuery(req.db, updateOrganizationQuery, organizationQueryValues);
+    console.log('Organization Update Result:', organizationUpdateResult);
 
-    await Promise.all(queryTasks);
+    // Update User
+    const userUpdateResult = await executeQuery(req.db, updateUserQuery, userQueryValues);
+    console.log('User Update Result:', userUpdateResult);
 
-    res.json({ message: 'Organization updated successfully' });
+    res.json({ message: 'Organization and user updated successfully' });
   } catch (error) {
     console.error('Database error:', error);
     res.status(500).json({ error: error });
   }
 };
 
+
+
+
 exports.getEmployees = async (req, res, next) => {
   const organization_user_id = req.params.user_id;
 
-  const employeesQuery = `SELECT   P.user_id, P.first_name, P.last_name,
+  const employeesQuery = `SELECT   U.ProfilePic, P.user_id, P.first_name, P.last_name,
                                     E.title
                                     FROM person P
                                     JOIN employment E
                                     ON   P.person_id = E.person_id
+                                    JOIN user U
+                                    ON P.user_id = U.user_id
                                     WHERE E.organization_id = (SELECT organization_id
                                                               FROM organization O
                                                               WHERE user_id =  ? )

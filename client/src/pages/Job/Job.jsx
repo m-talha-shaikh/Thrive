@@ -1,3 +1,4 @@
+import "./Job.scss"
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -9,8 +10,8 @@ import {
   Grid,
   Chip,
   Avatar,
-  Button, // Import Button from @mui/material
-  styled, // Import styled from @mui/system
+  Button,
+  styled,
 } from '@mui/material';
 
 import RoomIcon from '@mui/icons-material/Room';
@@ -41,6 +42,7 @@ const Job = () => {
         // Handle the response data
         const { job } = response.data.job;
         setJob(job);
+        console.log(job);
       })
       .catch((error) => {
         console.error('Error fetching job data:', error);
@@ -64,30 +66,35 @@ const Job = () => {
   return (
     <>
       {job && (
-        <StyledCard>
+        <StyledCard className="job-card">
           <CardContent>
+            {
+              job.ProfilePic && (
+                <Avatar src={`../../../public/uploads/${job.ProfilePic}`} />
+              )
+            }
             {job.title && (
-              <Typography variant="h5" fontSize="1.5rem" fontWeight="bold" marginBottom={1}>
+              <Typography className="job-title" variant="h5" fontSize="1.5rem" fontWeight="bold" marginBottom={1}>
                 {job.title}
               </Typography>
             )}
 
             {job.name && (
-              <Typography variant="body1" fontSize="1rem" color="textSecondary">
+              <Typography className="job-name" variant="body1" fontSize="1rem" color="textSecondary">
                 {job.name}
               </Typography>
             )}
 
             <Grid container justify="space-between" alignItems="center" marginBottom={2}>
               {job.job_type && (
-                <Typography variant="subtitle1" color="textSecondary">
+                <Typography className="job-type" variant="subtitle1" color="textSecondary">
                   {job.job_type}
                 </Typography>
               )}
             </Grid>
 
             {job.description && (
-              <Typography variant="body1" color="textSecondary">
+              <Typography className="job-description" variant="body1" color="textSecondary">
                 {job.description}
               </Typography>
             )}
@@ -140,7 +147,7 @@ const Job = () => {
 
             <Grid container spacing={2} alignItems="center" marginBottom={2}>
               <Grid item>
-                <Button variant="contained" color="primary" onClick={handleApply}>
+                <Button className="apply-button" variant="contained" color="primary" onClick={handleApply}>
                   Apply
                 </Button>
               </Grid>
