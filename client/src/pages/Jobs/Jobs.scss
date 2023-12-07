@@ -1,0 +1,12 @@
+@import "../../style.scss";
+
+.job-details-container {
+    overflow-y: scroll;
+    /* or 'scroll' */
+    scrollbar-width: auto;
+    /* Firefox */
+    scrollbar-color: auto;
+    /* Firefox */
+    -ms-overflow-style: auto;
+    /* IE/Edge */
+}

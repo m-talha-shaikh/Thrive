@@ -190,7 +190,7 @@ exports.createJob = async (req, res, next) => {
   const user_id = req.params.user_id;
   const post_date = new Date();
 
-  const {
+ let {
     title,
     description,
     expiry_date,
@@ -205,6 +205,16 @@ exports.createJob = async (req, res, next) => {
 
   console.log(post_date);
   const formattedExpiryDate = new Date(expiry_date).toISOString().slice(0, 19).replace("T", " ");
+  if(salary_min == ''){
+    salary_min = null;
+  }
+  if(salary_max == ''){
+    salary_max = null;
+  }
+
+  if(openings == ''){
+    openings = null;
+  }
 
   console.log("OMG");
 

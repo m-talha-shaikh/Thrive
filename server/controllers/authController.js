@@ -60,8 +60,9 @@ exports.signup = async (req, res, next) => {
       username,
     ]);
 
-    if (checkqueryresult.length > 0) {
+    if (checkqueryresult.length > 0 || password == '' || !email.includes('@')) {
       // Rollback the transaction if username already exists
+      console.log("ROLL BACKED");
       await executeQuery(req.db, 'ROLLBACK', []);
       return res.status(400).json({ error: 'Username already exists' });
     }
