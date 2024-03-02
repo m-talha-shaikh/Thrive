@@ -1,6 +1,3 @@
-
-
-
 const executeQuery = require("./../utils/executeQuery");
 
 
@@ -33,6 +30,9 @@ exports.UpdatePerson = async (req, res) => {
 
 
 exports.getPerson = async (req, res, next) => {
+  console.log("HEY THIS IS IDENTIFICTAITON print in getPErson controller to check jwt things");
+  console.log(req.headers.authorization);
+
   const user_id = req.params.user_id;
 
   const basicInfoQuery = `

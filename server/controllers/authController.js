@@ -240,8 +240,12 @@ exports.protect = async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
+  else {
+    console.log('No req headers auth')
+  }
 
   if (!token) {
+    console.log('No token')
     return res.status(401).json({ error: 'You are not logged in' });
   }
 
@@ -253,12 +257,15 @@ exports.protect = async (req, res, next) => {
     const user = await executeQuery(req.db, protectQuery, protectQueryValues);
 
     if (!user.length) {
+      console.log('No user length')
       return res.status(401).json({ error: 'The user no longer exists' });
     }
 
     req.user = user[0];
+    console.log("SUCCESS FROM PROTECT FUNCTION")
     next();
   } catch (error) {
+    console.log('Some Internal Error')
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -270,6 +277,7 @@ exports.restrictTo = (...allowedUserTypes) => {
         error: 'Your account type does not support this functionality',
       });
     }
+    console.log("SUCCESS FROM RESTRICT TO FUNCTION")
     next();
   };
 };
@@ -277,12 +285,14 @@ exports.restrictTo = (...allowedUserTypes) => {
 exports.authorize = () => {
   return (req, res, next) => {
     if (req.user.user_id === req.params.user_id) {
+      console.log("SUCCESS FROM AUTHORIZE FUNCTION")
       next();
     } else {
       res.status(403).json({ error: 'You are not authorized' });
     }
   };
 };
+
 exports.logout = (req, res) => {
   // Clear the JWT token from the client's cookies
   res.clearCookie('jwt');

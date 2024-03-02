@@ -10,13 +10,13 @@ router.route('/:user_id').get(personController.getPerson);
 
 
 // router.use('/:user_id', authController.protect, authController.restrictTo('person'), authController.authorize);
+
+router.use('/:user_id', authController.protect);
+
 router.route('/:user_id/education')
   .post(personController.createEducation);
-
-  console.log("Hey");
 router.route('/')
   .put(personController.UpdatePerson);
-  console.log("Hello");
 
 router
   .route('/:user_id/education/:education_id')
