@@ -90,15 +90,15 @@ const JobPost = ({ organization, user_id }) => {
       <FormControl fullWidth margin="normal">
         <InputLabel id="job-type-label">Job Type</InputLabel>
         <Select
-          {...register('job_type')}
-          labelId="job-type-label"
-          label="Job Type"
-          defaultValue="full_time" // Set the default value
-        >
-          <MenuItem value="full_time">Full Time</MenuItem>
-          <MenuItem value="part_time">Part Time</MenuItem>
-          <MenuItem value="contract">Contract</MenuItem>
-        </Select>
+        {...register('job_type')}
+        labelId="job-type-label"
+        label="Job Type"
+        defaultValue="full_time"
+      >
+        <MenuItem value="full_time">Full Time</MenuItem>
+        <MenuItem value="part_time">Part Time</MenuItem>
+        <MenuItem value="contract">Contract</MenuItem>
+      </Select>
       </FormControl>
 
       <TextField

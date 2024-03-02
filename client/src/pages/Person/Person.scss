@@ -69,14 +69,38 @@
         margin-top: 100px;
       }
 
-      .left {
-        flex: 1;
-        display: flex;
-        gap: 10px;
-        position: relative;
-        z-index: 2; 
-        @include tablet {
-          flex-wrap: wrap;
+            .heading {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                h2 {
+                    font-size: 24px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+
+                }
+            }
+
+
+            .education-item,
+            .certification-item,
+            .employment-item {
+
+                padding: 20px;
+                margin-bottom: 20px;
+
+                h3 {
+                    font-size: 18px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+
+                p {
+                    font-size: 16px;
+                    margin: 5px 0;
+                }
+            }
         }
 
         a {

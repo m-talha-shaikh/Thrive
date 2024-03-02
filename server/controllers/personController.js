@@ -1,6 +1,3 @@
-
-
-
 const executeQuery = require("./../utils/executeQuery");
 
 
@@ -33,6 +30,9 @@ exports.UpdatePerson = async (req, res) => {
 
 
 exports.getPerson = async (req, res, next) => {
+  console.log("HEY THIS IS IDENTIFICTAITON print in getPErson controller to check jwt things");
+  console.log(req.headers.authorization);
+
   const user_id = req.params.user_id;
 
   const basicInfoQuery = `
@@ -113,7 +113,7 @@ exports.getPerson = async (req, res, next) => {
 exports.createEducation = async (req, res, next) => {
   const user_id = req.params.user_id || req.user.user_id;
 
-  const {
+  let {
     year_enrolled,
     year_graduated,
     major,
@@ -121,6 +121,10 @@ exports.createEducation = async (req, res, next) => {
     text_description,
     institute_name,
   } = req.body;
+
+  if(year_graduated === ''){
+    year_graduated = null;
+  }
 
   const check_institute = 'SELECT institute_id FROM institute WHERE name = ?';
   const check_person = 'SELECT person_id FROM person WHERE user_id = ?';
@@ -184,7 +188,10 @@ exports.createEducation = async (req, res, next) => {
 exports.createCertification = async (req, res, next) => {
   const user_id = req.params.user_id || req.user.user_id;
 
-  const { name, issuing_organization, issue_date, expiration_date } = req.body;
+  let { name, issuing_organization, issue_date, expiration_date } = req.body;
+  if (expiration_date === '') {
+  expiration_date = null;
+  }
 
   const insertCertificationQuery = `
     INSERT INTO certifications(person_id, name, issuing_organization, issue_date, expiration_date)
@@ -224,7 +231,7 @@ exports.createCertification = async (req, res, next) => {
 exports.createEmployment = async (req, res, next) => {
   const user_id = req.params.user_id || req.user.user_id;
 
-  const {
+  let {
     year_started,
     month_started,
     month_left,
@@ -233,6 +240,14 @@ exports.createEmployment = async (req, res, next) => {
     text_description,
     organization_name,
   } = req.body;
+
+  if(month_left === ''){
+    month_left = null;
+  }
+  if(year_left === ''){
+    year_left = null;
+  }
+
 
   const check_organization =
     'SELECT organization_id FROM organization WHERE name = ?';
@@ -326,10 +341,9 @@ exports.updateEducation = async (req, res, next) => {
     );
 
     if (instituteQuery.length > 0) {
-      // The institute exists, use the existing institute_id
+
       institute_id = instituteQuery[0].institute_id;
     } else {
-      // The institute doesn't exist, insert a new record and get the institute_id
       const insertInstituteQuery = 'INSERT INTO institute (name) VALUES (?)';
       const insertInstituteResult = await executeQuery(
         req.db,
