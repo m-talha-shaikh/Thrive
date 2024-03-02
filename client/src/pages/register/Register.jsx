@@ -29,7 +29,6 @@ const handleAccountTypeChange = (value) => {
     setInputs((prevInputs) => ({ ...prevInputs, account_type: value }));
   };
 
-
 const [inputs, setInputs] = useState({
   username: username,
   email: email,
@@ -94,7 +93,6 @@ const handleClick = async (e) => {
   }
 };
 
-
   return (
     <div className={classes.login}>
       <div className={classes.card}>
@@ -119,7 +117,6 @@ const handleClick = async (e) => {
               <option value="institute">Institute</option>
               <option value="organization">Organization</option>
             </select>
-
             {account_type === 'person' && <input type="text" placeholder="First Name" onChange={(e) => {  setFirstName(e.target.value);  }} name="first_name" />}
             {account_type === 'person' && <input type="text" placeholder="Last Name" onChange={(e) => {  setLastName(e.target.value);  }} name="last_name" />}
             {account_type === 'person' && <input type="date" placeholder="Date of Birth" onChange={(e) => {  setDateOfBirth(e.target.value);  }} name="date_of_birth" />}
@@ -139,7 +136,6 @@ const handleClick = async (e) => {
             <input type="url" placeholder="Profile Picture URL" onChange={(e) => {  setProfilePic(e.target.value);  }} name="ProfilePic" />
             <input type="url" placeholder="Cover Picture URL" onChange={(e) => {  setCoverPic(e.target.value);  }} name="CoverPic" />
             {account_type === 'person' && <select onChange={(e) => {  setGender(e.target.value);  }} name="gender" value={inputs.gender}>
-
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>}
