@@ -1,17 +1,17 @@
 const mysql = require('mysql2');
 
 
-const database_host = process.env.DATABASE_HOST || 'localhost'
-const database_user = process.env.DATABASE_USER || 'root'
-const database_password = process.env.DATABASE_PASSWORD || ''
-const database_name = process.env.DATABASE_NAME || 'thrive_db'
+// const database_host = process.env.DATABASE_HOST || 'localhost'
+// const database_user = process.env.DATABASE_USER || 'root'
+// const database_password = process.env.DATABASE_PASSWORD || ''
+// const database_name = process.env.DATABASE_NAME || 'thrive_db'
 
 // Create the MySQL connection pool
 const pool = mysql.createPool({
-  host: database_host,
-  user: database_user,
-  password: database_password,
-  database: database_name,
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'thrive_db',
   waitForConnections: true,
   connectionLimit: 10,
 });
