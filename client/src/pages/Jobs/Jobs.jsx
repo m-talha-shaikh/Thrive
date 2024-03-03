@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useQuery, QueryClient, QueryClientProvider } from 'react-query';
 import { TextField, Checkbox, FormControlLabel, Radio, RadioGroup, FormControl, FormLabel, Grid, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { makeRequest } from "../../axios";
 
 import './Jobs.scss';
 
@@ -18,25 +19,24 @@ const Jobs = () => {
 
 
   const onSubmit = async (data) => {
-    if (!data.keyword) {
-      alert('Cannot search job without a keyword.');
-      return;
-    }
-    data.min_salary = parseInt(data.min_salary, 10);
-    data.max_salary = parseInt(data.max_salary, 10);
+  if (!data.keyword) {
+    alert('Cannot search job without a keyword.');
+    return;
+  }
+  data.min_salary = parseInt(data.min_salary, 10);
+  data.max_salary = parseInt(data.max_salary, 10);
 
-    try {
-      // Make a GET request to your backend
-      const response = await axios.get('http://localhost:3000/api/v1/Jobs', { params: data });
-      setJobData(response.data);
+  try {
+    // Make a GET request using makeRequest
+    const response = await makeRequest.get('/Jobs', { params: data });
+    setJobData(response.data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
 
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-
-    // Use React Query's fetch function to trigger the job search
-    queryClient.invalidateQueries('jobs', { exact: true, refetchInactive: true });
-  };
+  // Use React Query's fetch function to trigger the job search
+  queryClient.invalidateQueries('jobs', { exact: true, refetchInactive: true });
+};
 
 //   console.log(jobData);
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import classes from './register.module.css';
+import { makeRequest } from "../../axios"
 
 const Register = () => {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ const handleClick = async (e) => {
     };
 
     console.log(userData);
-    const response = await axios.post('http://localhost:3000/api/v1/Auth/signup', userData, {
+    const response = await makeRequest.post('/Auth/signup', userData, {
       headers: {
         'Content-Type': 'application/json',
       },

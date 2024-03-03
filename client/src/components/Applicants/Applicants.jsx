@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { makeRequest } from "../../axios";
+
 import { Card, CardContent, Typography, Button, Avatar, Link } from '@mui/material';
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
@@ -12,28 +14,29 @@ const Applicants = ({ user_id }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/api/v1/organizations/${user_id}/jobs`);
-        setJobs(response.data.jobs);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    if(user_id == currentUser.data.user.user_id){
-      setAuth(true);
-    }
-    fetchData();
-  }, [user_id]);
-
-  const handleJobApplicantsClick = async (job_id) => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/v1/jobs/${job_id}/applicants`);
-      setSelectedJob({ ...selectedJob, [job_id]: response.data.job.applicants });
+      const response = await makeRequest.get(`/organizations/${user_id}/jobs`);
+      setJobs(response.data.jobs);
     } catch (error) {
-      console.error('Error fetching applicants:', error);
+      console.error('Error fetching data:', error);
     }
   };
+  if (user_id == currentUser.data.user.user_id) {
+    setAuth(true);
+  }
+  fetchData();
+}, [user_id]);
+
+const handleJobApplicantsClick = async (job_id) => {
+  try {
+    const response = await makeRequest.get(`/jobs/${job_id}/applicants`);
+    setSelectedJob({ ...selectedJob, [job_id]: response.data.job.applicants });
+  } catch (error) {
+    console.error('Error fetching applicants:', error);
+  }
+};
+
 
   const handleApplicantClick = (id) => {
     if(id === null){

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';  // Update import
 import axios from 'axios';
+import { makeRequest } from "../../axios";
 
 const Profile = () => {
   const { id } = useParams();
@@ -8,17 +9,17 @@ const Profile = () => {
   const navigate = useNavigate();  // Change to useNavigate
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/api/v1/Auth/userType/${id}`);
-        setUserType(response.data.accountType);
-      } catch (error) {
-        console.error('Error fetching user type:', error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await makeRequest.get(`/Auth/userType/${id}`);
+      setUserType(response.data.accountType);
+    } catch (error) {
+      console.error('Error fetching user type:', error);
+    }
+  };
 
-    fetchData();
-  }, [id]);
+  fetchData();
+}, [id]);
 
   useEffect(() => {
   // Redirect based on userType only if the current path is the profile path

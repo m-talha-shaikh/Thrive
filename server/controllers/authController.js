@@ -195,7 +195,6 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
-  console.log('h' + req.cookies.jwt)
   if (email && password) {
     try {
       const users = await executeQuery(

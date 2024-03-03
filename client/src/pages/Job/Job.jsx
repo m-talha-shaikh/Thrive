@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
+import { makeRequest } from "../../axios";
 import {
   Card,
   CardContent,
@@ -37,35 +38,33 @@ const Job = () => {
   const [user_id, setUserId] = useState(currentUser.data.user.user_id);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/v1/Jobs/${job_id}`)
-      .then((response) => {
-        const { job } = response.data.job;
-        setJob(job);
-        if(currentUser.data.user.account_type === 'person'){
-          setCanApply(true);
-        }
-        console.log(job);
-      })
-      .catch((error) => {
-        console.error('Error fetching job data:', error);
-      });
-  }, [job_id]);
+  makeRequest.get(`/Jobs/${job_id}`)
+    .then((response) => {
+      const { job } = response.data.job;
+      setJob(job);
+      if (currentUser.data.user.account_type === 'person') {
+        setCanApply(true);
+      }
+      console.log(job);
+    })
+    .catch((error) => {
+      console.error('Error fetching job data:', error);
+    });
+}, [job_id]);
 
-  const handleApply = () => {
-    axios
-      .post(`http://localhost:3000/api/v1/Jobs/${job_id}`, { user_id })
-      .then((response) => {
-        console.log('Application successful:', response.data);
-        alert("Successfully Applied for Job");
-      })
-      .catch((error) => {
-        console.error('Error applying for the job:', error);
-        if (error.response && error.response.status === 400) {
-          window.alert('You have already applied for this job');
-        }
-      });
-  };
+const handleApply = () => {
+  makeRequest.post(`/Jobs/${job_id}`, { user_id })
+    .then((response) => {
+      console.log('Application successful:', response.data);
+      alert("Successfully Applied for Job");
+    })
+    .catch((error) => {
+      console.error('Error applying for the job:', error);
+      if (error.response && error.response.status === 400) {
+        window.alert('You have already applied for this job');
+      }
+    });
+};
 
   return (
     <>
