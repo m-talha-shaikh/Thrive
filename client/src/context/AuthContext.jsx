@@ -24,7 +24,6 @@ export const AuthContextProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(res.data));
     } catch (error) {
       console.error("Login failed:", error);
-      // Handle login failure if needed
     }
   };
 
