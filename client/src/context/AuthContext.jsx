@@ -1,5 +1,5 @@
+import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext();
 
@@ -9,37 +9,48 @@ export const AuthContextProvider = ({ children }) => {
   );
 
   const Login = async (inputs) => {
-    
-    const res = await axios.post(
-      "http://localhost:3000/api/v1/Auth/login",
-      inputs,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    console.log(res.data);
-    setCurrentUser(res.data);
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/Auth/login",
+        inputs,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      setCurrentUser(res.data);
+      localStorage.setItem("user", JSON.stringify(res.data));
+    } catch (error) {
+      console.error("Login failed:", error);
+      // Handle login failure if needed
+    }
   };
 
   const Logout = async () => {
-    // Clear user data from localStorage
-    const res = await axios.post(
-        "http://localhost:3000/api/v1/Auth/logout"
-        
+    try {
+      await axios.post(
+        "http://localhost:3000/api/v1/Auth/logout",
+        {},
+        {
+          withCredentials: true,
+        }
       );
-    localStorage.removeItem("user");
-    // Set the currentUser to null or an initial value
-    setCurrentUser(null);
+      localStorage.removeItem("user");
+      setCurrentUser(null);
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Handle logout failure if needed
+    }
   };
 
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(currentUser));
-  }, [currentUser]);
+    // Perform any initialization tasks here
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser, Login, Logout, setCurrentUser }}>
+    <AuthContext.Provider value={{ currentUser, Login, Logout }}>
       {children}
     </AuthContext.Provider>
   );

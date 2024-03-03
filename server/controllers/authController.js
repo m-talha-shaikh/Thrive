@@ -195,7 +195,7 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
-
+  console.log('h' + req.cookies.jwt)
   if (email && password) {
     try {
       const users = await executeQuery(
@@ -233,16 +233,23 @@ exports.login = async (req, res, next) => {
 
 exports.protect = async (req, res, next) => {
   let token;
-
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    token = req.headers.authorization.split(' ')[1];
+  if(req.headers.cookie){
+    token = req.headers.cookie.split('jwt=')[1].split(';')[0];
   }
   else {
-    console.log('No req headers auth')
+    console.log(`no jwt cookie`)
+    return res.status(401).json({ error: 'You are not logged in' });
   }
+  
+  // if (
+  //   req.headers.authorization &&
+  //   req.headers.authorization.startsWith('Bearer')
+  // ) {
+  //   token = req.headers.authorization.split(' ')[1];
+  // }
+  // else {
+  //   console.log('No req headers auth')
+  // }
 
   if (!token) {
     console.log('No token')
@@ -296,6 +303,7 @@ exports.authorize = () => {
 exports.logout = (req, res) => {
   // Clear the JWT token from the client's cookies
   res.clearCookie('jwt');
+  console.log("Cleared")
   res.status(200).json({ status: 'success' });
 };
 
