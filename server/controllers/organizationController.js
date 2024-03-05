@@ -33,7 +33,7 @@ exports.getOrganization = async (req, res, next) => {
 exports.updateOrganization = async (req, res, next) => {
   const user_id = req.params.user_id;
 
-  console.log(req.body);
+
   const {
     name,
     industry,
@@ -107,11 +107,11 @@ exports.updateOrganization = async (req, res, next) => {
   try {
     // Update Organization
     const organizationUpdateResult = await executeQuery(req.db, updateOrganizationQuery, organizationQueryValues);
-    console.log('Organization Update Result:', organizationUpdateResult);
+    // console.log('Organization Update Result:', organizationUpdateResult);
 
     // Update User
     const userUpdateResult = await executeQuery(req.db, updateUserQuery, userQueryValues);
-    console.log('User Update Result:', userUpdateResult);
+    // console.log('User Update Result:', userUpdateResult);
 
     res.json({ message: 'Organization and user updated successfully' });
   } catch (error) {
@@ -203,7 +203,7 @@ exports.createJob = async (req, res, next) => {
     remote_work,
   } = req.body;
 
-  console.log(post_date);
+  // console.log(post_date);
   const formattedExpiryDate = new Date(expiry_date).toISOString().slice(0, 19).replace("T", " ");
   if(salary_min == ''){
     salary_min = null;
@@ -216,7 +216,6 @@ exports.createJob = async (req, res, next) => {
     openings = null;
   }
 
-  console.log("OMG");
 
   const retrieveOrgIdQuery = `
     SELECT organization_id

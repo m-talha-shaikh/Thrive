@@ -10,6 +10,8 @@ router.route('/:user_id').get(organizationController.getOrganization);
 
 // router.use('/:user_id', authController.protect, authController.restrictTo('organization'), authController.authorize);
 
+router.use('/:user_id', authController.protect);
+
 router.route('/:user_id').put(organizationController.updateOrganization);
 
 router.route('/:user_id/employees').get(organizationController.getEmployees);

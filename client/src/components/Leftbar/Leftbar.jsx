@@ -24,7 +24,7 @@ const Leftbar = ()=>
     // Move the setUserType inside the useEffect to avoid re-renders
     setUserType(currentUser.data.user.account_type);
   }, [currentUser.data.user.account_type]);
-  console.log(userType);
+  console.log(' M ' + userType);
 
   console.log(currentUser.data.user)+"leftbar";
     return(

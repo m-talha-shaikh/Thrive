@@ -6,27 +6,43 @@ import { useContext, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { makeRequest } from "../../axios";
 import { AuthContext } from "../../context/AuthContext";
+
 const Share = () => {
   const [file, setFile] = useState(null);
   const [content, setDesc] = useState("");
   const [image_url,setUrl] = useState("");
-  const upload = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const res = await makeRequest.post("/upload", formData);
-      return res.data;
-    } catch (err) {
-    
-      console.log(err);
+
+ const upload = async () => {
+  try {
+    if (!file) {
+      throw new Error("No file selected");
     }
-  };
+    console.log("HI");
+
+    const formData = new FormData();
+    formData.append("file", file);
+    console.log(file)
+    console.log('Form Data:', formData); // Log the form data being sent
+
+    const res = await makeRequest.post("/upload", formData);
+    console.log('Response:', res); // Log the response from the server
+
+    return res.data;
+  } catch (err) {
+    console.error("Error uploading file:", err);
+    throw err; // Rethrow the error for better handling elsewhere
+  }
+};
+
+
+
   const { currentUser } = useContext(AuthContext);
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
     async (newPost) => {
+      console.log("Adding post")
       try {
         const response = await makeRequest.post("/Posts/uploadPost",newPost);
         return response.data; // Assuming your response contains the new post data

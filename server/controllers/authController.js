@@ -27,7 +27,6 @@ const createSendToken = (user, statusCode, res) => {
 
   res.status(statusCode).json({
     status: 'success',
-    token,
     data: {
       user,
     },
@@ -268,7 +267,6 @@ exports.protect = async (req, res, next) => {
     }
 
     req.user = user[0];
-    console.log("SUCCESS FROM PROTECT FUNCTION")
     next();
   } catch (error) {
     console.log('Some Internal Error')
@@ -276,28 +274,28 @@ exports.protect = async (req, res, next) => {
   }
 };
 
-exports.restrictTo = (...allowedUserTypes) => {
-  return (req, res, next) => {
-    if (!allowedUserTypes.includes(req.user.account_type)) {
-      return res.status(403).json({
-        error: 'Your account type does not support this functionality',
-      });
-    }
-    console.log("SUCCESS FROM RESTRICT TO FUNCTION")
-    next();
-  };
-};
+// exports.restrictTo = (...allowedUserTypes) => {
+//   return (req, res, next) => {
+//     if (!allowedUserTypes.includes(req.user.account_type)) {
+//       return res.status(403).json({
+//         error: 'Your account type does not support this functionality',
+//       });
+//     }
+//     console.log("SUCCESS FROM RESTRICT TO FUNCTION")
+//     next();
+//   };
+// };
 
-exports.authorize = () => {
-  return (req, res, next) => {
-    if (req.user.user_id === req.params.user_id) {
-      console.log("SUCCESS FROM AUTHORIZE FUNCTION")
-      next();
-    } else {
-      res.status(403).json({ error: 'You are not authorized' });
-    }
-  };
-};
+// exports.authorize = () => {
+//   return (req, res, next) => {
+//     if (req.user.user_id === req.params.user_id) {
+//       console.log("SUCCESS FROM AUTHORIZE FUNCTION")
+//       next();
+//     } else {
+//       res.status(403).json({ error: 'You are not authorized' });
+//     }
+//   };
+// };
 
 exports.logout = (req, res) => {
   // Clear the JWT token from the client's cookies
