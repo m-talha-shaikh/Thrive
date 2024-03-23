@@ -9,21 +9,12 @@
         transform: scale(1.02);
     }
 
-    .job-title {
+    .job-title, .job-name, .job-type {
         font-size: 1.5rem;
         font-weight: bold;
         margin-bottom: 1rem;
     }
 
-    .job-name {
-        font-size: 1rem;
-        color: #6b6b6b;
-    }
-
-    .job-type {
-        font-size: 1rem;
-        color: #6b6b6b;
-    }
 
     .job-description {
         font-size: 1rem;

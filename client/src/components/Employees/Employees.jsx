@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Typography, CircularProgress, Link, Avatar } from '@mui/material';
 import axios from 'axios';
+import { makeRequest } from "../../axios";
+
 import { useNavigate } from 'react-router-dom';
 
 const Employees = ({ user_id }) => {
@@ -9,19 +11,20 @@ const Employees = ({ user_id }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const response = await axios.get(`http://127.0.0.1:3000/api/v1/organizations/${user_id}/employees`);
-        setEmployees(response.data.employees);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching employees:', error);
-        setLoading(false);
-      }
-    };
+  const fetchEmployees = async () => {
+    try {
+      const response = await makeRequest.get(`/organizations/${user_id}/employees`);
+      setEmployees(response.data.employees);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching employees:', error);
+      setLoading(false);
+    }
+  };
 
-    fetchEmployees();
-  }, [user_id]);
+  fetchEmployees();
+}, [user_id]);
+
 
   const handleCardClick = (employee) => {
     navigate(`/profile/${employee.user_id}`);

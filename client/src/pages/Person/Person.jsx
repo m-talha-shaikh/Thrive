@@ -19,11 +19,21 @@ const Person = ()=>
   const navigate = useNavigate();
 
   const handleInstituteClick = (id) => {
-    navigate(`/institute/${id}`);
+    if(id === null){
+      alert("This institute does not have a user account yet");
+    }
+    else{
+      navigate(`/institute/${id}`);
+    }
   };
 
   const handleOrganizationClick = (id) => {
-    navigate(`/organization/${id}`);
+    if(id === null){
+      alert("This organziation does not have a user account yet");
+    }
+    else{
+      navigate(`/organization/${id}`);
+    }
   };
 
   const [authorized, setAuthorized] = useState(false);
@@ -201,7 +211,6 @@ const handleDeleteCertifications = async (certificationId) => {
         {data && data.person && data.person.ProfilePic ? ( <img src={`../../../public/uploads/${data.person.ProfilePic}`} alt="" className="profilePic" /> ) : ( <p> {error ? "Something went wrong with the profile picture" : isLoading ? "Loading profile picture..." : "No profile picture available"} </p> )}
         </div>
         <div className="profilecontainer">
-       
             <div className="userinfo">
              <div className="center">
                 <span>{error?"This is some thing wrong":(isLoading?"Loading":data.person.first_name+" "+data.person.last_name)}</span>
@@ -232,20 +241,21 @@ const handleDeleteCertifications = async (certificationId) => {
       </div>
       {data && data.education && data.education.map((item, index) => (
         <div key={index} className="education-item">
-          <Link key={index} onClick={() => handleInstituteClick(item.user_id)} style={{ textDecoration: 'none'}}>
+          
           <div style={{ display: 'flex', justifyContent: 'space-evenly'}}>
             <Typography variant="h3" style={{ display: 'inline-block', marginRight: '10px'  }}>{item.major}</Typography>
             {authorized && ( <Button variant="contained" color="error" onClick={() => handleDeleteEducation(item.education_id)} style={{ display: 'inline-block', marginLeft: '10px' }} > Delete </Button> )}
           </div>
+          <Link onClick={() => handleInstituteClick(item.user_id)} style={{ textDecoration: 'none'}}>
             <Avatar src={`../../../public/uploads/${item.ProfilePic}`}/>
             <Typography variant="body1">{item.name}</Typography>
           </Link>
           {item.year_graduated ? (
-            <Typography variant="body1">{`${item.year_enrolled} - ${item.year_graduated}`}</Typography>
+            <Typography variant="body1"><span style={{ fontWeight: 'bold' }}>Enrolled </span>{`${item.year_enrolled}`} - <span style={{ fontWeight: 'bold' }}>Graduated </span> {`${item.year_graduated}`}</Typography>
           ) : (
             <Typography variant="body1">{item.currently_studying ? 'Present' : item.year_enrolled}</Typography>
           )}
-          <Typography variant="body1">{item.text_description}</Typography>
+          <Typography variant="body1"><span style={{ fontWeight: 'bold' }}>Description </span>{item.text_description}</Typography>
         </div>
       ))}
       {showEducationForm && (
@@ -315,11 +325,11 @@ const handleDeleteCertifications = async (certificationId) => {
   </div>
   {data && data.employment && data.employment.map((item, index) => (
     <div key={index} className="employment-item">
-      <Link key={index} onClick={() => handleOrganizationClick(item.user_id)} style={{ textDecoration: 'none'}}>
       <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
         <h3 style={{ display: 'inline-block', marginRight: '10px' }}>{item.title}</h3>
         {authorized && ( <Button variant="contained" color="error" onClick={() => handleDeleteEmployment(item.employment_id)} style={{ display: 'inline-block', marginLeft: '10px' }} > Delete </Button> )}
       </div>
+      <Link  onClick={() => handleOrganizationClick(item.user_id)} style={{ textDecoration: 'none'}}>
             <Avatar src={`../../../public/uploads/${item.ProfilePic}`}/>
             <Typography variant="body1">{item.name}</Typography>
      </Link>
@@ -328,7 +338,7 @@ const handleDeleteCertifications = async (certificationId) => {
       ) : (
         <p>{`${item.month_started}/${item.year_started} - Present`}</p>
       )}
-      <p>{item.text_description}</p>
+      <p><span style={{ fontWeight: 'bold' }}>Description </span>{item.text_description}</p>
     </div>
   ))}
   {showEmploymentForm && (
@@ -410,7 +420,8 @@ const handleDeleteCertifications = async (certificationId) => {
     <div key={index} className="certification-item">
       <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
         <h3 style={{ display: 'inline-block', marginRight: '10px' }}>{item.name}</h3>
-        <Button
+        {authorized && (
+          <Button
           variant="contained"
           color="error"
           onClick={() => handleDeleteCertifications(item.certification_id)}
@@ -418,6 +429,7 @@ const handleDeleteCertifications = async (certificationId) => {
         >
           Delete
         </Button>
+        )}
       </div>
       <p>{item.issuing_organization}</p>
       <p>{new Date(item.issue_date).toLocaleDateString()}</p>

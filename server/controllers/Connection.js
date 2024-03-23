@@ -15,8 +15,6 @@ exports.getFriends =async (req,res)=>
 }
 exports.getFriends2 =async (req,res)=>
 {
-    console.log("part 2 hiites");
-    console.log(req.query.userId);
  
     try {
         const q = `Select user_id,ProfilePic,CoverPic,username From user where user_id IN (Select friend_id from friends where user_id=?)`;
@@ -35,7 +33,7 @@ exports.getUsernotFriends =async (req,res)=>
     try {
         const q = `Select user_id,ProfilePic,CoverPic,username From user where user_id NOT IN (Select friend_id from friends where user_id=?) AND user_id != ?`;
    const friends = await executeQuery(req.db, q, [req.query.userId,req.query.userId]);
-   console.log(friends);
+
    return res.status(200).json(friends);
     } catch (err) {
         console.log(err);

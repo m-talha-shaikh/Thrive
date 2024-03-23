@@ -1,37 +1,53 @@
+//env File Require
+require('dotenv').config()
+
+//External Imports
 const express = require('express');
 const helmet = require('helmet');
 const cors = require(`cors`);
-const attachDb = require('./server/utils/dbMiddleware');
 const cookieParser = require('cookie-parser');
+const multer  = require('multer')
+
+//Database Connection
+const attachDB = require('./server/utils/dbMiddleware');
+
+//Routers
+const AuthRoutes = require("./server/routes/Auth")
+
+//Profiles
 const personRouter = require('./server/routes/personRoutes')
 const instituteRouter = require('./server/routes/instituteRoutes')
 const organizationRouter = require('./server/routes/organizationRoutes')
+const ConnectionRoutes = require("./server/routes/ConnectionRoutes")
+
+//Social Media Interaction
 const PostRoutes = require("./server/routes/posts");
 const CommentRoutes = require("./server/routes/comments");
-const AuthRoutes = require("./server/routes/Auth")
 const likeRoutes = require("./server/routes/likes")
-const multer  = require('multer')
+
+//Jobs Section
 const jobRouter = require('./server/routes/jobRoutes');
-const ConnectionRoutes = require("./server/routes/ConnectionRoutes")
-const ChatRoutes = require("./server/routes/Chat")
+
+//Search Functionality
 const UserRoutes = require('./server/routes/user')
+
+//Not Functional Now
+const ChatRoutes = require("./server/routes/Chat")
 
 //Starting app
 const app = express();
 app.use(cookieParser());
 
 
-//Middlewares
+//MIDDLEWARES
+
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true,
 }));
     
-
-//Middlewares
-
-
 app.use(helmet());
+
 app.use(express.json())
 
 app.use((req,res,next)=>
@@ -39,9 +55,9 @@ app.use((req,res,next)=>
     res.header("Access-Control-Allow-Credentials",true)
     next();
 })
-app.use(helmet());
-app.use(express.json())
 
+
+//Mutler Function for Storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './client/public/uploads')
@@ -62,7 +78,7 @@ app.post("/api/v1/upload",upload.single("file"),(req,res)=>
 
 
 // Attach the database connection to all routes under '/api/v1'
-app.use('/api/v1', attachDb);
+app.use('/api/v1', attachDB);
 
 //Routing Middlewares
 app.use('/api/v1/persons', personRouter);

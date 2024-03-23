@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Typography, CircularProgress, Link, Avatar } from '@mui/material';
 import axios from 'axios';
+import { makeRequest } from "../../axios";
+
 import { useNavigate } from 'react-router-dom';
 
 const Affiliates = ({ user_id }) => {
@@ -9,20 +11,21 @@ const Affiliates = ({ user_id }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const response = await axios.get(`http://127.0.0.1:3000/api/v1/institutes/${user_id}/affiliates`);
-        setAffiliates(response.data.affiliates);
-        console.log(affiliates[0].ProfilePic)
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching employees:', error);
-        setLoading(false);
-      }
-    };
+  const fetchAffiliates = async () => {
+    try {
+      const response = await makeRequest.get(`/institutes/${user_id}/affiliates`);
+      setAffiliates(response.data.affiliates);
+      console.log(response.data.affiliates[0].ProfilePic);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching affiliates:', error);
+      setLoading(false);
+    }
+  };
 
-    fetchEmployees();
-  }, [user_id]);
+  fetchAffiliates();
+}, [user_id]);
+
 
   const handleCardClick = (affiliate) => {
     navigate(`/profile/${affiliate.user_id}`);

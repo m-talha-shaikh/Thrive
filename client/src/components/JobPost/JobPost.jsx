@@ -2,6 +2,8 @@ import './JobPost.scss'
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { makeRequest } from "../../axios";
+
 import {
   TextField,
   Button,
@@ -23,28 +25,26 @@ const JobPost = ({ organization, user_id }) => {
   }, [setValue]);
 
   const onSubmit = async (data) => {
-    try {
-        console.log(user_id)
-      const apiUrl = `http://127.0.0.1:3000/api/v1/organizations/${user_id}/jobs`;
+  try {
+    console.log(user_id);
+    const apiUrl = `/organizations/${user_id}/jobs`; // Using relative URL
 
+    const formattedData = {
+      ...data,
+      organization_id: organization.organization_id,
+      post_date: new Date().toISOString(),
+      expiry_date: new Date().toISOString(),
+      is_active: true,
+    };
 
-      const formattedData = {
-        ...data,
-        organization_id: organization.organization_id,
-        post_date: new Date().toISOString(),
-        expiry_date: new Date().toISOString(),
-        is_active: true,
-      };
+    const response = await makeRequest.post(apiUrl, formattedData); // Using makeRequest
 
-      const response = await axios.post(apiUrl, formattedData);
+    console.log('Job posted successfully:', response.data);
+  } catch (error) {
+    console.error('Error posting job:', error);
+  }
+};
 
-
-      console.log('Job posted successfully:', response.data);
-    } catch (error) {
-
-      console.error('Error posting job:', error);
-    }
-  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -90,15 +90,15 @@ const JobPost = ({ organization, user_id }) => {
       <FormControl fullWidth margin="normal">
         <InputLabel id="job-type-label">Job Type</InputLabel>
         <Select
-          {...register('job_type')}
-          labelId="job-type-label"
-          label="Job Type"
-          defaultValue="full_time" // Set the default value
-        >
-          <MenuItem value="full_time">Full Time</MenuItem>
-          <MenuItem value="part_time">Part Time</MenuItem>
-          <MenuItem value="contract">Contract</MenuItem>
-        </Select>
+        {...register('job_type')}
+        labelId="job-type-label"
+        label="Job Type"
+        defaultValue="full_time"
+      >
+        <MenuItem value="full_time">Full Time</MenuItem>
+        <MenuItem value="part_time">Part Time</MenuItem>
+        <MenuItem value="contract">Contract</MenuItem>
+      </Select>
       </FormControl>
 
       <TextField
