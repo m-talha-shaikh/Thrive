@@ -42,7 +42,7 @@ app.use(cookieParser());
 //MIDDLEWARES
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://192.168.100.7:5173","http://192.168.100.3"],
     credentials: true,
 }));
     

@@ -1,113 +1,275 @@
-.login{
-    height: 100vh;
-    width: 100vw;
-    background-color: rgb(170, 204, 231);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-} 
+/* styles.module.css */
 
-.card{
-    display: flex;
-    background-color: white;
-    width: 100%;
-    border-radius: 30px;
-    min-height: 100%;
-    overflow: hidden;
-}
-.left{
-    flex: 1;
-    background: linear-gradient(rgba(70, 93, 110, 0.5),rgba(227, 227, 227, 0.5)) ,url(https://images.pexels.com/photos/2422294/pexels-photo-2422294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1) center;
-     background-size: cover;
-     border-radius: 30px 0 0px 30px;
-     padding: 50px;
-     flex-direction: column;
-     gap: 30px;
-     color: white;
-}
-.left > h1{
-     font-size: 100px;
-     line-height: 100px;
-}
-.left > span{
-    font-size: 14px;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
+
+
+body {
+  height: 100vh;
+  width: 100%;
+  background-color: white;
+  font-family: "Poppins", sans-serif;
 }
-.left > div button{
-    width: 50%;
-    margin-top: 10px;
-    padding: 10px;
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.signuptext{
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+  color: #525252;
+  margin-bottom: 20px;
+}
+.container > div {
+  flex-basis: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container > div > p {
+  font-size: 16px;
+  color: #525252;
+  margin-bottom: 20px;
+}
+
+.textfield {
+  width: 364px;
+  height: 52px;
+  align-items: center;
+  background-color: #edf7ff;
+  margin: 10px;
+  display: flex;
+  border-radius: 16px 16px 16px 16px; 
+}
+
+.textfield > input,
+.textfield > input:focus {
+  border: none;
+  outline: none;
+  background-color: #edf7ff;
+  width: 364px;
+  height:49px;
+  border-radius: 16px;
+}
+
+.textfield img {
+  margin: 0 24px;
+}
+
+.btn {
+  height: 52px;
+  width: 364px;
+  background: linear-gradient(140deg, #5ba0ce, #5f97e0);
+  color: #f0edff;
+  font-weight: 700;
+  border-radius: 16px;
+  border: none;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+.btn:hover {
+    height: 52px;
+    width: 364px;
+    background: linear-gradient(140deg, #5ba0ce, #086cee);
+    color: #f0edff;
+    font-weight: 700;
+    border-radius: 16px;
     border: none;
-    background-color: rgb(255, 255, 255);
-    color: rgb(139, 201, 255);
-    border-radius: 10px;
-    font-weight: bold;
-}
-.left > div button:hover{
-    width: 50%;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: rgb(156, 209, 255);
-    color: rgb(255, 255, 255);
-    border-radius: 10px;
-    font-weight: bold;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    margin-top: 15px;
     cursor: pointer;
+  }
+
+.loginbtn {
+  border: 1px solid #f0edff;
+  border-radius: 16px;
+  width: 364px;
+  height: 52px;
+  margin: 5px;
+  background-color: #ffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.loginbtn1 {
+    border: 1px solid #ffffff;
+    border-radius: 16px;
+    width: 364px;
+    height: 52px;
+    margin: 5px;
+    background-color: #ffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+.loginbtn:hover {
+    border: 1px solid #f0edff;
+    border-radius: 16px;
+    width: 364px;
+    height: 52px;
+    margin: 5px;
+    background-color: #ffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+.loginbtn img {
+  margin: 25px;
 }
 
-.right{
-    flex: 1;
-     border-radius: 30px 0 0px 30px;
-     padding: 50px;
-     align-items: center;
-     flex-direction: column;
-     gap: 30px;
-     justify-content: center;
-     color: rgb(1, 0, 0);
-    
+.text {
+  margin: 25px;
 }
-.right > h1 {
-    color: rgb(67, 95, 105);
-    font-size: 50px;
+.signup {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
 }
-.right > form{
-     display: flex;
-     flex-direction: column;
-     gap: 30px;
+
+.reg {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 20px;
+  }
+.imgsection {
+  background: linear-gradient(30deg, #5ba0ce, #5f97e0);
+  height: 100%;
+  width: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
-.right >form input{
-   border: none;
-    border-bottom: 1px solid lightgray;
-    padding: 20px 10px;
-}
-.right >form button{
-   width: 50%;
-   padding: 10px;
-   font-weight: bold;
-   font: 1em sans-serif;
-   border: none;
-   border-radius: 10px;
-   background-color: rgb(162, 225, 255);
-   color: aliceblue;
-}
-.right >form button:hover{
-   width: 50%;
-   padding: 10px;
-   background-color: rgb(255, 255, 255);
-   color: rgb(162, 225, 255);
-   border: 2px solid rgb(162, 225, 255);
-   cursor: pointer;
-}
-@keyframes fadeIn {
-    0% {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(0);
-        opacity: 1;
-      }
+.imageContainer {
+    width: 100%;
+    height: 100%;
+    position: relative; /* Ensure the container is positioned relatively */
+  }
+  /* styles.module.css */
+
+/* Existing styles... */
+
+.selectContainer {
+    width: 364px;
+    height: 52px;
+    position: relative;
+    margin: 10px;
   }
   
-  .fadeIn {
-    animation: fadeIn 1s ease-in-out;
+  .selectContainer select {
+    width: 100%;
+    height: 100%;
+    background-color: #edf7ff;
+    border: none;
+    outline: none;
+    border-radius: 16px;
+    padding: 0 24px;
+    font-size: 16px;
+    color: #525252;
+  }
+  
+  .selectContainer::after {
+    content: "\25BE"; /* Unicode character for down arrow */
+    font-size: 16px;
+    color: #525252;
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    pointer-events: none; /* Ensures the arrow doesn't interfere with select functionality */
+  }
+  /* Style for date input */
+.dateContainer {
+    width: 300px;
+    height: 52px;
+    position: relative;
+    margin-bottom: 5px;
+    margin-left: -50px;
+  }
+  
+  .dateContainer input[type="date"] {
+    width: 100%;
+    height: 100%;
+    background-color: #edf7ff;
+    border: none;
+    outline: none;
+    border-radius: 16px;
+    padding: 0 24px;
+    font-size: 16px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: #525252;
+  }
+  
+  /* Additional styles for date input focus state */
+  .dateContainer input[type="date"]:focus {
+    box-shadow: 0 0 0 2px #5f97e0; /* Example focus style */
+  }
+  
+  
+  /* Additional styles for select focus state */
+  .selectContainer select:focus {
+    box-shadow: 0 0 0 2px #5f97e0; /* Example focus style */
+  }
+  
+  
+  .image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 1;
+    transform: scale(1); /* Initial scale */
+    transition: transform 0.5s ease-in-out; /* Transition on scale */
+  }
+  
+
+.card {
+  width: 412px;
+  height: 524px;
+  color: azure;
+}
+
+.card > div {
+  height: 80%;
+  width: 100%;
+}
+
+.card img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+.loginside,
+.registerside {
+  transition: all 0.5s ease-in-out;
+}
+.hidden {
+    opacity: 0;
+  transform: scale(0);
+  }
+.moveLeft {
+    transform: translateX(-100%);
+  }
+  
+  .moveRight {
+    transform: translateX(0%);
   }

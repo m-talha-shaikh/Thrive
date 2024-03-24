@@ -69,9 +69,9 @@ const Navbar = () => {
         <Link to="/" style={{ textDecoration: 'none' }}>
           <span style={{ fontSize: '30px', fontFamily: 'cursive' }}>Thrive</span>
         </Link>
-        <HomeRoundedIcon />
-        {darkMode ? <LightModeIcon onClick={toggel} /> : <DarkModeIcon onClick={toggel} />}
-        <GridViewIcon />
+        
+        
+      
         <div className="search">
           <form onSubmit={handleSearchSubmit}>
             <SearchIcon />
@@ -106,16 +106,14 @@ const Navbar = () => {
         </div>
       </div>
       <div className="right">
-        <MessageIcon onClick={handleChatClick} style={{ cursor: 'pointer' }} />
-        <NotificationsActiveIcon />
-        <PersonIcon />
+       
+        
         <div className="user">
           <img src={`../../../public/uploads/${currentUser.data.user.ProfilePic}`} alt="" />
           <span>{currentUser.data.user.username}</span>
         </div>
-        <button className="button" onClick={handleLogout}>
-          Logout
-        </button>
+        {darkMode ? <LightModeIcon onClick={toggel} /> : <DarkModeIcon onClick={toggel} />}
+        
       </div>
     </div>
   );

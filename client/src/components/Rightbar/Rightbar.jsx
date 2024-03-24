@@ -39,7 +39,7 @@ const Rightbar = () => {
     return userData.map((contact) => (
       <div className="user" key={contact.user_id}>
         <div className="userInfo">
-          <img src={"../../../public/uploads/" + contact.ProfilePic} alt="" />
+          <img src={"../../../public/uploads/user.png" } alt="" />
           <div className="online">
 
           </div>

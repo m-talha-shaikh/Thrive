@@ -24,23 +24,31 @@
             padding: 5px;
             margin-top: 20px;
             border-radius: 15px;
+            font-family: "Poppins", sans-serif;
+            font-size: large;
             box-shadow: 9px -2px 22px -4px rgba(173,173,173,0.75);
 -webkit-box-shadow: 9px -2px 22px -4px rgba(173,173,173,0.75);
 -moz-box-shadow: 9px -2px 22px -4px rgba(173,173,173,0.75);
 background-color: themed("bg");
             span{
                 color: gray;
+                display: flex; /* Use flexbox */
+                justify-content: center; /* Center horizontally */
+                align-items: center; /* Center vertically */
+                margin: 10px;
+                
             }
             .user{
+
                 display: flex;
-                align-items: center;
-                justify-content: space-between ;
-                margin: 10px 0px;
+             
+                margin: 15px 20px;
                 .userInfo{
                  display: flex;
                  align-items: center;
                  gap: 20px;
                  position: relative;
+                 
                  img{
                     width: 40px;
                     height: 40px;
@@ -58,9 +66,14 @@ background-color: themed("bg");
                  }
                  p{
                     color:themed("textColorSoft");
+                    font-weight: bold;
+                 font-size: medium;
                  }
                  span{
-                    font-weight: 500;
+                
+                    
+                    font-family: "Poppins", sans-serif;
+                    font-size: medium;
                     color: themed("textColor");
                  }
                 }

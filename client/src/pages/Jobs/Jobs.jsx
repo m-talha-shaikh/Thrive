@@ -41,7 +41,7 @@ const Jobs = () => {
 //   console.log(jobData);
 
     return (
-        <>
+        <div className='container1'>
         <QueryClientProvider client={queryClient}>
             <div className="jobs-container">
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -136,7 +136,7 @@ const Jobs = () => {
           ))}
       </div>
     )}
-        </>
+        </div>
     );
 };
 
