@@ -6,7 +6,11 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require(`cors`);
 const cookieParser = require('cookie-parser');
-const multer  = require('multer')
+const multer = require('multer');
+
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
+const path = require('path');
 
 //Database Connection
 const attachDB = require('./server/utils/dbMiddleware');
@@ -56,8 +60,69 @@ app.use((req,res,next)=>
     next();
 })
 
+// // Configure Cloudinary
+// cloudinary.config({ 
+//   cloud_name: 'dxndiu1hz', 
+//   api_key: '937266898967345', 
+//   api_secret: 'TMVVoo_962LdFFBUjKc4fA_Q_Rk' 
+// });
 
-//Mutler Function for Storage
+// // Configure multer to use both Cloudinary and local storage
+// const cloudinaryStorage = new CloudinaryStorage({
+//   cloudinary: cloudinary,
+//   params: {
+//     folder: 'uploads', // specify the folder in your Cloudinary account
+//     allowed_formats: ['jpg', 'jpeg', 'png', 'pdf'] // specify allowed file formats
+//   }
+// });
+
+// const localDiskStorage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, './client/public/uploads') // local storage destination
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now()+file.originalname )// local storage filename
+//   }
+// });
+
+// const uploadCloudinary = multer({ storage: cloudinaryStorage });
+// const uploadLocal = multer({ storage: localDiskStorage });
+
+// app.post('/api/v1/upload', (req, res) => {
+//   console.log("Trying to upload...");
+
+//   // Using uploadLocal middleware to store file in local storage
+//   uploadLocal.single('file')(req, res, function (err) {
+//     if (err) {
+//       console.error('Error uploading to local storage:', err);
+//       return res.status(500).send({ message: 'Error uploading file to local storage' });
+//     }
+
+//     // Using uploadCloudinary middleware to store file in Cloudinary
+//     uploadCloudinary.single('file')(req, res, function (err) {
+//       if (err) {
+//         console.error('Error uploading to Cloudinary:', err);
+//         if (err.http_code === 400 && err.message.includes('The file size exceeds')) {
+//           return res.status(400).send({ message: 'File size exceeds the limit' });
+//         }
+//         if (err.http_code === 400 && err.message.includes('Invalid file type')) {
+//           return res.status(400).send({ message: 'Invalid file type' });
+//         }
+//         // Log detailed Cloudinary upload error
+//         console.error('Cloudinary upload error:', err);
+//         return res.status(500).send({ message: 'Error uploading file to Cloudinary' });
+//       }
+
+//       // Both uploads successful
+//       console.log('File uploaded successfully to both local storage and Cloudinary');
+//       return res.status(200).send({ message: 'File uploaded successfully to both local storage and Cloudinary' });
+//     });
+//   });
+// });
+
+
+
+// //Mutler Function for Storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './client/public/uploads')
@@ -68,7 +133,8 @@ const storage = multer.diskStorage({
     }
   })
   
-  const upload = multer({ storage: storage })
+const upload = multer({ storage: storage })
+
 app.post("/api/v1/upload",upload.single("file"),(req,res)=>
 {
     const file =req.file;

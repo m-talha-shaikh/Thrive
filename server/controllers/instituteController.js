@@ -70,7 +70,7 @@ exports.getAffiliates = async (req, res, next) => {
 exports.updateInstitute = async (req, res, next) => {
   const user_id = req.params.user_id;
 
-  console.log(req.body);
+  // console.log(req.body);
   const {
     name,
     institute_type,
@@ -144,11 +144,11 @@ exports.updateInstitute = async (req, res, next) => {
   try {
     // Update Institute
     const instituteUpdateResult = await executeQuery(req.db, updateInstituteQuery, instituteQueryValues);
-    console.log('Institute Update Result:', instituteUpdateResult);
+    // console.log('Institute Update Result:', instituteUpdateResult);
 
     // Update User
     const userUpdateResult = await executeQuery(req.db, updateUserQuery, userQueryValues);
-    console.log('User Update Result:', userUpdateResult);
+    // console.log('User Update Result:', userUpdateResult);
 
     res.json({ message: 'Institute and user updated successfully' });
   } catch (error) {

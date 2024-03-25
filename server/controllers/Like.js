@@ -15,7 +15,6 @@ exports.getLikes =async (req,res)=>
 exports.postLikes =async (req,res)=>
 {
     try {
-        console.log(req.body);
         const q = "INSERT INTO Likes (`user_id`, `post_id`,`like_date`) VALUES (?)";
         const values =[
             req.body.user_id,
@@ -31,7 +30,7 @@ exports.postLikes =async (req,res)=>
 }
 exports.deleteLikes =async (req,res)=>
 {
-    console.log(req.query);
+    // console.log(req.query);
     try {
         const q = "DELETE FROM Likes WHERE `user_id`= ? AND `post_id`= ? ";
         const post = await executeQuery(req.db, q, [req.query.user_id,req.query.post_id]);

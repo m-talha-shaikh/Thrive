@@ -1,11 +1,12 @@
 const executeQuery = require('../utils/executeQuery');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
+
 exports.getPost = async (req, res) => {
   // Access user_id from req.user
 
 
-  console.log(req.params);
+//   console.log(req.params);
   // Check if the user is authenticated
   user_id = req.params.userId;
 
@@ -23,7 +24,6 @@ exports.getPost = async (req, res) => {
 };
 exports.addPost = async (req, res) => {
 
-    
    
     try {
         const q = "INSERT INTO posts (`user_id`, `content`, `image_url`, `post_date`) VALUES (?)";
@@ -40,9 +40,9 @@ exports.addPost = async (req, res) => {
         return res.status(500).json(err);
     }
 }
+
 exports.deletePost = async (req, res) => {
     
-    console.log(req.query);
     try {
         const q1 = `DELETE FROM Likes Where post_id =? `;
         await executeQuery(req.db, q1, [req.query.post_id])

@@ -26,7 +26,6 @@ const JobPost = ({ organization, user_id }) => {
 
   const onSubmit = async (data) => {
   try {
-    console.log(user_id);
     const apiUrl = `/organizations/${user_id}/jobs`; // Using relative URL
 
     const formattedData = {
@@ -39,7 +38,7 @@ const JobPost = ({ organization, user_id }) => {
 
     const response = await makeRequest.post(apiUrl, formattedData); // Using makeRequest
 
-    console.log('Job posted successfully:', response.data);
+    // console.log('Job posted successfully:');
   } catch (error) {
     console.error('Error posting job:', error);
   }
