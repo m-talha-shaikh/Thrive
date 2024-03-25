@@ -19,6 +19,33 @@ body {
   align-items: center;
   position: relative;
 }
+.invalidCredentials {
+  background: linear-gradient(140deg, #dd4444, #e06e5f);
+  color: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  position: relative;
+  border-radius: 10px;
+}
+.invalidCredentials span {
+  display: inline-block;
+  margin-right: 15px;
+}
+.closeButton {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  border: none;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: #f9f9f9;
+}
+
 .signuptext{
     font-family: "Poppins", sans-serif;
     font-size: 16px;
