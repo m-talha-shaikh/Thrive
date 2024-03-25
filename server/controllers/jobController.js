@@ -71,7 +71,7 @@ exports.getApplicants = async (req, res, next) => {
 
 
 exports.getJobs = async (req, res, next) => {
-  console.log(req.query);
+  // console.log(req.query);
   let {
     keyword,
     min_salary,
@@ -83,8 +83,6 @@ exports.getJobs = async (req, res, next) => {
   
   min_salary =  parseFloat(min_salary);
   max_salary = parseFloat(max_salary);
-  console.log(min_salary);
-  console.log("jobby", jobType);
   
   const filters = [];
   const queryValues = [];
@@ -94,10 +92,10 @@ exports.getJobs = async (req, res, next) => {
   `;
 
   if (keyword) {
-    console.log("Yay");
+ 
     searchQuery += ` AND MATCH (J.title, J.description) AGAINST (? IN NATURAL LANGUAGE MODE)`;
     filters.push(keyword);
-    console.log(filters);
+    // console.log(filters);
   }
 
   if (min_salary) {
@@ -141,8 +139,8 @@ exports.getJobs = async (req, res, next) => {
 }
 
 
-  console.log(filters);
-  console.log(searchQuery);
+  // console.log(filters);
+  // console.log(searchQuery);
 
   try {
     const results = await executeQuery(req.db, searchQuery, [
@@ -153,7 +151,7 @@ exports.getJobs = async (req, res, next) => {
     job.salary_min = parseFloat(job.salary_min);
     job.salary_max = parseFloat(job.salary_max);
   });
-    console.log(results);
+    // console.log(results);
 
     res.json(results);
   } catch (error) {

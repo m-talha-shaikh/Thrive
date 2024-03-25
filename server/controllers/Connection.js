@@ -43,7 +43,7 @@ exports.getUsernotFriends =async (req,res)=>
 exports.addFriend =async (req,res)=>
 {
     try {
-        console.log(req.body);
+        // console.log(req.body);
         const q = "INSERT INTO friends (`user_id`, `friend_id`,`friendship_date`) VALUES (?)";
         const values =[
             req.body.user_id,

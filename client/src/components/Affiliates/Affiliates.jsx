@@ -15,7 +15,6 @@ const Affiliates = ({ user_id }) => {
     try {
       const response = await makeRequest.get(`/institutes/${user_id}/affiliates`);
       setAffiliates(response.data.affiliates);
-      console.log(response.data.affiliates[0].ProfilePic);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching affiliates:', error);

@@ -7,7 +7,6 @@ import moment from "moment";
 
 const comments = ({postId})=>
 {
-  console.log("sdgnrjgjrgjrjnrnjrgjnnjdgvkekjer");
     const [content,setcontent]= useState("");
     const {currentUser}= useContext(AuthContext);
     const { isLoading, error, data } = useQuery('comments', async () => {
@@ -42,7 +41,6 @@ const comments = ({postId})=>
     mutation.mutate({ content,postId ,user_id:currentUser.data.user.user_id  });
     setcontent("");
   };
-  console.log(data);
    return(
     <div className="comments">
         <div className="write">

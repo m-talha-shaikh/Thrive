@@ -3,8 +3,6 @@ const executeQuery = require("./../utils/executeQuery");
 
 // UpdatePerson route
 exports.UpdatePerson = async (req, res) => {
-  console.log("HI");
-  console.log(req.headers);
 
   try {
     // Call the stored procedure to update person information
@@ -30,8 +28,6 @@ exports.UpdatePerson = async (req, res) => {
 
 
 exports.getPerson = async (req, res, next) => {
-  console.log("HEY THIS IS IDENTIFICTAITON print in getPErson controller to check jwt things");
-  console.log(req.headers.authorization);
 
   const user_id = req.params.user_id;
 
@@ -101,7 +97,6 @@ exports.getPerson = async (req, res, next) => {
       certifications: results[3],
     };
 
-    console.log(userProfile);
     res.json(userProfile);
   } catch (error) {
     console.error('Database error:', error);
@@ -177,7 +172,6 @@ exports.createEducation = async (req, res, next) => {
       educationRecord: results[0][0],
     };
 
-    console.log('Done');
     res.json(educationRecord);
   } catch (error) {
     console.error('Database error:', error);

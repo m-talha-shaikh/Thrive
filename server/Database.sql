@@ -2,13 +2,16 @@ CREATE DATABASE IF NOT EXISTS THRIVE_DB;
 Select * from user;
 USE THRIVE_DB;
 CREATE TABLE `user` (
-  `user_id` int PRIMARY KEY AUTO_INCREMENT,
-  `username` varchar(255) UNIQUE NOT NULL,
-  `email` varchar(255) UNIQUE NOT NULL,
-  `account_type` varchar(255) NOT NULL ,
-  `password` varchar(255) NOT NULL,
-  `ProfilePic` varchar(255) ,
-  `CoverPic` varchar(255)
+  `user_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `username` VARCHAR(255) UNIQUE NOT NULL,
+  `email` VARCHAR(255) UNIQUE NOT NULL,
+  `account_type` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `ProfilePic` VARCHAR(255),
+  `CoverPic` VARCHAR(255),
+  `otp` VARCHAR(6),
+  `otp_time` TIMESTAMP,
+  `verified_user` BOOLEAN
 );
 
 CREATE TABLE `location` (
@@ -432,6 +435,12 @@ MODIFY state int;
 ALTER TABLE certifications
 MODIFY issue_date date,
 MODIFY expiration_date date;
+
+ALTER TABLE `user` ADD COLUMN `otp` VARCHAR(6);
+
+ALTER TABLE `user` ADD COLUMN `otp_time` TIMESTAMP;
+
+ALTER TABLE `user` ADD COLUMN `verified_user` BOOLEAN;
 
 
 

@@ -10,6 +10,8 @@ const router = express.Router();
 //   authController.restrictTo('person')
 // );
 
+router.use('/:user_id', authController.protect);
+
 //Only Authentication Needed
 
 router.route('/').get(jobController.getJobs);
