@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const executeQuery = require('../utils/executeQuery');
 const argon2 = require('argon2');
 const { error } = require('console');
+const nodemailer = require('nodemailer')
 
 const signToken = (user_id) => {
   return jwt.sign({ user_id }, 'my-ultra-secret', {
@@ -32,6 +33,88 @@ const createSendToken = (user, statusCode, res) => {
     },
   });
 };
+
+
+exports.generateOTP = async (req, res) => {
+    const { email } = req.body;
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const updateQuery = `
+    UPDATE user 
+    SET otp = '${otp}', otp_time = NOW()
+    WHERE email = '${email}';
+`;
+
+
+    try {
+        await executeQuery(req.db, updateQuery);
+    } catch (error) {
+        console.error('Error inserting OTP into the database:', error);
+        return res.status(500).json({ message: 'Error generating OTP', error: error.message });
+    }
+
+    const transporter = nodemailer.createTransport({
+    service: "gmail",
+    port: 587,
+    secure: false,
+    auth: {
+        user: 'thrivecorp.pk@gmail.com',
+        pass: 'reollmjpgkxsztrm'
+    }
+});
+
+
+const mailOptions = {
+    from: {
+        name: 'Thrive Corporation',
+        address: 'thrivecorp.pk@gmail.com'
+    },
+    to: email,
+    subject: 'Your OTP for verification',
+    text: `Welcome to the Thrive App. Your OTP (One-Time Password) is: ${otp}`
+};
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('Email sent with OTP');
+        return res.status(200).json({ message: 'OTP sent successfully' });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        return res.status(500).json({ message: 'Error sending OTP email', error: error.message });
+    }
+};
+
+
+exports.verifyOTP = async (req, res) => {
+    const { email, otp } = req.body;
+
+    const checkQuery = `
+        SELECT user_id
+        FROM user 
+        WHERE email = '${email}' 
+        AND otp = '${otp}' 
+        AND otp_time >= NOW() - INTERVAL 10 MINUTE`;
+
+    try {
+        const result = await executeQuery(req.db, checkQuery);
+        if (result.length === 0) {
+            return res.status(400).json({ message: 'Invalid OTP or OTP expired' });
+        }
+
+        const userId = result[0].user_id;
+
+        const updateQuery = `UPDATE user SET verified_user = true WHERE user_id = ${userId}`;
+        await executeQuery(req.db, updateQuery);
+
+        return res.status(200).json({ message: 'User verified successfully' });
+    } catch (error) {
+        console.error('Error verifying user:', error);
+        return res.status(500).json({ message: 'Error verifying user', error: error.message });
+    }
+};
+
+
+
 
 exports.signup = async (req, res, next) => {
   const {
