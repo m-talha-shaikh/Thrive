@@ -1,12 +1,25 @@
 @import "../../style.scss";
-
-.job-details-container {
-    overflow-y: scroll;
-    /* or 'scroll' */
-    scrollbar-width: auto;
-    /* Firefox */
-    scrollbar-color: auto;
-    /* Firefox */
-    -ms-overflow-style: auto;
-    /* IE/Edge */
+.container1{
+    @include themify($themes) {
+        background-color:themed("bgSoft");
+        height: 100vh;
+        .job-details-container {
+            background-color:themed("bgSoft");
+  
+            overflow-y: scroll;
+        
+            scrollbar-width: auto;
+        
+            scrollbar-color: auto;
+        
+            -ms-overflow-style: auto;
+            
+        }
+    }
 }
+        
+    
+
+
+
+

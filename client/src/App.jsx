@@ -101,7 +101,6 @@ function App() {
       path: '/Chat',
       element: 
       <QueryClientProvider client={queryClient}>
-
         <Chat/>
       </QueryClientProvider>
     }
