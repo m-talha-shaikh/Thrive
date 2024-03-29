@@ -6,12 +6,14 @@ import Notification from "../../assets/11.png";
 import Messages from "../../assets/messages.png";
 import settings from "../../assets/settings.png";
 import { AuthContext } from "../../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const Leftbar = () => {
   const [userType, setUserType] = useState("person");
   const [selectedItem, setSelectedItem] = useState(""); // State to track selected item
   const { currentUser, Logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setUserType(currentUser.data.user.account_type);
@@ -58,6 +60,13 @@ const Leftbar = () => {
             <div className={`item ${selectedItem === "messages" ? "selected" : ""}`} onClick={() => handleItemClick("messages")}>
               <img src={Messages} alt="" />
               <span>Messages</span>
+            </div>
+          </Link>
+
+          <Link to={`/resume`} style={{ textDecoration: "none", color: "inherit" }}>
+            <div className={`item ${selectedItem === "settings" ? "selected" : ""}`} onClick={() => handleItemClick("settings")}>
+              <img src={settings} alt="" />
+              <span>Resume Builder</span>
             </div>
           </Link>
 

@@ -15,7 +15,6 @@ exports.getFriends =async (req,res)=>
 }
 exports.getFriends2 =async (req,res)=>
 {
- 
     try {
         const q = `Select user_id,ProfilePic,CoverPic,username From user where user_id IN (Select friend_id from friends where user_id=?)`;
    const friends = await executeQuery(req.db, q, [req.query.userId]);

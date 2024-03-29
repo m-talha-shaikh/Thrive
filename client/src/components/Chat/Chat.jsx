@@ -1,65 +1,113 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Chat.scss";
 import Contact from "./Contact";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { AuthContext } from "../../context/AuthContext";
 import { makeRequest } from "../../axios";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 const Chat = () => {
-  const {currentUser}=useContext(AuthContext) ;
+  const { currentUser } = useContext(AuthContext);
   const [messages, setMessages] = useState({});
   const [newMessage, setNewMessage] = useState("");
   const [selectedContact, setSelectedContact] = useState(null);
-  const { isLoading, error, data } = useQuery('getfriends', async () => { 
-    return  await makeRequest.get( `/Connection/messagingfriends`, {
+  const [conversationExists, setConversationExists] = useState(true); // Track if conversation exists
+  const { isLoading, error, data } = useQuery('getfriends', async () => {
+    return await makeRequest.get(`/Connection/messagingfriends`, {
       params: {
         userId: currentUser.data.user.user_id
       }
     })
       .then((res) => res.data);
   });
-  
-  const handleMessage = (e) => {
-    console.log("new message", e);
-    // Handle incoming messages and update the messages state
-  };
 
-  const handleContactSelection = (contact) => {
-    setSelectedContact(contact);
-    // Load chat history or messages for the selected contact here, if applicable.
+  const queryClient = useQueryClient();
 
-    // For example, update the messages state with the conversation for the selected contact.
-    // This is a placeholder and should be replaced with actual message data.
-    setMessages({
-      [contact]: [
-        { user: "contact", text: "Hello, how can I help you?" },
-        { user: "me", text: "Hi, I have a question." },
-        // Add more messages for the conversation
+  useEffect(() => {
+    const client = new W3CWebSocket('ws://localhost:3000/');
+
+    client.onopen = () => {
+      console.log('WebSocket Client Connected');
+    };
+
+    client.onmessage = (message) => {
+      const dataFromServer = JSON.parse(message.data);
+      handleMessage(dataFromServer);
+    };
+
+    // Store the client instance in a state variable
+    setWebSocketClient(client);
+
+    return () => {
+      client.close();
+    };
+  }, []);
+
+  const [webSocketClient, setWebSocketClient] = useState(null);
+
+  const handleMessage = (message) => {
+    console.log("Received message:", message);
+
+    // Update the messages state with the new message.
+    setMessages((prevMessages) => ({
+      ...prevMessages,
+      [message.user]: [
+        ...(prevMessages[message.user] || []),
+        { user: message.user, text: message.msg },
       ],
-    });
+    }));
   };
-  const mutation = useMutation(
-    async (newPost) => {
-      try {
-        const response = await makeRequest.post("/",newPost);
-        return response.data; // Assuming your response contains the new post data
-      } catch (err) {
-        throw err; 
+
+const handleContactSelection = async (contact) => {
+  setSelectedContact(contact);
+
+  try {
+    const response = await makeRequest.get("/Chat/messages", {
+      params: {
+        user_id_1: currentUser.data.user.user_id,
+        user_id_2: contact // Use the contact parameter directly here
       }
-    },
-    {
-      onSuccess: () => {
-        // Invalidate and refetch
-        queryClient.invalidateQueries(["posts"]);
-      },
-      onError: (err) => {
-        console.log(err);
-      },
-    }
-  );
-  const handleSubmit = (e) => {
+    });
+    
+    // Assuming the response contains an array of messages
+    const messagesData = response.data.messages;
+
+    console.log(messagesData);
+
+    // Map over messagesData to extract necessary information
+    const formattedMessages = messagesData.map(message => ({
+      user: (message.sender_id === currentUser.data.user.user_id) ? "me" : "other",
+      text: message.message_content
+    }));
+
+    // Update the messages state with the formatted messages
+    setMessages({ [contact]: formattedMessages });
+
+    // Set conversationExists to true since messages are received
+    setConversationExists(true);
+  } catch (error) {
+    console.error("Failed to fetch messages:", error);
+    setConversationExists(false);
+  }
+};
+
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle message submission
+
+    try {
+      // Make a POST request to store the message
+      await makeRequest.post("/Chat/messages", {
+        sender_id: currentUser.data.user.user_id,
+        receiver_id: selectedContact,
+        message_content: newMessage
+      });
+      console.log("Message sent successfully");
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
+
     // Update the messages state with the new message.
     setMessages((prevMessages) => ({
       ...prevMessages,
@@ -69,38 +117,53 @@ const Chat = () => {
       ],
     }));
 
+    // Send message using WebSocket
+    if (webSocketClient) {
+      webSocketClient.send(JSON.stringify({
+        type: "message",
+        msg: newMessage,
+        user: currentUser.data.user.user_id, // Assuming user_id is unique
+      }));
+    }
+
     // Clear the message input
     setNewMessage("");
   };
-  
+
   return (
     <div className="chat-container">
       <div className="contacts-pane">
 
-        {isLoading?"Loading":data.map((contact) => (
-             <Contact
-             name={contact.username}
-             status="Online"
-             image={"../../../public/uploads/"+contact.ProfilePic}
-             onClick={() => handleContactSelection(contact.user_id)}
-             key={contact.user_id}
-           />
-          ))}
-       
-        
+        {isLoading ? "Loading" : data.map((contact) => (
+          <Contact
+            name={contact.username}
+            status="Online"
+            image={"../../../public/uploads/" + contact.ProfilePic}
+            onClick={() => handleContactSelection(contact.user_id)}
+            key={contact.user_id}
+          />
+        ))}
+
       </div>
       {selectedContact && (
         <div className="message-pane">
-          <div className="messages">
-            {(messages[selectedContact] || []).map((message, index) => (
-              <div
-                className={`message ${message.user === "me" ? "sent" : "received"}`}
-                key={index}
-              >
-                {message.text}
-              </div>
-            ))}
-          </div>
+          {conversationExists ? (
+            <div className="messages">
+              {(messages[selectedContact] || []).map((message, index) => (
+                <div
+                  className={`message ${message.user === "me" ? "sent" : "received"}`}
+                  key={index}
+                >
+                  {message.text}
+                </div>
+              ))}
+            </div>
+
+          ) : (
+            <div className="no-messages">
+              Say Hi to start a conversation
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="message-form">
             <input
               type="text"
@@ -109,7 +172,7 @@ const Chat = () => {
               placeholder="Type a message..."
               className="message-input"
             />
-            <button type="submit" className="send-button" onClick={handleSubmit}>
+            <button type="submit" className="send-button">
               Send
             </button>
           </form>
@@ -120,3 +183,4 @@ const Chat = () => {
 };
 
 export default Chat;
+
