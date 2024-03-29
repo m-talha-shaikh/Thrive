@@ -161,6 +161,29 @@ CREATE TABLE `friends` (
   FOREIGN KEY (`friend_id`) REFERENCES `user` (`user_id`)
 );
 
+CREATE TABLE `conversation` (
+  `conversation_id` int PRIMARY KEY AUTO_INCREMENT,
+  `user1_id` int NOT NULL,
+  `user2_id` int NOT NULL,
+  `last_message` text,
+  `last_message_date` datetime,
+  FOREIGN KEY (`user1_id`) REFERENCES `user` (`user_id`),
+  FOREIGN KEY (`user2_id`) REFERENCES `user` (`user_id`)
+);
+
+CREATE TABLE `message` (
+  `message_id` int PRIMARY KEY AUTO_INCREMENT,
+  `conversation_id` int NOT NULL,
+  `sender_id` int NOT NULL,
+  `receiver_id` int NOT NULL,
+  `message_content` text,
+  `message_date` datetime,
+  FOREIGN KEY (`conversation_id`) REFERENCES `conversation` (`conversation_id`),
+  FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`),
+  FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`)
+);
+
+
 ALTER TABLE jobs
 ADD FULLTEXT(title, description);
 

@@ -16,6 +16,7 @@ import { DarkmodeContext } from './context/Darkmodecontext';
 import { AuthContext } from './context/AuthContext';
 import Jobs from "./pages/Jobs/Jobs"
 import Job from "./pages/Job/Job"
+import Resume from "./pages/Resume/Resume"
 import { QueryClient,QueryClientProvider,useQuery } from 'react-query';
 
 function App() {
@@ -86,6 +87,10 @@ function App() {
         {
           path: 'jobs/:job_id',
           element: <Job/>
+        },
+        {
+          path: '/resume',
+          element: <Resume/> 
         }
       ]
     },
