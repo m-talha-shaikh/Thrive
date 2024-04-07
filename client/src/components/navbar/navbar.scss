@@ -12,7 +12,7 @@
     top: 0;
     background-color: themed("bg");
     color: themed("textColor");
-    z-index: 999;
+    
 
     .button {
       border: none;
@@ -47,13 +47,19 @@
         border: 1px solid themed("border");
         border-radius: 5px;
         padding: 5px;
-        margin-left: 6rem;
+        margin-left: 30rem;
+        border-radius: 50px;
+        background-color: transparent; /* Added transparent background */
         input {
           border: none;
-          width: 500px;
-          background-color:themed("bgSoft");;
-          color: themed("bg");
-
+          width: 500px; /* Modified width */
+          background-color: transparent;
+          color: themed("textColorSoft");
+          transition: border-color 0.3s ease;
+          &:focus {
+            outline: none;
+            border-color: themed("logo"); /* Canged border color on focus */
+          }
           @include mobile {
             display: none;
           }
@@ -66,34 +72,49 @@
             outline: none;
           }
         }
+        button[type="submit"] {
+          background-color: themed("textColorSoft"); /* Changed background color */
+          border: none;
+          cursor: pointer;
+          
+          &:hover {
+            opacity: 0.7; /* Reduced opacity on hover */
+          }
+        }
 
         /* Added styles for search results */
         .search-results {
           position: absolute;
-          top: 100%; /* Position the results below the search bar */
-          left: 0;
+          top: calc(100% + 5px); 
+          
           width: 100%;
           background-color:themed("bg");
           border: 1px solid #ccc;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           padding: 8px;
-          z-index: 1;
+         z-index: 2;
           color: themed("textColor");
           .user{
             display: flex;
             align-items: center;
-            justify-content: space-between ;
+            justify-content: space-between;
             margin: 10px 0px;
+            padding: 8px; /* Add padding */
+            transition: background-color 0.3s ease;
+            background-color: themed("bgSoft");
+            &:hover {
+              background-color:themed("border"); // Add hover effect
+            }
             .userInfo{
              display: flex;
              align-items: center;
              gap: 20px;
              position: relative;
              img{
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                object-fit: cover;
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              object-fit: cover;
              }
              .online{
                 width: 12px;
@@ -164,4 +185,4 @@
       }
     }
   }
-}
+} 

@@ -45,12 +45,18 @@ const Navbar = () => {
     navigate('/Chat');
   };
 
-  const handleSearchSubmit = async (event) => {
-    event.preventDefault();
-    const searchQuery = event.target.searchInput.value;
+  const handleSearchChange = async (event) => {
+    const searchQuery = event.target.value;
 
-    const results = await searchUsers(searchQuery);
-    console.log(results);
+    if (searchQuery.trim() === '') {
+      // If search query is empty, hide search results
+      setShowResults(false);
+      setSearchResults([]);
+    } else {
+      // Otherwise, fetch search results
+      const results = await searchUsers(searchQuery);
+      console.log(results);
+    }
   };
 
   const handleSearchBlur = () => {
@@ -63,6 +69,7 @@ const Navbar = () => {
     setSearchResults([]);
     setShowResults(false);
   };
+
   return (
     <div className="navbar">
       <div className="left">
@@ -70,53 +77,50 @@ const Navbar = () => {
           <span style={{ fontSize: '30px', fontFamily: 'cursive' }}>Thrive</span>
         </Link>
         
-        
-      
         <div className="search">
-          <form onSubmit={handleSearchSubmit}>
-            <SearchIcon />
-            <input
-              type="text"
-              name="searchInput"
-              placeholder="Search..."
-              onBlur={handleSearchBlur}
-            />
-            <button type="submit"> <SearchIcon /></button>
-            {showResults && searchResults.length > 0 && (
-              <button className="cancel-button" onClick={handleCancelSearch}>
-                <CancelIcon />
-              </button>
-            )}
-          </form>
+          <SearchIcon />
+          <input
+            type="text"
+            name="searchInput"
+            placeholder="Search..."
+            onChange={handleSearchChange}
+            onBlur={handleSearchBlur}
+          />
           {showResults && searchResults.length > 0 && (
-            <div className="search-results">
-              {searchResults.map((result) => (
-               <div className="user" key={result.user_id}>
-               <div className="userInfo">
-                 <img src={"../../../public/uploads/" + result.ProfilePic} alt="" />
-                
-                 <Link to={`/profile/${result.user_id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                   <span>{result.username}</span>
-                 </Link>
-               </div>
-             </div>
-              ))}
-            </div>
+            <button className="cancel-button" onClick={handleCancelSearch} style={{background:"transparent"}}>
+              <CancelIcon />
+            </button>
           )}
+{showResults && searchResults.length > 0 && (
+  <div className="search-results">
+    {searchResults.map((result) => (
+      
+      
+        <div className="user">
+          <div className="userInfo">
+          <Link to={`/profile/${result.user_id}`} key={result.user_id} style={{textDecoration:"none",color:"inherit"}}>
+            <img src={`../../../public/uploads/${result.ProfilePic}`} alt="" />
+            </Link>
+            <span>{result.username}</span>
+          </div>
+        </div>
+  
+                      
+
+    ))}
+  </div>
+)}
         </div>
       </div>
       <div className="right">
-       
-        
         <div className="user">
           <img src={`../../../public/uploads/${currentUser.data.user.ProfilePic}`} alt="" />
           <span>{currentUser.data.user.username}</span>
         </div>
         {darkMode ? <LightModeIcon onClick={toggel} /> : <DarkModeIcon onClick={toggel} />}
-        
       </div>
     </div>
   );
 };
 
-export default Navbar;
+export default Navbar; 
