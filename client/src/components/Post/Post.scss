@@ -45,14 +45,24 @@
           }
         }
           button {
-             top: 30px;
-             right: 0;
+             position: absolute;
+            z-index: 30;
+            margin-left: 58rem;
+            margin-bottom: 90px;
              border: none;
-            background-color: rgb(207, 138, 138);
+             width: 80px;
+             height: 50px;
+             border-radius: 20px;
+            background-color:themed("border");
             padding: 5px;
             cursor: pointer;
-            color: white;
+            color: themed("textColor");
+            transition: background-color 0.3s;
+            &:hover {
+              background-color: rgb(95, 95, 95);
+            }
           }
+          
         
       }
 
@@ -64,6 +74,7 @@
           max-height: 500px;
           object-fit: cover;
           margin-top: 20px;
+          border-radius: 15px;
         }
       }
 
