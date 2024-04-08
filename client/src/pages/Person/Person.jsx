@@ -207,8 +207,8 @@ const handleDeleteCertifications = async (certificationId) => {
     return (
        <div className="profile">
         <div className="images">
-        <div className="cover">{data && data.person && data.person.CoverPic ? ( <img src={`../../../public/uploads/${data.person.CoverPic}`} alt="" className="coverPic" /> ) : ( <p> {error ? "Something went wrong with the cover picture" : isLoading ? "Loading cover picture..." : "No cover picture available"} </p> )}</div>
-        {data && data.person && data.person.ProfilePic ? ( <img src={`../../../public/uploads/${data.person.ProfilePic}`} alt="" className="profilePic" /> ) : ( <p> {error ? "Something went wrong with the profile picture" : isLoading ? "Loading profile picture..." : "No profile picture available"} </p> )}
+        <div className="cover">{data && data.person && data.person.CoverPic ? ( <img src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${data.person.CoverPic}`} alt="" className="coverPic" /> ) : ( <p> {error ? "Something went wrong with the cover picture" : isLoading ? "Loading cover picture..." : "No cover picture available"} </p> )}</div>
+        {data && data.person && data.person.ProfilePic ? ( <img src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${data.person.ProfilePic}`} alt="" className="profilePic" /> ) : ( <p> {error ? "Something went wrong with the profile picture" : isLoading ? "Loading profile picture..." : "No profile picture available"} </p> )}
         </div>
         <div className="profilecontainer">
             <div className="userinfo">
@@ -330,7 +330,7 @@ const handleDeleteCertifications = async (certificationId) => {
         {authorized && ( <Button variant="contained" color="error" onClick={() => handleDeleteEmployment(item.employment_id)} style={{ display: 'inline-block', marginLeft: '10px' }} > Delete </Button> )}
       </div>
       <Link  onClick={() => handleOrganizationClick(item.user_id)} style={{ textDecoration: 'none'}}>
-            <Avatar src={`../../../public/uploads/${item.ProfilePic}`}/>
+            <Avatar src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${item.ProfilePic}`}/>
             <Typography variant="body1">{item.name}</Typography>
      </Link>
       {item.year_left ? (

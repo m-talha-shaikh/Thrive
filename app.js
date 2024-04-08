@@ -45,6 +45,11 @@ app.use(cookieParser());
 
 
 //MIDDLEWARES
+cloudinary.config({
+  cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
+  api_key :process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET
+})
 
 // app.use(cors({
 //     origin: ["http://192.168.100.7:5173","http://192.168.100.3"],
@@ -72,15 +77,14 @@ app.use((req,res,next)=>
 // CODE FOR CLOUDINARY END
 
 // //Mutler Function for Storage
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './client/public/uploads')
-    },
-    filename: function (req, file, cb) {
-   
-      cb(null, Date.now()+file.originalname )
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+      folder:'Thrive', //folder name in your cloundinary account to store images
+      allowedFormats:['jpeg','png','jpg']
     }
-  })
+  
+})
   
 const upload = multer({ storage: storage })
 
@@ -114,6 +118,9 @@ app.all('*', (req, res, next) => {
 })
 
 module.exports = app;
+
+
+
 
 
 

@@ -84,7 +84,7 @@ const handleJobApplicantsClick = async (job_id) => {
           <Link key={applicant.user_id} onClick={() => handleApplicantClick(applicant.user_id)} style={{ textDecoration: 'none' }}>
             <div key={applicant.application_id}>
               <Typography>{`${applicant.first_name} ${applicant.last_name}`}</Typography>
-              <Avatar src={`../../../public/uploads/${applicant.ProfilePic}`} />
+              <Avatar src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${applicant.ProfilePic}`} />
             </div>
           </Link>
         ))}

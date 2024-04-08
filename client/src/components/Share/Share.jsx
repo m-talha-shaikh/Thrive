@@ -87,7 +87,7 @@ const Share = () => {
       <div className="container">
         <div className="top">
           <div className="left">
-            <img src={ "../../../public/uploads/"+currentUser.data.user.ProfilePic} alt="" />
+            <img src={ "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/"+currentUser.data.user.ProfilePic} alt="" />
             <input
               type="text"
               placeholder={`What's on your mind ${currentUser.data.user.username}?`}
