@@ -98,7 +98,7 @@ const Post = ({ post }) => {
 
         <div className="user">
           <div className="userinfo">
-            <img src={"../../../public/uploads/"+post.ProfilePic} alt="" />
+            <img src={"https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/"+post.ProfilePic} alt="" />
             <div className="details">
                 <Link to={`/profile/${post.user_id}`} style={{textDecoration:"none",color:"inherit"}}>
                     <span>{post.username}</span>
@@ -111,7 +111,7 @@ const Post = ({ post }) => {
         </div>
         <div className="content">
             <p>{post.content}</p>
-            <img src={"../../../public/uploads/"+post.image_url} alt="" />
+            <img src={"https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/"+post.image_url} alt="" />
         </div>
         <div className="info">
          <div className="item">

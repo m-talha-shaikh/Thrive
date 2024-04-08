@@ -99,7 +99,7 @@ const Navbar = () => {
         <div className="user">
           <div className="userInfo">
           <Link to={`/profile/${result.user_id}`} key={result.user_id} style={{textDecoration:"none",color:"inherit"}}>
-            <img src={`../../../public/uploads/${result.ProfilePic}`} alt="" />
+            <img src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${result.ProfilePic}`} alt="" />
             </Link>
             <span>{result.username}</span>
           </div>
@@ -114,7 +114,7 @@ const Navbar = () => {
       </div>
       <div className="right">
         <div className="user">
-          <img src={`../../../public/uploads/${currentUser.data.user.ProfilePic}`} alt="" />
+          <img src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${currentUser.data.user.ProfilePic}`} alt="" />
           <span>{currentUser.data.user.username}</span>
         </div>
         {darkMode ? <LightModeIcon onClick={toggel} /> : <DarkModeIcon onClick={toggel} />}

@@ -138,7 +138,7 @@ const handleContactSelection = async (contact) => {
           <Contact
             name={contact.username}
             status="Online"
-            image={"../../../public/uploads/" + contact.ProfilePic}
+            image={"https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/" + contact.ProfilePic}
             onClick={() => handleContactSelection(contact.user_id)}
             key={contact.user_id}
           />
