@@ -64,13 +64,13 @@ const Leftbar = () => {
           </Link>
 
           <Link to={`/resume`} style={{ textDecoration: "none", color: "inherit" }}>
-            <div className={`item ${selectedItem === "settings" ? "selected" : ""}`} onClick={() => handleItemClick("settings")}>
+            <div className={`item ${selectedItem === "settings" ? "selected" : ""}`} onClick={() => handleItemClick("resume")}>
               <img src={settings} alt="" />
               <span>Resume Builder</span>
             </div>
           </Link>
 
-          <Link to={`/jobs`} style={{ textDecoration: "none", color: "inherit" }}>
+          <Link to={`/setting`} style={{ textDecoration: "none", color: "inherit" }}>
             <div className={`item ${selectedItem === "settings" ? "selected" : ""}`} onClick={() => handleItemClick("settings")}>
               <img src={settings} alt="" />
               <span>Settings</span>

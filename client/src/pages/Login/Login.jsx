@@ -1,18 +1,22 @@
 // Login.js - Modified
 
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
 import { makeRequest } from "../../axios"
-
+import { useEffect } from 'react';
 const Login = () => {
   const [showLoginForm, setShowLoginForm] = useState(true);
-
+  const [invalidCredentials, setInvalidCredentials] = useState(false);
+  
   const toggleForm = () => {
     setShowLoginForm(!showLoginForm);
+    setInvalidCredentials(false);
   };
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
   const { Login } = useContext(AuthContext);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -92,6 +96,7 @@ const Login = () => {
 
     } catch (err) {
       // Handle errors
+      alert("Error: " + err.message)
       console.error(err.response?.data || err.message);
     }
   };
@@ -117,28 +122,50 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await Login(inputs_login);
+      if(await Login(inputs_login)==0)
+      {
+        throw new Error;
+      }
       navigate("/");
     } catch (error) {
-      setErr(error.response.data);
+      setInvalidCredentials(true);
+      setInput_login({ email: "", password: "" });
+      setErr(error);
     }
   };
-  
+  useEffect(() => {
+    setInput_login({ email: "", password: "" });
+  }, invalidCredentials);
 
+  const handleCloseInvalidCredentials = () => {
+    setInvalidCredentials(false);
+    setErr(null);
+    emailRef.current.value = '';
+    passwordRef.current.value = '';
+    setInput_login({ email: "", password: "" });
+  };
   return (
     <div className={styles.container}>
     {/* Login Section */}
     <div className={`${styles.loginside} ${showLoginForm ? styles.moveRight : styles.moveLeft}`}>
       <h1>LOGIN</h1>
+      {invalidCredentials && (
+          <div className={styles.invalidCredentials}>
+            <span>Invalid credentials. Please try again.</span>
+            <button className={styles.closeButton} onClick={handleCloseInvalidCredentials}>
+              &#10005;
+            </button>
+          </div>
+        )}
       <p>How to get started at Thrive?</p>
       <div className={styles.textfield}>
         <img src="../../../public/uploads/email.png" alt="" />
-        <input type="text" placeholder="Username" name='email' onChange={handleChange} />
+        <input type="Email" placeholder="Email" name='email'  onChange={handleChange}  ref={emailRef}  />
       </div>
       
       <div className={styles.textfield}>
         <img src="../../../public/uploads/pass.png" alt="" />
-        <input type="password" placeholder="Password" name='password' onChange={handleChange}/>
+        <input type="password" placeholder="Password" name='password'  onChange={handleChange} ref={passwordRef}/>
       </div>
 
       <button className={styles.btn} onClick={handleLogin}>Login Now</button>
