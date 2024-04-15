@@ -35,7 +35,7 @@ exports.storeMessage = async (req, res, next) => {
 };
 
 exports.getMessages = async (req, res, next) => {
-  console.log("Hy")
+  // console.log("Hy")
 
   const userId1 = req.query.user_id_1;
   const userId2 = req.query.user_id_2;
@@ -46,12 +46,12 @@ exports.getMessages = async (req, res, next) => {
                             WHERE (c.user1_id = ? AND c.user2_id = ?) OR (c.user1_id = ? AND c.user2_id = ?)
                             ORDER BY m.message_date`;
 
-  console.log(getMessagesQuery)
+  // console.log(getMessagesQuery)
 
   try {
 
     const messages = await executeQuery(req.db, getMessagesQuery, [userId1, userId2, userId2, userId1]);
-    console.log(messages)
+    // console.log(messages)
     res.status(200).json({ messages });
   } catch (error) {
     console.error('Database error:', error);

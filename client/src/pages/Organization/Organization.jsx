@@ -90,7 +90,7 @@ const Organization = ()=> {
   <div className="cover">
     {data && data.organization && data.organization.CoverPic ? (
       <img
-        src={`../../../public/uploads/${data.organization.CoverPic}`}
+        src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${data.organization.CoverPic}`}
         alt=""
         className="coverPic"
       />
@@ -106,7 +106,7 @@ const Organization = ()=> {
   </div>
   {data && data.organization && data.organization.ProfilePic ? (
     <img
-      src={`../../../public/uploads/${data.organization.ProfilePic}`}
+      src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${data.organization.ProfilePic}`}
       alt=""
       className="profilePic"
     />

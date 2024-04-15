@@ -247,7 +247,7 @@ const handleDeleteCertifications = async (certificationId) => {
             {authorized && ( <Button variant="contained" color="error" onClick={() => handleDeleteEducation(item.education_id)} style={{ display: 'inline-block', marginLeft: '10px' }} > Delete </Button> )}
           </div>
           <Link onClick={() => handleInstituteClick(item.user_id)} style={{ textDecoration: 'none'}}>
-            <Avatar src={`../../../public/uploads/${item.ProfilePic}`}/>
+            <Avatar src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${item.ProfilePic}`}/>
             <Typography variant="body1">{item.name}</Typography>
           </Link>
           {item.year_graduated ? (

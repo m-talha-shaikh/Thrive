@@ -41,7 +41,7 @@ const JobDetails = (props) => {
       <CardContent className="card-content">
         {
               ProfilePic && (
-                <Avatar src={`../../../public/uploads/${ProfilePic}`} />
+                <Avatar src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${ProfilePic}`} />
               )
         }
         <Typography variant="h4" className="job-title" onClick={() => onJobTitleClick(job_id)}>
