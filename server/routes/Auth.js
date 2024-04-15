@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { signup, login, logout, userType, generateOTP, verifyOTP } = require("../controllers/authController.js");
+const { signup, login, logout, userType, generateOTP, verifyOTP, changePassword } = require("../controllers/authController.js");
 
 const router = express.Router();
 
@@ -10,8 +10,11 @@ router.post("/signup", signup);
 // Generate OTP
 router.post("/generateOTP", generateOTP);
 
-// Generate OTP
+// Veirfy OTP
 router.post("/verifyOTP", verifyOTP);
+
+// Change Password
+router.post("/changePassword", changePassword);
 
 // Login route
 router.post("/login", login);

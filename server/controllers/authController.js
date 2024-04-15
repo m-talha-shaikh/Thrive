@@ -34,60 +34,109 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-
 exports.generateOTP = async (req, res) => {
+  console.log("Meow")
     const { email } = req.body;
     const otp = Math.floor(100000 + Math.random() * 900000);
-    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const updateQuery = `
-    UPDATE user 
-    SET otp = '${otp}', otp_time = NOW()
-    WHERE email = '${email}';
-`;
-
+        UPDATE user 
+        SET otp = '${otp}', otp_time = NOW()
+        WHERE email = '${email}';`;
 
     try {
-        await executeQuery(req.db, updateQuery);
+        const result = await executeQuery(req.db, updateQuery);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Email not found in the database' });
+        }
+
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            port: 587,
+            secure: false,
+            auth: {
+                user: 'thrivecorp.pk@gmail.com',
+                pass: 'reollmjpgkxsztrm'
+            }
+        });
+
+        const mailOptions = {
+            from: 'your-email@gmail.com',
+            to: email,
+            subject: 'Your OTP',
+            text: `Hi Dear Valued Thrive User \n You requested a password change \n
+            Here is your OTP ${otp} \n The OTP will expire in 10 minutes \n`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error sending OTP:', error);
+                return res.status(500).json({ message: 'Error sending OTP', error: error.message });
+            } else {
+                console.log('Email sent: ' + info.response);
+                return res.status(200).json({ message: 'OTP sent successfully' });
+            }
+        });
     } catch (error) {
         console.error('Error inserting OTP into the database:', error);
         return res.status(500).json({ message: 'Error generating OTP', error: error.message });
     }
-
-    const transporter = nodemailer.createTransport({
-    service: "gmail",
-    port: 587,
-    secure: false,
-    auth: {
-        user: 'thrivecorp.pk@gmail.com',
-        pass: 'reollmjpgkxsztrm'
-    }
-});
-
-
-const mailOptions = {
-    from: {
-        name: 'Thrive Corporation',
-        address: 'thrivecorp.pk@gmail.com'
-    },
-    to: email,
-    subject: 'Your OTP for verification',
-    text: `Welcome to the Thrive App. Your OTP (One-Time Password) is: ${otp}`
 };
 
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('Email sent with OTP');
-        return res.status(200).json({ message: 'OTP sent successfully' });
-    } catch (error) {
-        console.error('Error sending email:', error);
-        return res.status(500).json({ message: 'Error sending OTP email', error: error.message });
-    }
-};
+
+// exports.generateOTP = async (req, res) => {
+//     const { email } = req.body;
+//     const otp = Math.floor(100000 + Math.random() * 900000);
+//     const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+//     const updateQuery = `
+//     UPDATE user 
+//     SET otp = '${otp}', otp_time = NOW()
+//     WHERE email = '${email}';
+// `;
+
+
+//     try {
+//         await executeQuery(req.db, updateQuery);
+//     } catch (error) {
+//         console.error('Error inserting OTP into the database:', error);
+//         return res.status(500).json({ message: 'Error generating OTP', error: error.message });
+//     }
+
+//     const transporter = nodemailer.createTransport({
+//     service: "gmail",
+//     port: 587,
+//     secure: false,
+//     auth: {
+//         user: 'thrivecorp.pk@gmail.com',
+//         pass: 'reollmjpgkxsztrm'
+//     }
+// });
+
+
+// const mailOptions = {
+//     from: {
+//         name: 'Thrive Corporation',
+//         address: 'thrivecorp.pk@gmail.com'
+//     },
+//     to: email,
+//     subject: 'Your OTP for verification',
+//     text: `Welcome to the Thrive App. Your OTP (One-Time Password) is: ${otp}`
+// };
+
+//     try {
+//         await transporter.sendMail(mailOptions);
+//         console.log('Email sent with OTP');
+//         return res.status(200).json({ message: 'OTP sent successfully' });
+//     } catch (error) {
+//         console.error('Error sending email:', error);
+//         return res.status(500).json({ message: 'Error sending OTP email', error: error.message });
+//     }
+// };
 
 
 exports.verifyOTP = async (req, res) => {
     const { email, otp } = req.body;
-
+    console.log("E" + email)
+    console.log("O" + otp)
     const checkQuery = `
         SELECT user_id
         FROM user 
@@ -112,6 +161,34 @@ exports.verifyOTP = async (req, res) => {
         return res.status(500).json({ message: 'Error verifying user', error: error.message });
     }
 };
+
+exports.changePassword = async (req, res) => {
+    const { email, newPassword } = req.body;
+    const hashedPassword = await argon2.hash(newPassword);
+
+    
+    const updatePasswordQuery = `
+        UPDATE user 
+        SET password = '${hashedPassword}' 
+        WHERE email = '${email}'`;
+
+    try {
+        
+        const result = await executeQuery(req.db, updatePasswordQuery);
+
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Email not found' });
+        }
+
+        // Successfully updated password
+        return res.status(200).json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Error updating password:', error);
+        return res.status(500).json({ message: 'Error updating password', error: error.message });
+    }
+};
+
 
 
 

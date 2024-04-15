@@ -18,7 +18,7 @@ import Jobs from "./pages/Jobs/Jobs"
 import Job from "./pages/Job/Job"
 import Resume from "./pages/Resume/Resume"
 import { QueryClient,QueryClientProvider,useQuery } from 'react-query';
-import Setting from "./components/Settings/Settings.jsx"
+import Settings from "./components/Settings/Settings.jsx"
 function App() {
   const {currentUser} = useContext(AuthContext);
   const {darkMode}= useContext(DarkmodeContext);
@@ -93,7 +93,7 @@ function App() {
           element: <Resume/> 
         },{
           path: '/setting',
-          element: <Setting/>,
+          element: <Settings/>,
         }
       ]
     },
