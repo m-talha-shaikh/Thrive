@@ -77,7 +77,7 @@ const Institute = ()=> {
   <div className="cover">
     {data && data.institute && data.institute.CoverPic ? (
       <img
-        src={`../../../public/uploads/${data.institute.CoverPic}`}
+        src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${data.institute.CoverPic}`}
         alt=""
         className="coverPic"
       />
@@ -93,7 +93,7 @@ const Institute = ()=> {
   </div>
   {data && data.institute && data.institute.ProfilePic ? (
     <img
-      src={`../../../public/uploads/${data.institute.ProfilePic}`}
+      src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${data.institute.ProfilePic}`}
       alt=""
       className="profilePic"
     />

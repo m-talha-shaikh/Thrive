@@ -4,7 +4,7 @@ exports.getLikes =async (req,res)=>
 {
 
     try {
-        const q = `Select user_id from Likes where post_id =?`;
+        const q = `Select user_id from likes where post_id =?`;
    const Likes = await executeQuery(req.db, q, [req.query.postId]);
    return res.status(200).json(Likes.map(like=>like.user_id));
     } catch (err) {
@@ -15,7 +15,7 @@ exports.getLikes =async (req,res)=>
 exports.postLikes =async (req,res)=>
 {
     try {
-        const q = "INSERT INTO Likes (`user_id`, `post_id`,`like_date`) VALUES (?)";
+        const q = "INSERT INTO likes (`user_id`, `post_id`,`like_date`) VALUES (?)";
         const values =[
             req.body.user_id,
             req.body.post_id,
@@ -32,7 +32,7 @@ exports.deleteLikes =async (req,res)=>
 {
     // console.log(req.query);
     try {
-        const q = "DELETE FROM Likes WHERE `user_id`= ? AND `post_id`= ? ";
+        const q = "DELETE FROM likes WHERE `user_id`= ? AND `post_id`= ? ";
         const post = await executeQuery(req.db, q, [req.query.user_id,req.query.post_id]);
     
         return res.status(200).json("Post has been unLiked");

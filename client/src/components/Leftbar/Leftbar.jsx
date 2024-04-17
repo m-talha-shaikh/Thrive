@@ -8,8 +8,12 @@ import settings from "../../assets/settings.png";
 import { AuthContext } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
+import { ProfileTypeContext } from '../../context/ProfileTypeContext';
+
 
 const Leftbar = () => {
+  const { fetchAccountType } = useContext(ProfileTypeContext);
+
   const [userType, setUserType] = useState("person");
   const [selectedItem, setSelectedItem] = useState(""); // State to track selected item
   const { currentUser, Logout } = useContext(AuthContext);
@@ -34,12 +38,12 @@ const Leftbar = () => {
         <div className="menu">
           <div className="item" onClick={() => handleItemClick("home")}>
             <img src={Home} alt="" />
-            <Link
-              to={`/profile/${currentUser.data.user.user_id}`}
+            <div
+              onClick={() => fetchAccountType(currentUser.data.user.user_id)}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <span>Home</span>
-            </Link>
+            </div>
           </div>
 
           <Link to={`/jobs`} style={{ textDecoration: "none", color: "inherit" }}>

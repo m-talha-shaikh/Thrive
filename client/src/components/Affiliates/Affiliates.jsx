@@ -40,7 +40,7 @@ const Affiliates = ({ user_id }) => {
           <Link key={index} onClick={() => handleCardClick(affiliate)} style={{ textDecoration: 'none' }}>
             <Card style={{ margin: '16px 0', cursor: 'pointer' }}>
               <CardContent>
-                <Avatar src={`../../../public/uploads/${affiliate.ProfilePic}`} alt={`${affiliate.first_name} ${affiliate.last_name}`} />
+                <Avatar src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${affiliate.ProfilePic}`} alt={`${affiliate.first_name} ${affiliate.last_name}`} />
                 <Typography variant="h6">
                   {affiliate.first_name} {affiliate.last_name}
                 </Typography>

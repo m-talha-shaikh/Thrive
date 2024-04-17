@@ -44,7 +44,7 @@ const comments = ({postId})=>
    return(
     <div className="comments">
         <div className="write">
-            <img src={"../../../public/uploads/"+currentUser.data.user.ProfilePic} alt="" />
+            <img src={"https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/"+currentUser.data.user.ProfilePic} alt="" />
             <input type="text" placeholder="Write a Comment" 
             onChange={(e)=> setcontent(e.target.value)}
             value={content}/>
@@ -55,7 +55,7 @@ const comments = ({postId})=>
        {isLoading ? "Loading" : data.map(comment =>(
         <div className="comment">
     
-           <img src={"../../../public/uploads/"+comment.ProfilePic} alt="Image not availaibel" />
+           <img src={"https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/"+comment.ProfilePic} alt="Image not availaibel" />
         <div className="message">
             <span>{comment.username}</span>
             <p>{comment.content}</p>

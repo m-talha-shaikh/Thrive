@@ -4,15 +4,18 @@ import App from './App.jsx'
 import './index.css'
 import { DarkModeContextProvider } from './context/Darkmodecontext.jsx'
 import { AuthContextProvider } from './context/AuthContext.jsx'
+import { ProfileTypeContextProvider } from './context/ProfileTypeContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     
-     <AuthContextProvider>
+    <AuthContextProvider>
     <DarkModeContextProvider>
-
-    <App />
+    <ProfileTypeContextProvider>
+      <App />
+    </ProfileTypeContextProvider>
     </DarkModeContextProvider>
-     </AuthContextProvider>
+    </AuthContextProvider>
+    
   </React.StrictMode>
 )

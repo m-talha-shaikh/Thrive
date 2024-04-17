@@ -12,8 +12,11 @@ import moment from "moment";
 import { useQuery,useQueryClient,useMutation } from "react-query";
 import { makeRequest } from "../../axios";
 import { AuthContext } from "../../context/AuthContext";
+import { ProfileTypeContext } from '../../context/ProfileTypeContext';
 
 const Post = ({ post }) => {
+
+  const { fetchAccountType } = useContext(ProfileTypeContext);
     
     const [Liked,setLike]= useState(true);
     const [menuOpen,setmenuOpen] = useState(false);
@@ -100,10 +103,14 @@ const Post = ({ post }) => {
           <div className="userinfo">
             <img src={"https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/"+post.ProfilePic} alt="" />
             <div className="details">
-                <Link to={`/profile/${post.user_id}`} style={{textDecoration:"none",color:"inherit"}}>
+                {/* <Link to={`/profile/${post.user_id}`} style={{textDecoration:"none",color:"inherit"}}>
                     <span>{post.username}</span>
                     <div className="date">{moment(post.post_date).fromNow()}</div>
-                </Link>
+                </Link> */}
+                <div onClick={() => fetchAccountType(post.user_id)} style={{textDecoration:"none",color:"inherit"}}>
+                    <span>{post.username}</span>
+                    <div className="date">{moment(post.post_date).fromNow()}</div>
+                </div>
             </div>
           </div>
           <MoreHorizIcon  onClick={()=>setmenuOpen(!menuOpen)}/>
@@ -115,13 +122,16 @@ const Post = ({ post }) => {
         </div>
         <div className="info">
          <div className="item">
-           
-            {isLoading?"Isloading":(data.includes(currentUser.data.user.user_id)?   
-            <FavoriteOutlinedIcon style={{color:"red"}} onClick={handleLiked} />:
-            <FavoriteBorderOutlinedIcon onClick={handleLiked} />)}
-            <span >{isLoading?
-            "Loading":data.length} Likes</span>
-         </div>
+            {isLoading ? "Isloading" : (
+                (Array.isArray(data) && data.includes(currentUser?.data?.user?.user_id)) ?
+                <FavoriteOutlinedIcon style={{color: "red"}} onClick={handleLiked} /> :
+                <FavoriteBorderOutlinedIcon onClick={handleLiked} />
+            )}
+            <span>
+                {isLoading ? "Loading" : (Array.isArray(data) ? data.length : 0)} Likes
+            </span>
+        </div>
+
          <div className="item" onClick={()=>setCommentdisplay(!commentdisplay)}>
          <TextsmsOutlinedIcon />
             <span>Comments</span>

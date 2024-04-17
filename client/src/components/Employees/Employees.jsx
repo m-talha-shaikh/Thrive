@@ -40,7 +40,7 @@ const Employees = ({ user_id }) => {
           <Link key={index} onClick={() => handleCardClick(employee)} style={{ textDecoration: 'none' }}>
             <Card style={{ margin: '16px 0', cursor: 'pointer' }}>
               <CardContent>
-                <Avatar src={`../../../public/uploads/${employee.ProfilePic}`} alt={`${employee.first_name} ${employee.last_name}`} />
+                <Avatar src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${employee.ProfilePic}`} alt={`${employee.first_name} ${employee.last_name}`} />
                 <Typography variant="h6">
                   {employee.first_name} {employee.last_name}
                 </Typography>

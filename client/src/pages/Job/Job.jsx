@@ -72,7 +72,7 @@ const handleApply = () => {
         <StyledCard className="job-card">
           <CardContent>
             {job.ProfilePic && (
-              <Avatar src={`../../../public/uploads/${job.ProfilePic}`} />
+              <Avatar src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${job.ProfilePic}`} />
             )}
 
             {job.title && (
