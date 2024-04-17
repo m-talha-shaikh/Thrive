@@ -8,7 +8,6 @@ const database_password = process.env.DATABASE_PASSWORD || ''
 const database_name = process.env.DATABASE_NAME || 'thrive_db'
 
 
-const connection_string = process.env.DATABASE_SERVICE_URI
 
 // Create the MySQL connection pool
 const pool = mysql.createPool({

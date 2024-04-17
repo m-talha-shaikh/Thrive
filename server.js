@@ -21,12 +21,12 @@ const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
 // Start the HTTP server
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on port ${port}`);
 });
 
 // WebSocket server configuration
-const webSocketsServerPort = 3000;
+const webSocketsServerPort = process.env.PORT || 3000;
 const webSocketServer = require('websocket').server;
 
 // Create a WebSocket server

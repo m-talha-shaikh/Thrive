@@ -58,7 +58,7 @@ cloudinary.config({
 // }));
 
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "http://192.168.100.6:5173", "http://192.168.100.252" ],
     credentials: true,
 }));
     
