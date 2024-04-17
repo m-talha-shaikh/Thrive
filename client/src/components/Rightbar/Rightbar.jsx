@@ -5,7 +5,13 @@ import { AuthContext } from "../../context/AuthContext";
 import { makeRequest } from "../../axios";
 import { Link } from "react-router-dom";
 
+import { ProfileTypeContext } from '../../context/ProfileTypeContext';
+
+
 const Rightbar = () => {
+
+  const { fetchAccountType } = useContext(ProfileTypeContext);
+
   const { currentUser } = useContext(AuthContext);
 
   const { isLoading, error, data } = useQuery('getfriends', async () => {
@@ -37,15 +43,18 @@ const Rightbar = () => {
     }
 
     return userData.map((contact) => (
-      <div className="user" key={contact.user_id}>
-        <div className="userInfo">
+      <div   className="user" key={contact.user_id}>
+        <div onClick={() => fetchAccountType(contact.user_id)} className="userInfo">
           <img src={"https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/" + contact.ProfilePic } alt="" />
           <div className="online">
 
           </div>
-          <Link to={`/profile/${contact.user_id}`} style={{ textDecoration: "none", color: "inherit" }}>
+          {/* <Link to={`/profile/${contact.user_id}`} style={{ textDecoration: "none", color: "inherit" }}>
             <span>{contact.username}</span>
-          </Link>
+          </Link> */}
+          <div style={{ textDecoration: "none", color: "inherit" }}>
+            <span >{contact.username}</span>
+          </div>
         </div>
       </div>
     ));

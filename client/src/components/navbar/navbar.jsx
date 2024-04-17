@@ -14,7 +14,14 @@ import { DarkmodeContext } from '../../context/Darkmodecontext';
 import { AuthContext } from '../../context/AuthContext';
 import { makeRequest } from '../../axios';
 import CancelIcon from '@mui/icons-material/Cancel';
+
+import { ProfileTypeContext } from '../../context/ProfileTypeContext';
+
+  
+
+
 const Navbar = () => {
+  const { fetchAccountType } = useContext(ProfileTypeContext);
   const { toggel, darkMode } = useContext(DarkmodeContext);
   const { currentUser, Logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -34,6 +41,12 @@ const Navbar = () => {
       console.error('Search Error:', error);
       throw new Error('Error searching users');
     }
+  };
+
+  const userClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    alert("Image clicked");
   };
 
   const handleLogout = () => {
@@ -60,9 +73,11 @@ const Navbar = () => {
   };
 
   const handleSearchBlur = () => {
-    // Hide the search results container when the input loses focus
-    setShowResults(false);
+    setTimeout(() => {
+      setShowResults(false);
+    }, 200); // Delay of 200 milliseconds
   };
+
   
   const handleCancelSearch = () => {
     // Clear search results and hide the container
@@ -91,16 +106,16 @@ const Navbar = () => {
               <CancelIcon />
             </button>
           )}
-{showResults && searchResults.length > 0 && (
+{ searchResults.length > 0 && (
   <div className="search-results">
     {searchResults.map((result) => (
       
       
-        <div className="user">
+        <div key={result.user_id}  className="user">
           <div className="userInfo">
-          <Link to={`/profile/${result.user_id}`} key={result.user_id} style={{textDecoration:"none",color:"inherit"}}>
-            <img src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${result.ProfilePic}`} alt="" />
-            </Link>
+          <div to={`/profile/${result.user_id}`} key={result.user_id} style={{ textDecoration: "none", color: "inherit" }}>
+            <img src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${result.ProfilePic}`} alt="" onClick={() => fetchAccountType(result.user_id)} />
+          </div>
             <span>{result.username}</span>
           </div>
         </div>

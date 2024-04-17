@@ -9,6 +9,7 @@ const Profile = () => {
   const navigate = useNavigate();  // Change to useNavigate
 
   useEffect(() => {
+    alert("meow")
   const fetchData = async () => {
     try {
       const response = await makeRequest.get(`/Auth/userType/${id}`);

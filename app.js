@@ -51,6 +51,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET
 })
 
+
 // app.use(cors({
 //     origin: ["http://192.168.100.7:5173","http://192.168.100.3"],
 //     credentials: true,

@@ -465,7 +465,7 @@ exports.logout = (req, res) => {
 };
 
 
-exports.userType = async (req, res) => {
+exports.accountType = async (req, res) => {
   const userId = req.params.id;
 
   const userTypeQuery = 'SELECT account_type FROM user WHERE user_id = ?';
