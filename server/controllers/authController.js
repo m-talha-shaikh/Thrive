@@ -20,8 +20,8 @@ const createSendToken = (user, statusCode, res) => {
     httpOnly: true,
   };
 
-  cookieOptions.secure = true;
-  cookieOptions.sameSite = 'None';
+  cookieOptions.secure = false;
+  cookieOptions.sameSite = 'Lax';
 
 
   res.cookie('jwt', token, cookieOptions);
@@ -32,8 +32,8 @@ const createSendToken = (user, statusCode, res) => {
     status: 'success',
     data: {
       user,
-    },
-  });
+    },
+  });
 };
 
 exports.generateOTP = async (req, res) => {
@@ -393,10 +393,13 @@ exports.login = async (req, res, next) => {
 
 exports.protect = async (req, res, next) => {
   let token;
+  console.log(req.cookie);
   if(req.headers.cookie){
     token = req.headers.cookie.split('jwt=')[1].split(';')[0];
+    console.log("Token: " + token);
   }
   else {
+    console.log("jdf");
     console.log(`no jwt cookie`)
     return res.status(401).json({ error: 'You are not logged in' });
   }
