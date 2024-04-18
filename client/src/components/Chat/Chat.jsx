@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import "./Chat.scss";
 import Contact from "./Contact";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -24,7 +24,7 @@ const Chat = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const client = new W3CWebSocket('ws://localhost:3000/');
+    const client = new W3CWebSocket('ws://192.168.100.7:3000/');
 
     client.onopen = () => {
       console.log('WebSocket Client Connected');
@@ -45,6 +45,16 @@ const Chat = () => {
 
   const [webSocketClient, setWebSocketClient] = useState(null);
 
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, selectedContact]);
+
   const handleMessage = (message) => {
     console.log("Received message:", message);
 
@@ -58,40 +68,38 @@ const Chat = () => {
     }));
   };
 
-const handleContactSelection = async (contact) => {
-  setSelectedContact(contact);
+  const handleContactSelection = async (contact) => {
+    setSelectedContact(contact);
 
-  try {
-    const response = await makeRequest.get("/Chat/messages", {
-      params: {
-        user_id_1: currentUser.data.user.user_id,
-        user_id_2: contact // Use the contact parameter directly here
-      }
-    });
-    
-    // Assuming the response contains an array of messages
-    const messagesData = response.data.messages;
+    try {
+      const response = await makeRequest.get("/Chat/messages", {
+        params: {
+          user_id_1: currentUser.data.user.user_id,
+          user_id_2: contact // Use the contact parameter directly here
+        }
+      });
+      
+      // Assuming the response contains an array of messages
+      const messagesData = response.data.messages;
 
-    console.log(messagesData);
+      console.log(messagesData);
 
-    // Map over messagesData to extract necessary information
-    const formattedMessages = messagesData.map(message => ({
-      user: (message.sender_id === currentUser.data.user.user_id) ? "me" : "other",
-      text: message.message_content
-    }));
+      // Map over messagesData to extract necessary information
+      const formattedMessages = messagesData.map(message => ({
+        user: (message.sender_id === currentUser.data.user.user_id) ? "me" : "other",
+        text: message.message_content
+      }));
 
-    // Update the messages state with the formatted messages
-    setMessages({ [contact]: formattedMessages });
+      // Update the messages state with the formatted messages
+      setMessages({ [contact]: formattedMessages });
 
-    // Set conversationExists to true since messages are received
-    setConversationExists(true);
-  } catch (error) {
-    console.error("Failed to fetch messages:", error);
-    setConversationExists(false);
-  }
-};
-
-
+      // Set conversationExists to true since messages are received
+      setConversationExists(true);
+    } catch (error) {
+      console.error("Failed to fetch messages:", error);
+      setConversationExists(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -157,8 +165,8 @@ const handleContactSelection = async (contact) => {
                   {message.text}
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
-
           ) : (
             <div className="no-messages">
               Say Hi to start a conversation
@@ -183,4 +191,3 @@ const handleContactSelection = async (contact) => {
 };
 
 export default Chat;
-
