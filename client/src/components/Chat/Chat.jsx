@@ -6,8 +6,11 @@ import { AuthContext } from "../../context/AuthContext";
 import { makeRequest } from "../../axios";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
+
 const Chat = () => {
+  const [isCalling, setIsCalling] = useState(false);
   const { currentUser } = useContext(AuthContext);
+  const [isMessagePaneOpen, setIsMessagePaneOpen] = useState(true);
   const [messages, setMessages] = useState({});
   const [newMessage, setNewMessage] = useState("");
   const [selectedContact, setSelectedContact] = useState(null);
@@ -20,7 +23,10 @@ const Chat = () => {
     })
       .then((res) => res.data);
   });
-
+  const handleCall = () => {
+    // Logic to initiate a call
+    setIsCalling(true);
+  };
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -155,6 +161,10 @@ const Chat = () => {
       </div>
       {selectedContact && (
         <div className="message-pane">
+          <div className="collapse-button" onClick={() => setIsMessagePaneOpen(!isMessagePaneOpen)}>
+            {isMessagePaneOpen ? "Collapse" : "Expand"}
+          </div>
+           {isCalling && <CallComponent isCaller={true} />}
           {conversationExists ? (
             <div className="messages">
               {(messages[selectedContact] || []).map((message, index) => (

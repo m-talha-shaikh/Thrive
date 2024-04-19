@@ -21,7 +21,7 @@ const createSendToken = (user, statusCode, res) => {
   };
 
   cookieOptions.secure = false;
-  cookieOptions.sameSite = 'Lax';
+  cookieOptions.sameSite = 'Lax';
 
 
   res.cookie('jwt', token, cookieOptions);

@@ -44,7 +44,7 @@ exports.addPost = async (req, res) => {
 exports.deletePost = async (req, res) => {
     
     try {
-        const q1 = `DELETE FROM Likes Where post_id =? `;
+        const q1 = `DELETE FROM likes Where post_id =? `;
         await executeQuery(req.db, q1, [req.query.post_id])
         const q = `DELETE FROM posts Where post_id =? AND user_id = ?`;
         const post = await executeQuery(req.db, q, [req.query.post_id,req.query.user_id]);
