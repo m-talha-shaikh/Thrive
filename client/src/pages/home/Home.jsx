@@ -7,7 +7,7 @@ const home= ()=>
    return(
    <div className="home">
        <Share/>
-    <Posts/>
+       <Posts/>
    </div>
      
    )
