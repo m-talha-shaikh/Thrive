@@ -24,7 +24,7 @@ const Chat = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const client = new W3CWebSocket('ws://192.168.100.7:3000/');
+    const client = new W3CWebSocket('ws://192.168.100.6:3000/');
 
     client.onopen = () => {
       console.log('WebSocket Client Connected');
