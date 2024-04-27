@@ -22,6 +22,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.1",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.13",
     "react-query": "^3.39.3",
     "websocket": "^1.0.34",
