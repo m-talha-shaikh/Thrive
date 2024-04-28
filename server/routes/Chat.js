@@ -5,7 +5,7 @@ const messageController = require('./../controllers/Chat');
 const router = express.Router({ mergeParams: true });
 
 // Middleware for protecting routes
-// router.use('/:conversation_id', authController.protect);
+router.use('/:conversation_id', authController.protect);
 
 router.route('/messages')
   .post(messageController.storeMessage);

@@ -20,8 +20,8 @@ const createSendToken = (user, statusCode, res) => {
     httpOnly: true,
   };
 
-  // cookieOptions.secure = false;
-  // cookieOptions.sameSite = 'Lax';
+  cookieOptions.secure = false;
+  cookieOptions.sameSite = 'Lax';
 
 
   res.cookie('jwt', token, cookieOptions);

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SocketProvider";
-
+import "./Lobby.scss"
 const LobbyScreen = () => {
   const [email, setEmail] = useState("");
   const [room, setRoom] = useState("");
@@ -33,7 +33,7 @@ const LobbyScreen = () => {
   }, [socket, handleJoinRoom]);
 
   return (
-    <div>
+    <div className="Lobby">
       <h1>Lobby</h1>
       <form onSubmit={handleSubmitForm}>
         <label htmlFor="email">Email ID</label>

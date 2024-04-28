@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState } from "react";
 import ReactPlayer from "react-player";
 import peer from "../service/peer";
 import { useSocket } from "../context/SocketProvider";
-
+import "./Room.scss"
 const RoomPage = () => {
   const socket = useSocket();
   const [remoteSocketId, setRemoteSocketId] = useState(null);
@@ -110,29 +110,31 @@ const RoomPage = () => {
   ]);
 
   return (
-    <div>
+    <div className="Room">
       <h1>Room Page</h1>
       <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
       {myStream && <button onClick={sendStreams}>Send Stream</button>}
       {remoteSocketId && <button onClick={handleCallUser}>CALL</button>}
-      <div style={{ display: 'flex' }}>
+      <div className="stream-container">
         {myStream && (
-          <div style={{ width: '50%' }}>
-            <h1>My Stream</h1>
+          <div className="stream">
+            <h2>My Stream</h2>
             <ReactPlayer
               playing
               muted
               url={myStream}
+              width="100%"
             />
           </div>
         )}
         {remoteStream && (
-          <div style={{ width: '50%' }}>
-            <h1>Remote Stream</h1>
+          <div className="stream">
+            <h2>Remote Stream</h2>
             <ReactPlayer
               playing
               muted
               url={remoteStream}
+              width="100%"
             />
           </div>
         )}

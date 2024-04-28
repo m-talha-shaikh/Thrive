@@ -1,3 +1,4 @@
+/* Share.scss */
 @import "../../style.scss";
 
 .share {
@@ -10,9 +11,10 @@
     color: themed("textColor");
     margin-bottom: 20px;
     width: 90%;
+
     .container {
       padding: 20px;
-   
+
       .top {
         display: flex;
         align-items: center;
@@ -22,6 +24,7 @@
           display: flex;
           align-items: center;
           flex: 3;
+
           img {
             width: 40px;
             height: 40px;
@@ -38,10 +41,12 @@
             color: themed("textColor");
           }
         }
+
         .right {
           flex: 1;
           display: flex;
           justify-content: flex-end;
+
           .file {
             width: 100px;
             height: 100px;
@@ -62,6 +67,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+
         .left {
           display: flex;
           align-items: center;
@@ -83,19 +89,79 @@
             }
           }
         }
+
         .right {
           button {
-            
-        width: 5rem;
-        padding: 10px;
-        background-color: #2c79df;
-        border: none;
-        border-radius: 15px;
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-      
-        bottom: 20px;
+            width: 5rem;
+            padding: 10px;
+            background-color: #2c79df;
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      width: 100%; // Adjust width for mobile screens
+      .container {
+        .top {
+          flex-direction: column;
+
+          .left {
+            width: 100%;
+
+            img {
+              width: 30px;
+              height: 30px;
+            }
+
+            input {
+              padding: 10px;
+              width: calc(100% - 20px); // Adjust width to account for padding
+            }
+          }
+
+          .right {
+            margin-top: 10px;
+            width: 100%;
+
+            .file {
+              width: 100%;
+              height: auto;
+              max-height: 200px;
+            }
+          }
+        }
+
+        .bottom {
+          flex-direction: column;
+          align-items: stretch; // Stretch items to fit the container width
+
+          .left {
+            width: 100%;
+
+            .item {
+              justify-content: center;
+              flex-direction: column;
+              gap: 5px;
+
+              img {
+                height: 16px;
+              }
+            }
+          }
+
+          .right {
+            margin-top: 10px;
+            width: 100%;
+
+            button {
+              width: 100%;
+            }
           }
         }
       }
