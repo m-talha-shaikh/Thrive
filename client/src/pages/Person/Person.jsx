@@ -11,8 +11,9 @@ import { useLocation } from "react-router-dom";
 import Update from "../../components/update/Update";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
-
-  
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 const Person = ()=>
 { 
 
@@ -236,7 +237,15 @@ const handleDeleteCertifications = async (certificationId) => {
       <div className="heading">
     <h2 style={{ display: 'inline-block'}}>Education</h2>
     {showEducationForm && <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEducationForm(false)}>X</Button>}
-    {authorized && !showEducationForm && ( <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEducationForm(true)} > Add </Button> )}
+    {authorized && !showEmploymentForm && (
+  <IconButton 
+    style={{ display: 'inline-block', marginLeft: '50px' }} 
+    variant="contained" 
+    onClick={() => setShowEducationForm(true)} 
+  > 
+    <AddIcon /> 
+  </IconButton>
+)}
 
       </div>
       {data && data.education && data.education.map((item, index) => (
@@ -244,7 +253,18 @@ const handleDeleteCertifications = async (certificationId) => {
           
           <div style={{ display: 'flex', justifyContent: 'space-evenly'}}>
             <Typography variant="h3" style={{ display: 'inline-block', marginRight: '10px'  }}>{item.major}</Typography>
-            {authorized && ( <Button variant="contained" color="error" onClick={() => handleDeleteEducation(item.education_id)} style={{ display: 'inline-block', marginLeft: '10px' }} > Delete </Button> )}
+            {authorized && (
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+
+    <IconButton 
+      color="error" 
+      onClick={() => handleDeleteEducation(item.education_id)} 
+      style={{ display: 'inline-block', marginLeft: '10px' }}
+    >
+      <DeleteIcon />
+    </IconButton>
+  </div>
+)}
           </div>
           <Link onClick={() => handleInstituteClick(item.user_id)} style={{ textDecoration: 'none'}}>
             <Avatar src={`https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/${item.ProfilePic}`}/>
