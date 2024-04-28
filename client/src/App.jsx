@@ -97,6 +97,14 @@ function App() {
         },{
           path: '/setting',
           element: <Settings/>,
+        },
+        {
+          path: '/Lobby',
+          element: <LobbyScreen />
+        },
+        {
+          path: '/room/:roomId',
+          element: <RoomPage />
         }
       ]
     },
@@ -114,14 +122,6 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Chat/>
       </QueryClientProvider>
-    },
-    {
-      path: '/Lobby',
-      element: <LobbyScreen />
-    },
-    {
-      path: '/room/:roomId',
-      element: <RoomPage />
     }
   ]);
   return (
