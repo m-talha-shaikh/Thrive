@@ -13,7 +13,7 @@ export default defineConfig({
 // export default defineConfig({
 //   plugins: [react()],
 //   server: {
-//     host: 'localhost', // specify the IP address here
+//     host: '192.168.100.6', // specify the IP address here
 //     port: 5173 // specify the port number here
 //   },
 // })

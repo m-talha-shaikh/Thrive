@@ -25,6 +25,7 @@
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.13",
     "react-query": "^3.39.3",
+    "socket.io": "^4.7.5",
     "websocket": "^1.0.34",
     "ws": "^8.16.0",
     "xss-clean": "^0.1.4"
