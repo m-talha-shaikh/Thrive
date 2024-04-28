@@ -261,7 +261,7 @@ const handleDeleteCertifications = async (certificationId) => {
       {showEducationForm && (
         <form onSubmit={handleSubmit(onSubmitEducation)}>
           <div>
-            <Typography variant="body1">Name:</Typography>
+            <Typography variant="body1">Institute:</Typography>
             <Controller
               name="institute_name"
               control={control}

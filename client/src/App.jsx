@@ -19,6 +19,9 @@ import Job from "./pages/Job/Job"
 import Resume from "./pages/Resume/Resume"
 import { QueryClient,QueryClientProvider,useQuery } from 'react-query';
 import Settings from "./components/Settings/Settings.jsx"
+import LobbyScreen from "./components/Lobby";
+import RoomPage from "./components/Room";
+
 function App() {
   const {currentUser} = useContext(AuthContext);
   const {darkMode}= useContext(DarkmodeContext);
@@ -94,6 +97,14 @@ function App() {
         },{
           path: '/setting',
           element: <Settings/>,
+        },
+        {
+          path: '/Lobby',
+          element: <LobbyScreen />
+        },
+        {
+          path: '/room/:roomId',
+          element: <RoomPage />
         }
       ]
     },

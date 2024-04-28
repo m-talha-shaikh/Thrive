@@ -4,6 +4,7 @@ import Home from "../../assets/Home.png";
 import Explore from "../../assets/5.png";
 import Notification from "../../assets/11.png";
 import Messages from "../../assets/messages.png";
+import Video from "../../assets/video.png";
 import settings from "../../assets/settings.png";
 import { AuthContext } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -64,6 +65,13 @@ const Leftbar = () => {
             <div className={`item ${selectedItem === "messages" ? "selected" : ""}`} onClick={() => handleItemClick("messages")}>
               <img src={Messages} alt="" />
               <span>Messages</span>
+            </div>
+          </Link>
+
+          <Link to={`/Lobby`} style={{ textDecoration: "none", color: "inherit" }}>
+            <div className={`item ${selectedItem === "video" ? "selected" : ""}`} onClick={() => handleItemClick("video")}>
+              <img src={Video} alt="" />
+              <span>Video Call</span>
             </div>
           </Link>
 

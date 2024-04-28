@@ -90,6 +90,7 @@ exports.getPerson = async (req, res, next) => {
 
     const results = await Promise.all(queryTasks);
 
+
     const userProfile = {
       person: results[0][0],
       education: results[1],
