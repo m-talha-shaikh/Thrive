@@ -5,6 +5,7 @@ import Explore from "../../assets/5.png";
 import Notification from "../../assets/11.png";
 import Messages from "../../assets/messages.png";
 import Video from "../../assets/video.png";
+import resume from "../../assets/resume.png";
 import settings from "../../assets/settings.png";
 import { AuthContext } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -77,7 +78,7 @@ const Leftbar = () => {
 
           <Link to={`/resume`} style={{ textDecoration: "none", color: "inherit" }}>
             <div className={`item ${selectedItem === "settings" ? "selected" : ""}`} onClick={() => handleItemClick("resume")}>
-              <img src={settings} alt="" />
+              <img src={resume} alt="" />
               <span>Resume Builder</span>
             </div>
           </Link>
