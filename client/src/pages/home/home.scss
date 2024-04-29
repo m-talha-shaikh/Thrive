@@ -13,8 +13,9 @@
         &::-webkit-scrollbar{
             display: none;
         }
+        @media screen and (max-width: 768px){
+            padding: 0px
+        }
     }
-    @include mobile{
-        padding: 10px;
-    }
+   
 }

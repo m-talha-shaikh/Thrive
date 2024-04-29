@@ -1,0 +1,57 @@
+@import "../style.scss";
+// style.scss
+
+.Lobby {
+    @include themify($themes) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: themed("bgSoft");
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: themed("textColor");
+    }
+  
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  
+      label {
+        margin-bottom: 10px;
+        color: themed("textColor");
+      }
+  
+      input {
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid themed("border");
+        border-radius: 5px;
+        width: 300px;
+        background-color: themed("bg");
+        max-width: 100%;
+        color: themed("textColor");
+      }
+  
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+  
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+  }
+  
+}
+
+

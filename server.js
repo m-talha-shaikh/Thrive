@@ -83,7 +83,7 @@ const videoCallPort = 8000;
 const server = http.createServer(app);
 
 // Start the HTTP server
-server.listen(port, "192.168.100.6", () => {
+server.listen(port, "192.168.100.7", () => {
     console.log(`Server is running on port ${port}`);
 });
 

@@ -100,4 +100,10 @@ background-color: themed("bg");
         }
     }
 }
+
+}
+@media screen and (max-width: 768px){
+    .rightbar {
+        display: none;
+    }
 }
