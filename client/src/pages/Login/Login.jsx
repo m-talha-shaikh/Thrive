@@ -193,7 +193,7 @@ const Login = () => {
         <img src="../../../public/uploads/user.png" alt="" />
         <input type="text" placeholder="Username" onChange={(e) => {  setUsername(e.target.value);  }} name="username" />
       </div>
-       <div className={styles.selectContainer}>
+      <div className={styles.selectContainer}>
       <select onChange={(e) => handleAccountTypeChange(e.target.value)} name="account_type" value={account_type}>
               <option value="person">Person</option>
               <option value="institute">Institute</option>
@@ -201,6 +201,42 @@ const Login = () => {
             </select>
             
       </div>
+      {account_type === 'institute' || account_type === 'organization' ? (
+        <div className={styles.textfield}>
+          <input
+            type="text"
+            placeholder="Name"
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            name="name"
+          />
+        </div>
+      ) : (
+        <>
+          <div className={styles.textfield}>
+            <input
+              type="text"
+              placeholder="First Name"
+              onChange={(e) => {
+                setFirstName(e.target.value);
+              }}
+              name="first_name"
+            />
+          </div>
+          <div className={styles.textfield}>
+            <input
+              type="text"
+              placeholder="Last Name"
+              onChange={(e) => {
+                setLastName(e.target.value);
+              }}
+              name="last_name"
+            />
+          </div>
+        </>
+      )}
+
       <div className={styles.selectContainer}>
       {account_type === 'person' && <select onChange={(e) => {  setGender(e.target.value);  }} name="gender" value={inputs.gender}>
               <option value="male">Male</option>
@@ -208,16 +244,24 @@ const Login = () => {
             </select>}
             
       </div>
-      <div className={styles.dateContainer}>
-    {/* Updated date input */}
-    <input type="date" placeholder="Date of Birth" onChange={(e) => { setDateOfBirth(e.target.value); }} name="date_of_birth" />
-  </div>
+      {account_type === 'person' && (
+        <div className={styles.dateContainer}>
+          <input
+            type="date"
+            placeholder="Date of Birth"
+            onChange={(e) => {
+              setDateOfBirth(e.target.value);
+            }}
+            name="date_of_birth"
+          />
+        </div>
+      )}
       <div className={styles.textfield}>
         <img src="../../../public/uploads/pass.png" alt="" />
         <input type="password" placeholder="Password" onChange={(e) => {  setPassword(e.target.value);  }} name="password" />
       </div>
 
-      <button className={styles.btn} onClick={handleClick}>Sign in</button>
+      <button className={styles.btn} onClick={handleClick}>Sign Up</button>
       <button className={styles.reg} onClick={toggleForm}><p className={styles.signuptext}>back to login page</p></button>
     </div>
     {/* Image Section */}
