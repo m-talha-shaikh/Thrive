@@ -1,25 +1,118 @@
 @import "../../style.scss";
-.container1{
-    @include themify($themes) {
-        background-color:themed("bgSoft");
-        height: 100vh;
-        .job-details-container {
-            background-color:themed("bgSoft");
-  
-            overflow-y: scroll;
-        
-            scrollbar-width: auto;
-        
-            scrollbar-color: auto;
-        
-            -ms-overflow-style: auto;
-            
-        }
+
+.container1 {
+  @include themify($themes) {
+    background-color: themed("bgSoft");
+    height: 100vh;
+    padding: 20px;
+
+    .jobs-container {
+      margin-bottom: 20px;
     }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+
+      .MuiFormControl-root {
+        width: 100%;
+      }
+
+      .MuiGrid-item {
+        display: flex;
+        flex-direction: column;
+      }
+      .MuiFormControlLabel-root {
+        color:themed("textColor") ; // Change this to your desired label color for checkboxes
+      }
+      .MuiCheckbox-root.Mui-checked {
+        color: themed("textColorSoft");
+         // Change this to your desired color for the checkbox
+      }
+      // Change label color here
+      .MuiFormLabel-root {
+        color: themed("textColorSoft"); // Change this to your desired label color
+        margin-bottom: 5px;
+      }
+
+      // Change input color here
+      .MuiInputBase-input {
+        color: themed("textColorSoft"); // Change this to your desired input color
+      }
+
+      // Change the color of the TextField
+      .MuiInputBase-root {
+        color: themed("textColorSoft"); // Change this to your desired text field color
+      }
+
+      .MuiInput-underline:before {
+        border-bottom-color: themed("textColorSoft"); // Change this to your desired underline color
+      }
+
+      .MuiInput-underline:after {
+        border-bottom-color: themed("textColorSoft"); // Change this to your desired underline color when focused
+      }
+
+      .MuiInputLabel-root.Mui-focused {
+        color: themed("textColorSoft"); // Change this to your desired label color when focused
+      }
+
+      .MuiInputBase-input::placeholder {
+        color: themed("textColorSoft"); // Change this to your desired placeholder color
+      }
+
+      .MuiButton-root {
+        margin-top: 20px;
+      }
+    }
+
+    .job-details-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+
+      .job-details {
+        background-color: themed("bg");
+        padding: 20px;
+        border-radius: 10px;
+        width: calc(50% - 10px);
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: translateY(-5px);
+        }
+
+        .job-title {
+          font-size: 18px;
+          font-weight: bold;
+          color: themed("textColor");
+          margin-bottom: 10px;
+        }
+
+        .company-name {
+          font-size: 16px;
+          color: themed("textColorSoft");
+          margin-bottom: 10px;
+        }
+
+        .salary-range {
+          font-size: 16px;
+          color: themed("textColorSoft");
+          margin-bottom: 10px;
+        }
+
+        .openings {
+          font-size: 16px;
+          color: themed("textColorSoft");
+          margin-bottom: 10px;
+        }
+
+        .remote-work {
+          font-size: 16px;
+          color: themed("textColorSoft");
+        }
+      }
+    }
+  }
 }
-        
-    
-
-
-
-

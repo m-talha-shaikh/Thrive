@@ -236,7 +236,7 @@ const handleDeleteCertifications = async (certificationId) => {
       <div className="heading">
     <h2 style={{ display: 'inline-block'}}>Education</h2>
     {showEducationForm && <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEducationForm(false)}>X</Button>}
-    {authorized && !showEducationForm && ( <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEducationForm(true)} > Add </Button> )}
+    {authorized && !showEducationForm && ( <Button style={{ display: 'inline-block', marginLeft: '50px' }} variant="contained" onClick={() => setShowEducationForm(true)} > + </Button> )}
 
       </div>
       {data && data.education && data.education.map((item, index) => (

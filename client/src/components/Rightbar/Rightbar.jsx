@@ -1,35 +1,32 @@
 import React, { useContext } from "react";
 import "./Rightbar.scss";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { AuthContext } from "../../context/AuthContext";
 import { makeRequest } from "../../axios";
-import { Link } from "react-router-dom";
-
 import { ProfileTypeContext } from '../../context/ProfileTypeContext';
 
-
 const Rightbar = () => {
-
   const { fetchAccountType } = useContext(ProfileTypeContext);
-
   const { currentUser } = useContext(AuthContext);
 
+  // Fetch online friends
   const { isLoading, error, data } = useQuery('getfriends', async () => {
-    return await makeRequest.get(`/Connection/messagingfriends`, {
+    const response = await makeRequest.get(`/Connection/messagingfriends`, {
       params: {
         userId: currentUser.data.user.user_id
       }
-    })
-    .then((res) => res.data);
+    });
+    return response.data;
   });
 
+  // Fetch users who are not friends
   const { isLoading: isLoading2, error: error2, data: data2 } = useQuery('getusers', async () => {
-    return await makeRequest.get(`/Connection/UsersNotfriends`, {
+    const response = await makeRequest.get(`/Connection/UsersNotfriends`, {
       params: {
         userId: currentUser.data.user.user_id
       }
-    })
-    .then((res) => res.data);
+    });
+    return response.data;
   });
 
   // Function to render user components or a fallback message
@@ -39,21 +36,30 @@ const Rightbar = () => {
     }
 
     if (userData.length === 0) {
-      return <p  style={{ textDecoration: "none", color: "inherit" }}>No {type} available.</p>; // Fallback message for no users
+      return (
+        <p style={{ textDecoration: "none", color: "inherit" }}>
+          No {type} available.
+        </p>
+      ); // Fallback message for no users
     }
 
-    return userData.map((contact) => (
-      <div   className="user" key={contact.user_id}>
-        <div onClick={() => fetchAccountType(contact.user_id)} className="userInfo">
-          <img src={"https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/" + contact.ProfilePic } alt="" />
-          <div className="online">
+    // Slice the userData to display only five contacts
+    const limitedData = userData.slice(0, 5);
 
-          </div>
-          {/* <Link to={`/profile/${contact.user_id}`} style={{ textDecoration: "none", color: "inherit" }}>
-            <span>{contact.username}</span>
-          </Link> */}
+    return limitedData.map((contact) => (
+      <div className="user" key={contact.user_id}>
+        <div onClick={() => fetchAccountType(contact.user_id)} className="userInfo">
+          <img
+            src={
+              contact.ProfilePic
+                ? "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/" + contact.ProfilePic
+                : "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1715465014/user100_oo6mqk.png" // Replace with your default image URL
+            }
+            alt=""
+          />
+          <div className="online"></div>
           <div style={{ textDecoration: "none", color: "inherit" }}>
-            <span >{contact.username}</span>
+            <span>{contact.username}</span>
           </div>
         </div>
       </div>
@@ -67,7 +73,6 @@ const Rightbar = () => {
           <span>People you may know! </span>
           {renderUsers(data2, 'people')}
         </div>
-
         <div className="item">
           <span>Online Friends</span>
           {renderUsers(data, 'friends')}

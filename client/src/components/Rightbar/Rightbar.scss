@@ -31,7 +31,7 @@
 -moz-box-shadow: 9px -2px 22px -4px rgba(173,173,173,0.75);
 background-color: themed("bg");
             span{
-                color: gray;
+                color: themed("textColor");
                 display: flex; /* Use flexbox */
                 justify-content: center; /* Center horizontally */
                 align-items: center; /* Center vertically */
@@ -41,12 +41,13 @@ background-color: themed("bg");
             .user{
 
                 display: flex;
-             
+                color: themed("textColorSoft");
                 margin: 15px 20px;
                 .userInfo{
                  display: flex;
                  align-items: center;
                  gap: 20px;
+                 color: themed("textColorSoft");
                  position: relative;
                  
                  img{

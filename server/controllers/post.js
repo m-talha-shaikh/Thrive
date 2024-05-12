@@ -46,6 +46,8 @@ exports.deletePost = async (req, res) => {
     try {
         const q1 = `DELETE FROM likes Where post_id =? `;
         await executeQuery(req.db, q1, [req.query.post_id])
+        const q2 = `DELETE FROM comments Where post_id =? `;
+        await executeQuery(req.db, q2, [req.query.post_id])
         const q = `DELETE FROM posts Where post_id =? AND user_id = ?`;
         const post = await executeQuery(req.db, q, [req.query.post_id,req.query.user_id]);
         return res.status(200).json("Post has been deleted");
