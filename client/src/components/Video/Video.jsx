@@ -11,7 +11,7 @@ const configuration = {
   ],
   iceCandidatePoolSize: 10,
 };
-const socket = io("http://192.168.248.224:3000", { transports: ["websocket"] });
+const socket = io("http://192.168.100.6:3000", { transports: ["websocket"] });
 
 let pc;
 let localStream;

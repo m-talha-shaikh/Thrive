@@ -201,13 +201,16 @@ exports.signup = async (req, res, next) => {
     email,
     account_type,
     password,
-    ProfilePic,
-    CoverPic,
     city,
     state,
     country,
     ...categoryData
   } = req.body;
+
+  console.log(req.body)
+
+  ProfilePic = "Thrive/d9nhe5yo56qxoejxyunl"
+  CoverPic = "Thrive/hvvpprm0lwgzdtvlgsjc"
 
   const check_query = 'SELECT * FROM user WHERE username = ?';
   const check_location =
@@ -223,7 +226,7 @@ exports.signup = async (req, res, next) => {
 
     if (checkqueryresult.length > 0 || password == '' || !email.includes('@')) {
       // Rollback the transaction if username already exists
-      console.log("ROLL BACKED");
+      console.log("Username Already Exist Rollback");
       await executeQuery(req.db, 'ROLLBACK', []);
       return res.status(400).json({ error: 'Username already exists' });
     }
@@ -322,7 +325,7 @@ exports.signup = async (req, res, next) => {
     } else {
       // Rollback the transaction for an invalid account_type
       await executeQuery(req.db, 'ROLLBACK', []);
-      console.log('Oh no');
+      console.log('Invalid Account Type');
       return res.status(400).json({ message: 'Invalid account_type' });
     }
 
@@ -348,7 +351,7 @@ exports.signup = async (req, res, next) => {
     createSendToken(user, 201, res);
   } catch (error) {
     // Rollback the transaction in case of any error
-    await executeQuery(req.db, 'ROLLBACK', []);
+    await executeQuery(req.db, 'Some Other Error Rollbacking', []);
     console.error('Database error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }

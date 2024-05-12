@@ -53,12 +53,12 @@ cloudinary.config({
 
 
 app.use(cors({
-    origin: ["http://192.168.100.7:5173","http://192.168.100.7:5173"],
+    origin: ["http://" + process.env.MY_IP + ":5173"],
     credentials: true,
 }));
 
 // app.use(cors({
-//     origin: ["http://192.168.100.7:5173", "http://192.168.100.7:5173", "http://192.168.100.252"  ],
+//     origin: ["http://" + process.env.MY_IP + ":5173", "http://" + process.env.MY_IP + ":5173", "http://" + process.env.MY_IP + ""  ],
 //     credentials: true,
 // }));
     
