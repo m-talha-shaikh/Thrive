@@ -1,32 +1,62 @@
-// Job.scss
+@import "../../style.scss";
 
 .job-card {
-    border-radius: 16px;
+  @include themify($themes) {
+    background-color: themed("bgSoft");
+    padding: 20px;
+   
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    max-width: 100%; /* Adjusted to cover the entire available space */
+    width: 100%; /* Adjusted to cover the entire available space */
+    height: 100%;
+    margin: auto; /* Centering the card */
 
-    &:hover {
-        transform: scale(1.02);
+    .job-title {
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: themed("textColor");
     }
 
-    .job-title, .job-name, .job-type {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
+    .job-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: themed("textColorSoft");
+      margin-bottom: 0.5rem;
     }
-
 
     .job-description {
+      font-size: 1rem;
+      color: themed("textColorSoft");
+      margin-bottom: 1rem;
+    }
+
+    .job-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      svg {
         font-size: 1rem;
-        color: #6b6b6b;
+        margin-right: 0.5rem;
+        color: themed("bgSoft");
+      }
+
+      .info-text {
+        font-size: 0.9rem;
+        color: themed("textColor");
+      }
     }
 
     .apply-button {
-        background-color: #4caf50;
-        color: #ffffff;
+      background-color: #006cb4;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
 
-        &:hover {
-            background-color: #45a049;
-        }
+      &:hover {
+        background-color: #2ea4f3;
+      }
     }
+  }
 }

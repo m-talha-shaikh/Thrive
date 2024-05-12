@@ -11,30 +11,29 @@ const Share = () => {
   const [file, setFile] = useState(null);
   const [content, setDesc] = useState("");
   const [image_url,setUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false); // Add a state for tracking upload status
 
- const upload = async () => {
-  try {
-    if (!file) {
-      throw new Error("No file selected");
+  const upload = async () => {
+    try {
+      if (!file) {
+        throw new Error("No file selected");
+      }
+      console.log("HI");
+
+      const formData = new FormData();
+      formData.append("file", file);
+      console.log(file)
+      console.log('Form Data:', formData); // Log the form data being sent
+
+      const res = await makeRequest.post("/upload", formData);
+      console.log('Response:', res); // Log the response from the server
+
+      return res.data;
+    } catch (err) {
+      console.error("Error uploading file:", err);
+      throw err; // Rethrow the error for better handling elsewhere
     }
-    console.log("HI");
-
-    const formData = new FormData();
-    formData.append("file", file);
-    console.log(file)
-    console.log('Form Data:', formData); // Log the form data being sent
-
-    const res = await makeRequest.post("/upload", formData);
-    console.log('Response:', res); // Log the response from the server
-
-    return res.data;
-  } catch (err) {
-    console.error("Error uploading file:", err);
-    throw err; // Rethrow the error for better handling elsewhere
-  }
-};
-
-
+  };
 
   const { currentUser } = useContext(AuthContext);
 
@@ -44,7 +43,7 @@ const Share = () => {
     async (newPost) => {
       console.log("Adding post")
       try {
-        const response = await makeRequest.post("/Posts/uploadPost",newPost);
+        const response = await makeRequest.post("/Posts/uploadPost", newPost);
         return response.data; // Assuming your response contains the new post data
       } catch (err) {
         throw err; 
@@ -58,36 +57,44 @@ const Share = () => {
       onError: (err) => {
         console.log(err);
       },
+      onMutate: () => {
+        setIsUploading(true); // Set uploading state to true when mutation starts
+      },
+      onSettled: () => {
+        setIsUploading(false); // Set uploading state to false when mutation completes
+      },
     }
   );
-  
 
   const handleClick = async (e) => {
     e.preventDefault();
-  
 
     if (!content.trim() && !file) {
-   
       console.error("Cannot post an empty content.");
       return;
     }
-  
+
     let image_url;
     if (file) {
       image_url = await upload();
     }
-  
-    mutation.mutate({ user_id: currentUser.data.user.user_id, content, image_url });
+
+    mutation.mutate({
+      user_id: currentUser.data.user.user_id,
+      content,
+      image_url,
+    });
+
     setDesc("");
     setFile(null);
   };
-  
+
   return (
     <div className="share">
       <div className="container">
         <div className="top">
           <div className="left">
-            <img src={ "https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/"+currentUser.data.user.ProfilePic} alt="" />
+            <img src={"https://res.cloudinary.com/dzhkmbnbn/image/upload/v1712615554/" + currentUser.data.user.ProfilePic} alt="" />
             <input
               type="text"
               placeholder={`What's on your mind ${currentUser.data.user.username}?`}
@@ -116,10 +123,11 @@ const Share = () => {
                 <span>Add Image</span>
               </div>
             </label>
-           
+
           </div>
           <div className="right">
-            <button onClick={handleClick}>Share</button>
+            {/* Display "Uploading" when isUploading is true, otherwise display "Share" */}
+            <button onClick={handleClick}>{isUploading ? "Uploading" : "Share"}</button>
           </div>
         </div>
       </div>
