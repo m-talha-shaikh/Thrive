@@ -89,19 +89,20 @@
           
           width: 100%;
           background-color:themed("bg");
-          border: 1px solid #ccc;
+          border: 1px solid themed("border");
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           padding: 8px;
          z-index: 2;
           color: themed("textColor");
           .user{
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin: 10px 0px;
             padding: 8px; /* Add padding */
             transition: background-color 0.3s ease;
-            background-color: themed("bgSoft");
+          
             &:hover {
               background-color:themed("border"); // Add hover effect
             }
