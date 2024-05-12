@@ -71,12 +71,15 @@ const Leftbar = () => {
             </div>
           </Link>
 
+         {currentUser.data.user.account_type === 'person' && (
           <Link to={`/resume`} style={{ textDecoration: "none", color: "inherit" }}>
             <div className={`item ${selectedItem === "resume" ? "selected" : ""}`} onClick={() => handleItemClick("resume")}>
               <img src={resume} alt="" />
               <span>Resume Builder</span>
             </div>
           </Link>
+        )}
+
 
           <Link to={`/setting`} style={{ textDecoration: "none", color: "inherit" }}>
             <div className={`item ${selectedItem === "settings" ? "selected" : ""}`} onClick={() => handleItemClick("settings")}>
