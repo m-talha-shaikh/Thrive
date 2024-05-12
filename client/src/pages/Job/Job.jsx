@@ -22,12 +22,7 @@ import BusinessIcon from '@mui/icons-material/Business'; // Import BusinessIcon 
 
 // Use styled utility instead of makeStyles
 const StyledCard = styled(Card)({
-  borderRadius: theme => theme.spacing(2),
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  transition: 'transform 0.2s',
-  '&:hover': {
-    transform: 'scale(1.02)',
-  },
+  
 });
 
 const Job = () => {
@@ -125,14 +120,7 @@ const handleApply = () => {
                   <Chip
                     icon={<BusinessIcon marginRight={1} />}
                     label={job.job_type}
-                    sx={{
-                      backgroundColor: '#e0e0e0',
-                      borderRadius: '8px',
-                      padding: '8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      fontSize: '1rem',
-                    }}
+                   
                   />
                 </Grid>
               )}
