@@ -134,7 +134,7 @@ exports.getJobs = async (req, res, next) => {
   }
 
   if (jobTypeConditions.length > 0) {
-    searchQuery += ` AND J.job_type IN (${jobTypeConditions.map(type => `"${type}"`).join(', ')})`;
+    searchQuery += ` AND J.job_type IN (${jobTypeConditions.map(type => `'${type}'`).join(', ')})`;
   }
 }
 
