@@ -38,7 +38,7 @@ const Leftbar = () => {
     <div className="leftbar">
       <div className="container">
         <div className="menu">
-          <div className="item" onClick={() => handleItemClick("home")}>
+          <div className={`item ${selectedItem === "home" ? "selected" : ""}`} style={{cursor:"pointer"}} onClick={() => handleItemClick("home")}>
             <img src={Home} alt="" />
             <div
               onClick={() => fetchAccountType(currentUser.data.user.user_id)}
@@ -55,12 +55,7 @@ const Leftbar = () => {
             </div>
           </Link>
 
-          <Link to={`/jobs`} style={{ textDecoration: "none", color: "inherit" }}>
-            <div className={`item ${selectedItem === "notifications" ? "selected" : ""}`} onClick={() => handleItemClick("notifications")}>
-              <img src={Notification} alt="" />
-              <span>Notifications</span>
-            </div>
-          </Link>
+         
 
           <Link to={`/Chat`} style={{ textDecoration: "none", color: "inherit" }}>
             <div className={`item ${selectedItem === "messages" ? "selected" : ""}`} onClick={() => handleItemClick("messages")}>
@@ -77,7 +72,7 @@ const Leftbar = () => {
           </Link>
 
           <Link to={`/resume`} style={{ textDecoration: "none", color: "inherit" }}>
-            <div className={`item ${selectedItem === "settings" ? "selected" : ""}`} onClick={() => handleItemClick("resume")}>
+            <div className={`item ${selectedItem === "resume" ? "selected" : ""}`} onClick={() => handleItemClick("resume")}>
               <img src={resume} alt="" />
               <span>Resume Builder</span>
             </div>

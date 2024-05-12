@@ -4,6 +4,7 @@
  
     margin: 0;
     overflow: hidden;
+    
   }
   /* Hide the scrollbar for webkit-based browsers */
 body::-webkit-scrollbar {

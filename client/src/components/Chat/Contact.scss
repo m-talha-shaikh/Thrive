@@ -1,13 +1,15 @@
 /* Contact.scss */
-
+@import "../../style.scss";
 .contact {
+  @include themify($themes) {
     display: flex;
     align-items: center;
     padding: 10px;
     cursor: pointer;
+    background-color: themed("textColorSoft");
   
     &:hover {
-      background-color: #f0f0f0;
+      background-color: themed("textColorSoft");
     }
   
     .contact-image {
@@ -20,6 +22,7 @@
     .contact-info {
       .contact-name {
         font-weight: bold;
+        color: themed("textColor");
       }
   
       .contact-status {
@@ -27,4 +30,4 @@
       }
     }
   }
-  
+}
