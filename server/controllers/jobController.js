@@ -2,7 +2,7 @@ const executeQuery = require('./../utils/executeQuery');
 
 exports.getJob = async (req, res, next) => {
   const job_id = req.params.job_id;
-
+  console.log(job_id)
   const jobQuery = `SELECT
                       j.*,
                       o.name,
@@ -25,9 +25,11 @@ exports.getJob = async (req, res, next) => {
       job: results[0][0],
     };
 
+    console.log(jobRecord)
     res.json({
       job: jobRecord,
     });
+
   } catch (error) {
     console.error('Database error:', error);
     res.status(500).json({ error: error });
