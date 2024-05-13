@@ -37,6 +37,15 @@ const handleJobApplicantsClick = async (job_id) => {
   }
 };
 
+const handleRankApplicantsClick = async (id) => {
+  if(id === null){
+      alert("User does not exist anymore");
+    }
+    else{
+      navigate(`/ranking/${id}`);
+    }
+};
+
 
   const handleApplicantClick = (id) => {
     if(id === null){
@@ -76,6 +85,9 @@ const handleJobApplicantsClick = async (job_id) => {
               <>
     <Button onClick={() => handleJobApplicantsClick(job.job_id)}>
       View Applicants
+    </Button>
+    <Button onClick={() => handleRankApplicantsClick(job.job_id)}>
+      Rank Applicants
     </Button>
     {selectedJob && selectedJob[job.job_id] && (
       <div>
