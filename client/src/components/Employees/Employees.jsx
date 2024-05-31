@@ -27,7 +27,7 @@ const Employees = ({ user_id }) => {
 
 
   const handleCardClick = (employee) => {
-    navigate(`/profile/${employee.user_id}`);
+    navigate(`/person/${employee.user_id}`);
   };
 
   return (
