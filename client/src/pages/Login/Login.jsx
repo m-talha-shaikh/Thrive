@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
 import { makeRequest } from "../../axios"
 import { useEffect } from 'react';
+
 const Login = () => {
   const [showLoginForm, setShowLoginForm] = useState(true);
   const [invalidCredentials, setInvalidCredentials] = useState(false);
@@ -203,6 +204,7 @@ const Login = () => {
       </div>
       {account_type === 'institute' || account_type === 'organization' ? (
         <div className={styles.textfield}>
+          
           <input
             type="text"
             placeholder="Name"
@@ -215,6 +217,7 @@ const Login = () => {
       ) : (
         <>
           <div className={styles.textfield}>
+          <img src="../../../src/assets/namefirst.png" alt="" />
             <input
               type="text"
               placeholder="First Name"
@@ -225,6 +228,7 @@ const Login = () => {
             />
           </div>
           <div className={styles.textfield}>
+          <img src="../../../src/assets/namefirst.png" alt="" />
             <input
               type="text"
               placeholder="Last Name"
@@ -238,6 +242,7 @@ const Login = () => {
       )}
 
       <div className={styles.selectContainer}>
+        
       {account_type === 'person' && <select onChange={(e) => {  setGender(e.target.value);  }} name="gender" value={inputs.gender}>
               <option value="male">Male</option>
               <option value="female">Female</option>
