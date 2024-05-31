@@ -118,6 +118,7 @@ exports.createEducation = async (req, res, next) => {
     institute_name,
   } = req.body;
 
+
   if(year_graduated === ''){
     year_graduated = null;
   }

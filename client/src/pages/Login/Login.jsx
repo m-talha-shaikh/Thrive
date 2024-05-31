@@ -25,7 +25,7 @@ const Login = () => {
   const [city, setCity] = useState('Not set');
   const [state, setState] = useState('Not set');
   const [country, setCountry] = useState('Not set');
-  const [ProfilePic, setProfilePic] = useState('../../../public/uploads/user100.png');
+  const [ProfilePic, setProfilePic] = useState('');
   const [CoverPic, setCoverPic] = useState('');
   const [first_name, setFirstName] = useState('None');
   const [last_name, setLastName] = useState('None');

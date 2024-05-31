@@ -9,6 +9,7 @@ import Organization from './pages/Organization/Organization';
 import Person from './pages/Person/Person';
 import Home from './pages/home/Home'
 import Chat from './components/Chat/Chat';
+import Ranking from './components/Ranking/Ranking';
 import "./style.scss"
 import Rightbar from './components/Rightbar/Rightbar';
 import {createBrowserRouter,RouterProvider, Outlet, Navigate} from 'react-router-dom'; 
@@ -105,6 +106,11 @@ function App() {
         {
           path: '/room/:roomId',
           element: <RoomPage />
+        },
+        {
+          
+          path: '/ranking/:job_id',
+          element: <Ranking />
         }
       ]
     },

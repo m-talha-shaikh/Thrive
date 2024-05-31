@@ -24,6 +24,7 @@
     "mysql2": "^3.6.1",
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.13",
+    "query-string": "^9.0.0",
     "react-query": "^3.39.3",
     "socket.io": "^4.7.5",
     "websocket": "^1.0.34",
