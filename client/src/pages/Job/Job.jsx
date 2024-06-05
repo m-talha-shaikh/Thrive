@@ -106,14 +106,14 @@ const handleApply = () => {
                   />
                 </Grid>
               )}
-              {job.remote_work && (
+              {/* {job.remote_work && (
                 <Grid item>
                   <Chip
                     icon={<Avatar>🏠</Avatar>}
                     label="Remote Work"
                   />
                 </Grid>
-              )}
+              )} */}
 
               {job.job_type && (
                 <Grid item>
@@ -135,14 +135,14 @@ const handleApply = () => {
                   />
                 </Grid>
               )}
-              {job.expiry_date && (
+              {/* {job.expiry_date && (
                 <Grid item>
                   <Chip
                     icon={<EventIcon marginRight={1} />}
                     label={`Expires on ${new Date(job.expiry_date).toLocaleDateString()}`}
                   />
                 </Grid>
-              )}
+              )} */}
             </Grid>
 
             {canApply && (

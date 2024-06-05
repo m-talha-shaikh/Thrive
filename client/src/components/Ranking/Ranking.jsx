@@ -33,7 +33,7 @@ export default function Ranking() {
         console.log(jobString)
         try {
             if (jobString && Object.keys(userResponses).length > 0) {
-                const response = await makeRequest.post('http://192.168.100.6:5000/similarDocuments', {
+                const response = await makeRequest.post('http://localhost:5000/similarDocuments', {
                     jobString: jobString,
                     userResponses: userResponses
                 });
@@ -141,11 +141,11 @@ export default function Ranking() {
                                 <Chip icon={<RoomIcon marginRight={1} />} label={job.country} />
                             </Grid>
                         )}
-                        {job.remote_work && (
+                        {/* {job.remote_work && (
                             <Grid item>
                                 <Chip icon={<Avatar>🏠</Avatar>} label="Remote Work" />
                             </Grid>
-                        )}
+                        )} */}
                         {job.job_type && (
                             <Grid item>
                                 <Chip icon={<BusinessIcon marginRight={1} />} label={job.job_type} />
@@ -158,11 +158,11 @@ export default function Ranking() {
                                 <Chip icon={<EventIcon marginRight={1} />} label={`Posted on ${new Date(job.post_date).toLocaleDateString()}`} />
                             </Grid>
                         )}
-                        {job.expiry_date && (
+                        {/* {job.expiry_date && (
                             <Grid item>
                                 <Chip icon={<EventIcon marginRight={1} />} label={`Expires on ${new Date(job.expiry_date).toLocaleDateString()}`} />
                             </Grid>
-                        )}
+                        )} */}
                     </Grid>
                 </CardContent>
             )}
@@ -220,7 +220,7 @@ export default function Ranking() {
 //         console.log(userResponses)
 //         console.log(jobString)
 //         try {
-//             const response = await makeRequest.post('http://192.168.100.6:5000/similarDocuments', {
+//             const response = await makeRequest.post('http://localhost:5000/similarDocuments', {
 //                 jobString: jobString,
 //                 userResponses: userResponses
 //             });
@@ -392,7 +392,7 @@ export default function Ranking() {
 //         console.log(userResponses)
 //         try {
 
-//             const response = await makeRequest.post('http://192.168.100.6:5000/similarDocuments', {
+//             const response = await makeRequest.post('http://localhost:5000/similarDocuments', {
 //                 jobString: jobString,
 //                 userResponses: userResponses
 //             });
